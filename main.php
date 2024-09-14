@@ -1,6 +1,6 @@
 <?php
 
-$ip = '127.0.0.1';
+$ip = '1.2.3.4';
 $puerto = 80;
 
 // Crear un socket
