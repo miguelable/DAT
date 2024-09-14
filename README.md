@@ -4,7 +4,7 @@ Este proyecto implementa un servidor web básico en PHP utilizando sockets para 
 
 ## Funcionamiento General
 
-1. **Creación del socket**: El servidor se configura para escuchar conexiones TCP en la IP `127.0.0.1` y el puerto `80`.
+1. **Creación del socket**: El servidor se configura para escuchar conexiones TCP en la IP `1.2.3.4` y el puerto `80`.
 2. **Escuchar y aceptar conexiones**: Una vez creado y asociado el socket a una dirección IP y puerto, el servidor escucha conexiones entrantes. Cuando un cliente se conecta, el servidor acepta la conexión y gestiona la solicitud HTTP.
 
 3. **Leer solicitudes HTTP**: La función encargada de manejar al cliente lee la solicitud HTTP, extrae la URL solicitada y responde en consecuencia:
