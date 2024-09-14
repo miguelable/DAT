@@ -107,7 +107,7 @@ function get_main_page()
             <h1>Archivos en el directorio</h1>
             <ul>";
     foreach ($files as $file) {
-        if ($file === '.' || $file === '..' || strpos($file, '.php') !== false) {
+        if ($file === '.' || $file === '..' || strpos($file, '.php') || strpos($file, '.git') !== false) {
             continue;
         }
         $html .= "<li><a href=\"$file\">$file</a></li>";
