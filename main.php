@@ -68,22 +68,12 @@ function handle_client($client)
         $file_content = file_get_contents($url);
     }
 
-    if ($download === true)
-        $response .= "Content-Disposition: attachment; filename=\"$url\"\r\n";
-    // Leer el tamaño del archivo para meterlo a los headers de http
-    $content_length = strlen($file_content);
-
     // Construir la respuesta HTTP 
     $response = "HTTP/1.1 200 OK\r\n";
-    if (strpos($url, '.ico') !== false) {
-        $response .= "Content-Type: image/x-icon\r\n";
-    } else if (strpos($url, '.html') !== false) {
-        $response .= "Content-Type: text/html\r\n";
-    } else if (strpos($url, '.md') !== false) {
-        $response .= "Content-Type: text/markdown\r\n";
-    } else {
-        $response .= "Content-Type: text/html\r\n";
-    }
+    $response .= get_content_type($url);
+    if ($download === true)
+        $response .= "Content-Disposition: attachment; filename=\"$url\"\r\n";
+    $content_length = strlen($file_content);
     $response .= "Content-Length: $content_length\r\n";
     $response .= "Connection: close\r\n\r\n";
     $response .= $file_content;
