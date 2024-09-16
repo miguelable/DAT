@@ -31,6 +31,7 @@ while (true) {
 
 function handle_client($client)
 {
+    $download = false;
     // Leer la solicitud del cliente (navegador)
     $request = '';
     while ($chunk = socket_read($client, 1024)) {
@@ -55,6 +56,11 @@ function handle_client($client)
     if ($url === '') {
         $file_content = get_main_page(); // Si no se especifica una URL, servir un archivo por defecto
     } else {
+        if (strpos($url, '/&download=true') !== false) {
+            $url = str_replace('/&download=true', '', $url);
+            // si es true entonces flag de descarga a true
+            $download = true;
+        }
         // si el fichero no existe devolver error
         if (!file_exists($url)) {
             $file_content = "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\nConnection: close\r\n\r\n";
@@ -66,6 +72,8 @@ function handle_client($client)
         $file_content = file_get_contents($url);
     }
 
+    if ($download === true)
+        $response .= "Content-Disposition: attachment; filename=\"$url\"\r\n";
     // Leer el tamaño del archivo para meterlo a los headers de http
     $content_length = strlen($file_content);
 
@@ -110,7 +118,7 @@ function get_main_page()
         if ($file === '.' || $file === '..' || strpos($file, '.php') || strpos($file, '.git') !== false) {
             continue;
         }
-        $html .= "<li><a href=\"$file\">$file</a></li>";
+        $html .= "<li>$file<a href=\"$file\">Ver</a><a href=\"$file\&download=true\">Descargar</a></li>";
     }
     $html .= "</ul>
         </body> 
