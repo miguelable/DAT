@@ -48,10 +48,10 @@ function handle_client($client)
 
     // Extraer la URL
     $url = $args[1];
-    $url = substr($url, 1); // Remover la barra inicial "/"
-    if ($url === '') {
+    if ($url === '/') {
         $file_content = get_main_page(); // Si no se especifica una URL, servir un archivo por defecto
     } else {
+        $url = substr($url, 1); // Remover la barra inicial "/"
         if (strpos($url, '/&download=true') !== false) {
             $url = str_replace('/&download=true', '', $url);
             // si es true entonces flag de descarga a true
