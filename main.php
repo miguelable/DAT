@@ -113,3 +113,21 @@ HTML;
 HTML;
     return $html;
 }
+
+
+function get_content_type($url)
+{
+    $answer = '';
+    if (strpos($url, '.ico') !== false) {
+        $answer .= "Content-Type: image/x-icon\r\n";
+    } else if (strpos($url, '.html') !== false) {
+        $answer .= "Content-Type: text/html\r\n";
+    } else if (strpos($url, '.md') !== false) {
+        $answer .= "Content-Type: text/markdown\r\n";
+    } else if (strpos($url, '.css') !== false) {
+        $answer .= "Content-Type: text/css\r\n";
+    } else {
+        $answer .= "Content-Type: text/html\r\n";
+    }
+    return $answer;
+}
