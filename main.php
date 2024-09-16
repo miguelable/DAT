@@ -87,27 +87,29 @@ function handle_client($client)
 
 function get_main_page()
 {
-    // Devuelve un html con un listado de los ficheros que tiene la carpeta
     $files = scandir(__DIR__);
-    $html =
-        "<!DOCTYPE html>
+    $html = <<<HTML
+    <!DOCTYPE html>
     <html>
         <head>
-            <title>
-                Servidor Web
-            </title>
+            <title>Servidor Web</title>
+            <link rel="stylesheet" href="style.css">
         </head>
         <body>
             <h1>Archivos en el directorio</h1>
-            <ul>";
+            <h3>Pulsa para ver o descargar un archivo</h3>
+            <ul>
+HTML;
     foreach ($files as $file) {
-        if ($file === '.' || $file === '..' || strpos($file, '.php') || strpos($file, '.git') !== false) {
+        if (!is_file($file) || in_array($file, ['.', '..']) || strpos($file, '.php') || strpos($file, '.git') !== false) {
             continue;
         }
-        $html .= "<li>$file<a href=\"$file\">Ver</a><a href=\"$file\&download=true\">Descargar</a></li>";
+        $html .= "<li>$file <a href=\"$file\">Ver</a> <a href=\"$file&download=true\">Descargar</a></li>";
     }
-    $html .= "</ul>
-        </body> 
-    </html>";
+    $html .= <<<HTML
+            </ul>
+        </body>
+    </html>
+HTML;
     return $html;
 }
