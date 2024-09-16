@@ -43,12 +43,8 @@ function handle_client($client)
 
     echo "Solicitud recibida:\n$request\n";
 
-    // Extraer los argumentos del GET
+    // Separar la cabecera por los espacios
     $args = explode(" ", $request);
-    if (count($args) < 2) {
-        socket_close($client);
-        return;
-    }
 
     // Extraer la URL
     $url = $args[1];
