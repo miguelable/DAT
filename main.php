@@ -52,8 +52,8 @@ function handle_client($client)
         $file_content = get_main_page(); // Si no se especifica una URL, servir un archivo por defecto
     } else {
         $url = substr($url, 1); // Remover la barra inicial "/"
-        if (strpos($url, '/&download=true') !== false) {
-            $url = str_replace('/&download=true', '', $url);
+        if (strpos($url, '&download=true') !== false) {
+            $url = str_replace('&download=true', '', $url);
             // si es true entonces flag de descarga a true
             $download = true;
         }
