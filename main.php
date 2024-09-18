@@ -14,6 +14,8 @@ if (socket_bind($sock, $ip, $puerto) === false) {
     die("Error al asociar el socket: " . socket_strerror(socket_last_error($sock)));
 }
 
+echo "". socket_strerror(socket_last_error($sock)) . "";
+
 // Escuchar conexiones
 if (socket_listen($sock, 10) === false) {
     die("Error al escuchar en el socket: " . socket_strerror(socket_last_error($sock)));
