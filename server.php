@@ -50,10 +50,8 @@ function handle_client($client, $clients)
     $request = socket_read($client, 1024);
     log_verbose("Petición: $request");
 
-    // Enviar la respuesta al cliente
-    $response = "Hola, soy el servidor\n";
     // Devolver el array de clientes conecatdos
-    $response .= "Clientes conectados: \n";
+    $response = "Clientes conectados: \n";
     foreach ($clients as $c) {
         $response .= $c->ip . "\n";
     }
