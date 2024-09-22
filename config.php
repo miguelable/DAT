@@ -1,13 +1,13 @@
 <?php
 
-// $numUsers = $argv[1];
+/*
+ !! Important run server before start configuring the clients ¡¡
+*/
 
 // si la carpeta users no esta creada crearla
 if (!file_exists("users")) {
     mkdir("users", 0777, true);
 }
-
-// print_r($argv[1]);
 
 for ($i = 100; $i < 110; $i++) {
     $ip = "127.0.0." . $i;
@@ -50,5 +50,4 @@ function crearFichero($ip)
     // ejecutar el fichero
     $command = "php users/client" . $client_number . "/user.php";
     exec($command, $output);
-    echo $output[0] . "\n";
 }
