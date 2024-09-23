@@ -48,7 +48,7 @@ function handle_client($client, $clients)
 {
     // Leer la petición del cliente
     $request = socket_read($client, 1024);
-    log_verbose("Petición: $request");
+    log_verbose("Petición:\n $request");
 
     // Devolver el array de clientes conecatdos
     $response = "Clientes conectados: \n";
