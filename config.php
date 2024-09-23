@@ -1,5 +1,7 @@
 <?php
 
+require_once "logs.php";
+
 /*
  !! Important run server before start configuring the clients ¡¡
 */
@@ -10,44 +12,64 @@ if (!file_exists("users")) {
 }
 
 for ($i = 100; $i < 110; $i++) {
-    $ip = "127.0.0." . $i;
-    crearFichero($ip);
+    // Crear un proceso hijo usando pcntl_fork
+    $pid = pcntl_fork();
+
+    if ($pid == -1) {
+        // Si no se puede crear un hijo, muestra un error
+        die("Error: No se pudo crear el proceso hijo\n");
+    } elseif ($pid == 0) {
+        // Código para el proceso hijo
+        $ip = "127.0.0." . $i;
+        crearFichero($ip);
+        // Terminamos el proceso hijo
+        exit(0);
+    } else {
+        // Código para el proceso padre
+        log_debug("Hijo creado con IP 127.0.0.$i");
+    }
 }
 
-// funcion para crear el fichero
+// El padre debe esperar a que todos los hijos terminen
+while (pcntl_waitpid(0, $status) != -1) {
+    $status = pcntl_wexitstatus($status);
+    log_info("Proceso hijo terminó con estado $status");
+}
+
+// Función para crear el fichero
 function crearFichero($ip)
 {
-    // extraer el código de user.php
+    // Extraer el código de user.php
     $codigo = file_get_contents("user.php");
-    // reemplazar la ip
+    // Reemplazar la IP
     $codigo = str_replace("127.0.0.10", $ip, $codigo);
-    // reemplazar la dirección de descarga y compartir
+    // Reemplazar la dirección de descarga y compartir
     $client_number = substr($ip, -1);
-    // si la carpeta de descarga no está creada la creamos
+
+    // Crear carpetas si no existen
     if (!file_exists("users/client" . $client_number . "/download")) {
         mkdir("users/client" . $client_number . "/download", 0777, true);
     }
-    // si la carpeta de compartir no está creada la creamos
     if (!file_exists("users/client" . $client_number . "/shared")) {
         mkdir("users/client" . $client_number . "/shared", 0777, true);
     }
-    // si no esta creada la carpeta la creamos
     if (!file_exists("users/client" . $client_number)) {
         mkdir("users/client" . $client_number, 0777, true);
     }
-    // crear el fichero con el código
-    $file = "users/client" . $client_number . "/user.php"; // nombre del fichero
+
+    // Crear el fichero PHP
+    $file = "users/client" . $client_number . "/user.php"; // Nombre del fichero
     $file = fopen($file, "w");
     fwrite($file, $codigo);
     fclose($file);
 
-    // crear el fichero de texto
-    $text = "users/client" . $client_number . "/shared/archivo" . $client_number . ".txt"; // nombre del fichero
+    // Crear el fichero de texto
+    $text = "users/client" . $client_number . "/shared/archivo" . $client_number . ".txt"; // Nombre del fichero
     $text = fopen($text, "w");
-    fwrite($text, "Hello form the client number " . $client_number . " file.");
+    fwrite($text, "Hello from the client number " . $client_number . " file.");
     fclose($text);
 
-    // ejecutar el fichero
+    // Ejecutar el fichero (opcional)
     $command = "php users/client" . $client_number . "/user.php";
     exec($command, $output);
 }
