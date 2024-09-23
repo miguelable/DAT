@@ -21,14 +21,17 @@ Este proyecto implementa un servidor y un cliente en PHP para manejar descargas 
   - `$client`: El socket del cliente.
 - **Salidas**: Respuesta HTTP con el contenido solicitado o un mensaje de error.
 
-### 2. `run_client($client)`
+### 2. `run_client($ip, $puerto, $path, $output_file)`
 
 - **Descripción**: Gestiona la conexión con un cliente. Lee la solicitud HTTP, extrae los parámetros (como la URL solicitada) y responde con el contenido del archivo o un mensaje de error.
 - **Entradas**:
-  - `$client`: El socket del cliente.
+  - $ip: Dirección IP del servidor al que conectarse.
+  - $puerto: Puerto en el que escucha el servidor.
+  - $path: Ruta del archivo solicitado en el servidor.
+  - $output_file: Nombre del archivo donde se guardará el contenido descargado.
 - **Salidas**: Respuesta HTTP con el contenido solicitado o un mensaje de error.
 - 
-### 3. `run_server($client)`
+### 3. `run_server($ip, $puerto)`
 
 - **Descripción**: Gestiona la conexión con un cliente. Lee la solicitud HTTP, extrae los parámetros (como la URL solicitada) y responde con el contenido del archivo o un mensaje de error.
 - **Entradas**:
