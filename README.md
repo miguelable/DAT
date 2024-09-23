@@ -21,13 +21,19 @@ Este proyecto implementa un servidor y un cliente en PHP para manejar descargas 
   - `$client`: El socket del cliente.
 - **Salidas**: Respuesta HTTP con el contenido solicitado o un mensaje de error.
 
+### 1. `run_client($client)`
 
-### 3. `get_content_type($url)`
-
-- **Descripción**: Devuelve el tipo de contenido HTTP (`Content-Type`) basado en la extensión del archivo solicitado (por ejemplo, `.html`, `.css`, `.ico`, etc.).
+- **Descripción**: Gestiona la conexión con un cliente. Lee la solicitud HTTP, extrae los parámetros (como la URL solicitada) y responde con el contenido del archivo o un mensaje de error.
 - **Entradas**:
-  - `$url`: La URL o nombre del archivo solicitado.
-- **Salidas**: Una cadena de texto con el encabezado `Content-Type` adecuado para la respuesta HTTP.
+  - `$client`: El socket del cliente.
+- **Salidas**: Respuesta HTTP con el contenido solicitado o un mensaje de error.
+- 
+- ### 1. `run_server($client)`
+
+- **Descripción**: Gestiona la conexión con un cliente. Lee la solicitud HTTP, extrae los parámetros (como la URL solicitada) y responde con el contenido del archivo o un mensaje de error.
+- **Entradas**:
+  - `$client`: El socket del cliente.
+- **Salidas**: Respuesta HTTP con el contenido solicitado o un mensaje de error.
 
 ## Uso
 
