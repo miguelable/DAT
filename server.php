@@ -56,7 +56,7 @@ function handle_client($client, $clients)
         $response .= $c->ip . "\n";
     }
     log_verbose($response);
-
+    log_error("Esto es un mensaje de error");
     socket_write($client, $response, strlen($response));
 
     // Cerrar la conexión
