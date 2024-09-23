@@ -33,25 +33,25 @@ Este proyecto implementa un servidor y un cliente en PHP para manejar descargas 
 - 
 ### 3. `run_server($ip, $puerto)`
 
-- **Descripción**: Gestiona la conexión con un cliente. Lee la solicitud HTTP, extrae los parámetros (como la URL solicitada) y responde con el contenido del archivo o un mensaje de error.
+- **Descripción**: Configura y ejecuta un servidor que escucha conexiones entrantes en una dirección IP y puerto especificados. Acepta las conexiones de los clientes y llama a handle_client() para gestionar cada solicitud.
 - **Entradas**:
-  - `$client`: El socket del cliente.
+  - $ip: Dirección IP en la que el servidor escuchará las conexiones.
+  - $puerto: Puerto en el que el servidor escuchará conexiones.
 - **Salidas**: Respuesta HTTP con el contenido solicitado o un mensaje de error.
 
 ### 4. `extract_header($request)`
 
-- **Descripción**: Gestiona la conexión con un cliente. Lee la solicitud HTTP, extrae los parámetros (como la URL solicitada) y responde con el contenido del archivo o un mensaje de error.
+- **Descripción**: Extrae la información relevante de la solicitud HTTP recibida, como la ruta solicitada. Esta información se utiliza para identificar qué archivo debe ser servido al cliente.
 - **Entradas**:
-  - `$client`: El socket del cliente.
-- **Salidas**: Respuesta HTTP con el contenido solicitado o un mensaje de error.
+  - $request: La solicitud HTTP completa enviada por el cliente, como una cadena de texto.
+- **Salidas**:  Un array asociativo que contiene detalles extraídos de la solicitud
 
 
 ## Uso
 
-1. Ejecuta el script PHP en un servidor o entorno con soporte para sockets.
-2. Abre un navegador web y accede a `http://127.0.0.1` para ver la página principal que lista los archivos disponibles en el directorio.
-3. Para ver un archivo, pulsa en el enlace **Ver** junto al archivo deseado.
-4. Para descargar un archivo, pulsa en el enlace **Descargar**.
+1. Ejecuta el servidor mediente la consola con php main.php --server.
+2. Ejecuta la petición en otro terminal : php main.php http://127.0.0.1:8888/archivo.txt descargado.txt
+3. Comprobación de la descarga 
 
 ### Ejemplos:
 
