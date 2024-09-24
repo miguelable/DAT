@@ -1,7 +1,7 @@
 <?php
 
 $ip = '127.0.0.1';
-$puerto = 8080; // Cambiado a 8080 para evitar conflictos con el puerto 80, que suele estar en uso para otros servicios
+$puerto = 8888; // Cambiado a 8080 para evitar conflictos con el puerto 80, que suele estar en uso para otros servicios
 
 function run_server($ip, $puerto) {
 
