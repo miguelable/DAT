@@ -4,7 +4,7 @@ require_once "client.php";
 require_once "server.php";
 
 $server_host = '127.0.0.1';
-$server_port = 8888;
+$server_port = 8080;
 
 
 
