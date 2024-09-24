@@ -13,7 +13,7 @@ php main.php --server
 ```
 
 #### Modo Cliente:
-Inicia el cliente en la IP y puertos indicados en la URL ( o con los valores del servidor si no se especifican )
+Inicia el cliente en la IP y puertos indicados en la URL ( o con los valores del servidor si no se especifican ). Además extrae la ruta y el nombre del archivo a descragar. El comando en este caso será:
 
 ```bash
 php main.php http://127.0.0.1:8888/archivo.txt descargado.txt
@@ -54,10 +54,10 @@ Implementa el servidor que gestiona las solicitudes de los clientes.
 ## Uso
 
 1. Ejecuta el servidor mediente la consola con php main.php --server.
-2. Ejecuta la petición en otro terminal : php main.php http://127.0.0.1:8888/archivo.txt descargado.txt
+2. Ejecuta la petición en otro terminal indicando IP, puerto, directorio y nombre del archivo que desea a la salida : php main.php http://127.0.0.1:8888/archivo.txt descargado.txt
 3. Comprobación de la descarga en la carpeta local.
 
-### Ejemplos:
+### Ejemplo:
 
 - Desde un terminal ejecuta el comando: php main.php --server
 - Desde un segundo terminal ejecuta: php main.php http://127.0.0.1:8888/archivo.txt
@@ -68,4 +68,4 @@ Implementa el servidor que gestiona las solicitudes de los clientes.
 - **Miguel Ferrer**
 - **Paula Fernández**
 
-**Fecha**: 16 de septiembre de 2024
+**Fecha**: 24 de septiembre de 2024
