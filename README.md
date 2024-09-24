@@ -6,14 +6,14 @@ Este proyecto implementa un servidor y un cliente en PHP para manejar descargas 
 Archivo principal para ejecutar tanto el cliente como el servidor según los argumentos proporcionados.
 
 #### Modo Servidor:
-Inicia el servidor en `127.0.0.1` y el puerto `8888` (o el configurado en `server.php`).
+Inicia el servidor en `127.0.0.1` y el puerto `8888` con el comando:
 
 ```bash
 php main.php --server
 ```
 
 #### Modo Cliente:
-Conéctate al servidor y descarga un archivo especificado.
+Inicia el cliente en la IP y puertos indicados en la URL ( o con los valores del servidor si no se especifican )
 
 ```bash
 php main.php http://127.0.0.1:8888/archivo.txt descargado.txt
