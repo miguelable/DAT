@@ -69,6 +69,13 @@ function crearFichero($ip)
     fwrite($text, "Hello from the client number " . $client_number . " file.");
     fclose($text);
 
+    // Crear el fichero de logs
+    $log = "users/client" . $client_number . "/logs.php"; // Nombre del fichero
+    $log = fopen($log, "w");
+    fwrite($log,  file_get_contents("logs.php"));
+    fclose($log);
+
+
     // Ejecutar el fichero (opcional)
     $command = "php users/client" . $client_number . "/user.php";
     exec($command, $output);

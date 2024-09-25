@@ -1,6 +1,6 @@
 <?php
 
-require_once "logs.php";
+require_once realpath(__DIR__ . "/logs.php");
 
 // Datos de configuración del cliente y el servidor
 $ip = "127.0.0.10";
@@ -9,23 +9,23 @@ $server_ip = "127.0.0.1";
 $server_port = 8888;
 
 // get download directory
-$download_directory = "users/" . basename(__DIR__) . "/download/";
-$shared_directory = "users/" . basename(__DIR__) . "/shared/";
+$download_directory = realpath(__DIR__ . "/download/");
+$shared_directory = realpath(__DIR__ . "/shared/");
 
 // 1. Función para crear y conectar el socket
 function create_socket($ip, $port, $server_ip, $server_port)
 {
     $sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname('tcp'));
     if ($sock === false) {
-        die("Error creando el socket: " . socket_strerror(socket_last_error()));
+        log_error("Error creando el socket: " . socket_strerror(socket_last_error()));
     }
 
     if (socket_bind($sock, $ip, $port) === false) {
-        die("Error asociando el socket: " . socket_strerror(socket_last_error($sock)));
+        log_error("Error asociando el socket: " . socket_strerror(socket_last_error($sock)));
     }
 
     if (socket_connect($sock, $server_ip, $server_port) === false) {
-        die("Error conectando al servidor: " . socket_strerror(socket_last_error($sock)));
+        log_error("Error conectando al servidor: " . socket_strerror(socket_last_error($sock)));
     }
 
     log_info("Conectado al servidor");
@@ -106,7 +106,7 @@ function file_sending_loop($sock, $shared_directory, $ip, $port, $server_ip, $se
 // 6. Proceso principal
 $pid = pcntl_fork();
 if ($pid == -1) {
-    die("Error creando el proceso hijo...\n");
+    log_error("Error creando el proceso hijo...\n");
 } else if ($pid == 0) {
     // Proceso hijo: envía archivos compartidos periódicamente
     file_sending_loop($sock, $shared_directory, $ip,  $port, $server_ip, $server_port);
@@ -114,5 +114,4 @@ if ($pid == -1) {
     // Proceso padre: leer la respuesta del servidor
     $response = socket_read($sock, 1024);
     log_debug("Respuesta del servidor:\n$response");
-    socket_close($sock); // Cierra el socket al terminar
 }
