@@ -49,7 +49,7 @@ function get_shared_files($shared_directory)
         log_warning("No hay archivos para compartir");
     }
 
-    return $shared_files;
+    return array_values($shared_files);
 }
 
 // 3. Función para enviar los archivos compartidos
