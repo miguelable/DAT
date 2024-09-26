@@ -15,7 +15,7 @@ $shared_directory = realpath(__DIR__ . "/shared/");
 // Inicializar el socket
 $sock = create_socket();
 
-// 1. Función para crear y conectar el socket
+// Función para crear y conectar el socket
 function create_socket()
 {
     $sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname('tcp'));
@@ -38,7 +38,7 @@ function create_socket()
     return $sock;
 }
 
-// 2. Función para obtener los archivos compartidos
+// Función para obtener los archivos que se comparten
 function get_shared_files()
 {
     $shared_directory = $GLOBALS['shared_directory'];
@@ -51,18 +51,16 @@ function get_shared_files()
         return $file !== "." && $file !== "..";
     });
 
-    if (empty($shared_files)) {
+    if (empty($shared_files))
         log_warning("No hay archivos para compartir");
-    }
     return array_values($shared_files);
 }
 
-// 3. Función para enviar los archivos compartidos
+// Función para enviar los archivos que se comparten   
 function send_shared_files($shared_files)
 {
-    if (empty($shared_files)) {
+    if (empty($shared_files))
         return;
-    }
 
     $ip = $GLOBALS['ip'];
     $server_ip = $GLOBALS['server_ip'];
@@ -85,69 +83,28 @@ function send_shared_files($shared_files)
     return true;
 }
 
-// 4. Función para gestionar la reconexión en caso de fallo
-function handle_socket_error()
-{
-    log_warning("Intentando reconectar...");
-    socket_close($GLOBALS['sock']);
-    $GLOBALS['sock'] = create_socket();
-}
-
-// 5. Función para ejecutar el bucle de envío de archivos compartidos
+// Función para ejecutar el bucle de envío de archivos compartidos
 function file_sending_loop()
 {
     while (true) {
         $shared_files = get_shared_files();
         if (!send_shared_files($shared_files)) {
-            // Si ocurre un error, intenta reconectar
-            handle_socket_error();
+            log_warning("Intentando reconectar...");
+            socket_close($GLOBALS['sock']);
+            $GLOBALS['sock'] = create_socket();
         }
-        sleep(10); // Espera 10 segundos antes de enviar nuevamente
+        sleep(10);
     }
 }
 
-// 6. Proceso principal
-$pid = pcntl_fork();
-if ($pid == -1) {
-    log_error("Error creando el proceso hijo...\n");
-} else if ($pid == 0) {
-    // Proceso hijo: envía archivos compartidos periódicamente
-    file_sending_loop($sock, $shared_directory, $ip,  $port, $server_ip, $server_port);
-} else {
-    $pid2 = pcntl_fork();
-    if ($pid2 == -1) {
-        log_error("Error creando el proceso hijo...\n");
-    } else if ($pid2 == 0) {
-        // Proceso hijo2: leer por terminal las ordenes del usuario
-        terminal_loop();
-    } else {
-        $pid3 = pcntl_fork();
-        if ($pid3 == -1) {
-            log_error("Error creando el proceso hijo...\n");
-        } else if ($pid3 == 0) {
-            // Proceso hijo3: leer la respuesta del servidor
-            $response = read_server_response($sock);
-            // log_debug("Respuesta del servidor:\n$response");
-        } else {
-            // Proceso padre: esperar a que los 3 hijos terminen
-            pcntl_waitpid($pid, $status);
-            pcntl_waitpid($pid2, $status);
-            pcntl_waitpid($pid3, $status);
-            log_info("Todos los procesos hijos han terminado");
-        }
-    }
-}
-
-// 7. Función para leer las órdenes del usuario por terminal
+// Función para leer las órdenes del usuario por terminal
 function terminal_loop()
 {
     while (true) {
         echo "> ";
         $order = trim(fgets(STDIN));
-        // separar la orden por espacios
-        if (empty($order)) {
+        if (empty($order))
             continue;
-        }
         $order = explode(" ", $order);
         switch ($order[0]) {
             case "?":
@@ -155,27 +112,33 @@ function terminal_loop()
                 break;
             case "exit":
                 log_info("Saliendo del programa...");
-                // Enviar señal a procesos hijos para que terminen
-                posix_kill($GLOBALS['pid'], SIGTERM);  // pid del proceso hijo, si lo tienes
-                posix_kill($GLOBALS['pid2'], SIGTERM);  // otro proceso hijo
-                posix_kill($GLOBALS['pid3'], SIGTERM);  // otro proceso hijo
+                posix_kill($GLOBALS['pid1'], SIGTERM);
+                posix_kill($GLOBALS['pid2'], SIGTERM);
+                posix_kill($GLOBALS['pid3'], SIGTERM);
                 exit;
             case "search":
                 if (count($order) < 2 || empty($order[1]) || $order[1] === "?") {
                     log_debug("Use: search <file>");
                     break;
                 }
-                $args = $order[1];
-                echo "Searching file: $args\n";
+                echo "Searching file: $order[1]\n";
                 searchFile($order[1]);
                 break;
             case "download":
-                // Lógica para descarga (implementación pendiente)
+                if (count($order) < 2 || empty($order[1]) || $order[1] === "?") {
+                    log_debug("Use: download <file>");
+                    break;
+                }
+                // Lógica para descargar archivos (implementación pendiente)
                 break;
             case "hosts":
                 // Lógica para listar hosts (implementación pendiente)
                 break;
             case "host_files":
+                if (count($order) < 2 || empty($order[1]) || $order[1] === "?") {
+                    log_debug("Use: host_files <host>");
+                    break;
+                }
                 // Lógica para listar archivos de un host (implementación pendiente)
                 break;
             default:
@@ -185,7 +148,7 @@ function terminal_loop()
     }
 }
 
-// 8. Función para buscar archivos
+// Función para buscar archivos
 function searchFile($args)
 {
     $server_ip = $GLOBALS['server_ip'];
@@ -213,7 +176,7 @@ function searchFile($args)
     return true;
 }
 
-// 9. Función para mostrar los comandos disponibles
+// Función para mostrar los comandos disponibles
 function show_available_commands()
 {
     echo "Comandos disponibles:\n";
@@ -225,7 +188,7 @@ function show_available_commands()
     echo "exit \t\t\t\t Salir del programa\n";
 }
 
-// 10. Función para leer la respuesta del servidor
+// Función para leer la respuesta del servidor
 function read_server_response($sock)
 {
     $response = socket_read($sock, 1024);
@@ -235,3 +198,128 @@ function read_server_response($sock)
     }
     return $response;
 }
+
+// Función para manejar las peticiones de los clientes
+function client_loop()
+{
+    $sock = $GLOBALS['sock'];
+    while (true) {
+        // Aceptar conexiones entrantes
+        if (($client = socket_accept($sock)) !== false) {
+            $pid = pcntl_fork();
+            if ($pid == -1) {
+                log_error("Error al crear el proceso cliente");
+                socket_close($client);
+            } elseif ($pid == 0) {
+                handle_client($client);
+                exit;
+            } else {
+                // Proceso padre: cerrar el socket del cliente en el padre
+                socket_close($client);
+            }
+        }
+    }
+}
+
+// Función para manejar las peticiones de los clientes
+function handle_client($client)
+
+// Función para manejar las peticiones de los clientes
+function client_loop()
+{
+    $sock = $GLOBALS['sock'];
+    while (true) {
+        // Aceptar conexiones entrantes
+        if (($client = socket_accept($sock)) !== false) {
+            $pid = pcntl_fork();
+            if ($pid == -1) {
+                log_error("Error al crear el proceso cliente");
+                socket_close($client);
+            } elseif ($pid == 0) {
+                handle_client($client);
+                exit;
+            } else {
+                // Proceso padre: cerrar el socket del cliente en el padre
+                socket_close($client);
+            }
+        }
+    }
+}
+
+// Función para manejar las peticiones de los clientes
+function handle_client($client)
+
+// Función para manejar las peticiones de los clientes
+function client_loop()
+{
+    $sock = $GLOBALS['sock'];
+    while (true) {
+        // Aceptar conexiones entrantes
+        if (($client = socket_accept($sock)) !== false) {
+            $pid = pcntl_fork();
+            if ($pid == -1) {
+                log_error("Error al crear el proceso cliente");
+                socket_close($client);
+            } elseif ($pid == 0) {
+                handle_client($client);
+                exit;
+            } else {
+                // Proceso padre: cerrar el socket del cliente en el padre
+                socket_close($client);
+            }
+        }
+    }
+}
+
+// Función para manejar las peticiones de los clientes
+function handle_client($client)
+
+// Función para manejar las peticiones de los clientes
+function client_loop()
+{
+    $sock = $GLOBALS['sock'];
+    while (true) {
+        // Aceptar conexiones entrantes
+        if (($client = socket_accept($sock)) !== false) {
+            $pid = pcntl_fork();
+            if ($pid == -1) {
+                log_error("Error al crear el proceso cliente");
+                socket_close($client);
+            } elseif ($pid == 0) {
+                handle_client($client);
+                exit;
+            } else {
+                // Proceso padre: cerrar el socket del cliente en el padre
+                socket_close($client);
+            }
+        }
+    }
+}
+
+// Función para manejar las peticiones de los clientes
+function handle_client($client)
+
+// Función para manejar las peticiones de los clientes
+function client_loop()
+{
+    $sock = $GLOBALS['sock'];
+    while (true) {
+        // Aceptar conexiones entrantes
+        if (($client = socket_accept($sock)) !== false) {
+            $pid = pcntl_fork();
+            if ($pid == -1) {
+                log_error("Error al crear el proceso cliente");
+                socket_close($client);
+            } elseif ($pid == 0) {
+                handle_client($client);
+                exit;
+            } else {
+                // Proceso padre: cerrar el socket del cliente en el padre
+                socket_close($client);
+            }
+        }
+    }
+}
+
+// Función para manejar las peticiones de los clientes
+function handle_client($client)
