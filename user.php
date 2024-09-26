@@ -86,15 +86,12 @@ function send_shared_files($shared_files)
 }
 
 // 4. Función para gestionar la reconexión en caso de fallo
-function handle_socket_error(&$sock, $ip, $port, $server_ip, $server_port)
+function handle_socket_error()
 {
     log_warning("Intentando reconectar...");
-    socket_close($sock);
-    $sock = create_socket($ip, $port, $server_ip, $server_port);
+    socket_close($GLOBALS['sock']);
+    $GLOBALS['sock'] = create_socket();
 }
-
-// Inicializar el socket
-$sock = create_socket($ip, $port, $server_ip, $server_port);
 
 // 5. Función para ejecutar el bucle de envío de archivos compartidos
 function file_sending_loop($sock, $shared_directory, $ip, $port, $server_ip, $server_port)
