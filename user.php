@@ -58,29 +58,30 @@ function get_shared_files()
 }
 
 // 3. Función para enviar los archivos compartidos
-function send_shared_files($sock, $shared_files, $ip, $server_ip, $server_port)
+function send_shared_files($shared_files)
 {
     if (empty($shared_files)) {
         return;
     }
 
+    $ip = $GLOBALS['ip'];
+    $server_ip = $GLOBALS['server_ip'];
+    $server_port = $GLOBALS['server_port'];
+    $sock = $GLOBALS['sock'];
+
     // Crear el JSON con los nombres de los archivos
     $shared_files_data = json_encode(["files" => $shared_files]);
-
     // Preparar la solicitud HTTP
     $request = "PUT /hosts/$ip HTTP/1.1\r\n" .
         "Host: $server_ip:$server_port\r\n" .
         "Content-Type: application/json\r\n" .
         "Content-Length: " . strlen($shared_files_data) . "\r\n\r\n" .
         $shared_files_data;
-
     // Intentar enviar la solicitud
     if (!@socket_write($sock, $request, strlen($request))) {
         log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($sock)));
         return false;
     }
-
-    log_info("Solicitud enviada correctamente:\n$request");
     return true;
 }
 
