@@ -1,6 +1,9 @@
 <?php
 
+// si se declara LOG_OK, si no no incluir logs
+define('LOG_ON', true);
 require_once realpath(__DIR__ . "/logs.php");
+
 
 // Datos de configuración del cliente y el servidor
 $ip = "127.0.0.10";
