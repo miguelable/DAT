@@ -94,13 +94,13 @@ function handle_socket_error()
 }
 
 // 5. Función para ejecutar el bucle de envío de archivos compartidos
-function file_sending_loop($sock, $shared_directory, $ip, $port, $server_ip, $server_port)
+function file_sending_loop()
 {
     while (true) {
-        $shared_files = get_shared_files($shared_directory);
-        if (!send_shared_files($sock, $shared_files, $ip, $server_ip, $server_port)) {
+        $shared_files = get_shared_files();
+        if (!send_shared_files($shared_files)) {
             // Si ocurre un error, intenta reconectar
-            handle_socket_error($sock, $ip, $port, $server_ip, $server_port);
+            handle_socket_error();
         }
         sleep(10); // Espera 10 segundos antes de enviar nuevamente
     }
