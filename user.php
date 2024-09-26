@@ -12,23 +12,29 @@ $server_port = 8888;
 $download_directory = realpath(__DIR__ . "/download/");
 $shared_directory = realpath(__DIR__ . "/shared/");
 
+// Inicializar el socket
+$sock = create_socket();
+
 // 1. Función para crear y conectar el socket
-function create_socket($ip, $port, $server_ip, $server_port)
+function create_socket()
 {
     $sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname('tcp'));
     if ($sock === false) {
         log_error("Error creando el socket: " . socket_strerror(socket_last_error()));
+        return false;
     }
 
-    if (socket_bind($sock, $ip, $port) === false) {
+    if (socket_bind($sock, $GLOBALS['ip'], $GLOBALS['port']) === false) {
         log_error("Error asociando el socket: " . socket_strerror(socket_last_error($sock)));
+        socket_close($sock);
+        return false;
     }
 
-    if (socket_connect($sock, $server_ip, $server_port) === false) {
+    if (socket_connect($sock,  $GLOBALS['server_ip'], $GLOBALS['server_port']) === false) {
         log_error("Error conectando al servidor: " . socket_strerror(socket_last_error($sock)));
+        socket_close($sock);
+        return false;
     }
-
-    log_info("Conectado al servidor");
     return $sock;
 }
 
