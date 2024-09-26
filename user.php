@@ -39,13 +39,13 @@ function create_socket()
 }
 
 // 2. Función para obtener los archivos compartidos
-function get_shared_files($shared_directory)
+function get_shared_files()
 {
+    $shared_directory = $GLOBALS['shared_directory'];
     if (!file_exists($shared_directory)) {
         log_error("Directorio compartido no encontrado: $shared_directory");
         return [];
     }
-
     $files = scandir($shared_directory);
     $shared_files = array_filter($files, function ($file) {
         return $file !== "." && $file !== "..";
@@ -54,7 +54,6 @@ function get_shared_files($shared_directory)
     if (empty($shared_files)) {
         log_warning("No hay archivos para compartir");
     }
-
     return array_values($shared_files);
 }
 
