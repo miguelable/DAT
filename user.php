@@ -15,6 +15,59 @@ $shared_directory = realpath(__DIR__ . "/shared/");
 // Inicializar el socket
 $sock = create_socket();
 
+// Constantes para mensajes de error
+define('ERROR_FORK_1', "Error creando el proceso 1\n");
+define('ERROR_FORK_2', "Error creando el proceso 2\n");
+define('ERROR_FORK_3', "Error creando el proceso 3\n");
+
+// Crear procesos hijos
+$pid1 = create_child_process('task_file_sending_loop', ERROR_FORK_1);
+if ($pid1 != -1) {
+    $pid2 = create_child_process('task_terminal_loop', ERROR_FORK_2);
+    if ($pid2 != -1) {
+        $pid3 = create_child_process('task_client_requests', ERROR_FORK_3);
+        if ($pid3 != -1) {
+            // Proceso padre: esperar a que los 3 hijos terminen
+            pcntl_waitpid($pid1, $status);
+            pcntl_waitpid($pid2, $status);
+            pcntl_waitpid($pid3, $status);
+            log_info("Todos los procesos han terminado");
+        }
+    }
+}
+
+// Función para crear un proceso hijo
+function create_child_process($task, $error_message)
+{
+    $pid = pcntl_fork();
+    if ($pid == -1) {
+        log_error($error_message);
+        return -1;
+    } else if ($pid == 0) {
+        $task();
+        exit(0); // Asegurarse de que el proceso hijo termine
+    }
+    return $pid;
+}
+
+// Tareas de los procesos hijos
+function task_file_sending_loop()
+{
+    file_sending_loop();
+}
+
+// Tarea de la terminal del cliente
+function task_terminal_loop()
+{
+    terminal_loop();
+}
+
+// Tarea aceptar peticiones entrantes
+function task_client_requests()
+{
+    client_loop();
+}
+
 // Función para crear y conectar el socket
 function create_socket()
 {
