@@ -276,103 +276,25 @@ function client_loop()
 
 // Función para manejar las peticiones de los clientes
 function handle_client($client)
-
-// Función para manejar las peticiones de los clientes
-function client_loop()
 {
-    $sock = $GLOBALS['sock'];
+    // Leer la petición del cliente
     while (true) {
-        // Aceptar conexiones entrantes
-        if (($client = socket_accept($sock)) !== false) {
-            $pid = pcntl_fork();
-            if ($pid == -1) {
-                log_error("Error al crear el proceso cliente");
-                socket_close($client);
-            } elseif ($pid == 0) {
-                handle_client($client);
-                exit;
-            } else {
-                // Proceso padre: cerrar el socket del cliente en el padre
-                socket_close($client);
-            }
+        $request = socket_read($client, 1024);
+        if ($request === false) {
+            log_error("Error al leer la petición del cliente: " . socket_strerror(socket_last_error($client)));
+            break;
+        }
+        log_verbose("Petición:\n $request");
+        // Devolver el array de clientes conecatdos
+        $response = "Respuesta provisional\n";
+        log_verbose($response);
+        // Enviar respuesta al cliente
+        if (socket_write($client, $response, strlen($response)) === false) {
+            log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($client)));
+            break;
         }
     }
+    // Cerrar la conexión al cliente
+    log_info("Cerrando conexión con el cliente.");
+    socket_close($client);
 }
-
-// Función para manejar las peticiones de los clientes
-function handle_client($client)
-
-// Función para manejar las peticiones de los clientes
-function client_loop()
-{
-    $sock = $GLOBALS['sock'];
-    while (true) {
-        // Aceptar conexiones entrantes
-        if (($client = socket_accept($sock)) !== false) {
-            $pid = pcntl_fork();
-            if ($pid == -1) {
-                log_error("Error al crear el proceso cliente");
-                socket_close($client);
-            } elseif ($pid == 0) {
-                handle_client($client);
-                exit;
-            } else {
-                // Proceso padre: cerrar el socket del cliente en el padre
-                socket_close($client);
-            }
-        }
-    }
-}
-
-// Función para manejar las peticiones de los clientes
-function handle_client($client)
-
-// Función para manejar las peticiones de los clientes
-function client_loop()
-{
-    $sock = $GLOBALS['sock'];
-    while (true) {
-        // Aceptar conexiones entrantes
-        if (($client = socket_accept($sock)) !== false) {
-            $pid = pcntl_fork();
-            if ($pid == -1) {
-                log_error("Error al crear el proceso cliente");
-                socket_close($client);
-            } elseif ($pid == 0) {
-                handle_client($client);
-                exit;
-            } else {
-                // Proceso padre: cerrar el socket del cliente en el padre
-                socket_close($client);
-            }
-        }
-    }
-}
-
-// Función para manejar las peticiones de los clientes
-function handle_client($client)
-
-// Función para manejar las peticiones de los clientes
-function client_loop()
-{
-    $sock = $GLOBALS['sock'];
-    while (true) {
-        // Aceptar conexiones entrantes
-        if (($client = socket_accept($sock)) !== false) {
-            $pid = pcntl_fork();
-            if ($pid == -1) {
-                log_error("Error al crear el proceso cliente");
-                socket_close($client);
-            } elseif ($pid == 0) {
-                handle_client($client);
-                exit;
-            } else {
-                // Proceso padre: cerrar el socket del cliente en el padre
-                socket_close($client);
-            }
-        }
-    }
-}
-
-// Función para manejar las peticiones de los clientes
-function handle_client($client)
