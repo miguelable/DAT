@@ -56,16 +56,57 @@ function handle_client($client, $clients_list)
         // Caso 1: GET /peers/nombreArchivo
         if (preg_match('/GET \/peers\/([^\s]+)/', $request, $matches)) {
             $nombreArchivo = $matches[1];
-            echo "Solicitud GET para peers con el archivo: $nombreArchivo";
-
-            // Aquí puedes manejar la lógica para buscar y devolver el archivo.
-
+            echo "Solicitud GET para peers con el archivo: $nombreArchivo\n";
+        
+            // Buscar los clientes que tienen el archivo solicitado
+            $peersConArchivo = array_filter($clients_list, function($client) use ($nombreArchivo) {
+                return in_array($nombreArchivo, $client->files);
+            });
+        
+            // Seleccionar hasta 5 peers de manera aleatoria
+            $peersAleatorios = array_rand($peersConArchivo, min(5, count($peersConArchivo)));
+        
+            // Asegurarse de que $peersAleatorios sea un array (si solo hay uno, array_rand devuelve una sola clave)
+            if (!is_array($peersAleatorios)) {
+                $peersAleatorios = [$peersAleatorios];
+            }
+        
+            // Devolver los peers seleccionados
+            foreach ($peersAleatorios as $key) {
+                $client = $clients_list[$key];
+                echo "Peer con IP: " . $client->ip . "\n";
+            }
         // Caso 2: GET /search/trozoNombreArchivo
         } elseif (preg_match('/GET \/search\/([^\s]+)/', $request, $matches)) {
             $trozoNombreArchivo = $matches[1];
             echo "Solicitud GET para search con el fragmento del nombre del archivo: $trozoNombreArchivo";
 
-            // Aquí puedes manejar la lógica para buscar archivos que coincidan con el fragmento.
+            // Array para almacenar los resultados de la búsqueda
+        $resultados = [];
+
+        // Buscar en cada cliente
+        foreach ($clients_list as $client) {
+            foreach ($client->files as $file) {
+                // Verificar si el fragmento está contenido en el nombre del archivo
+                if (strpos($file, $trozoNombreArchivo) !== false) {
+                    // Si el archivo coincide, añadir el cliente y el archivo a los resultados
+                    $resultados[] = [
+                        'ip' => $client->ip,
+                        'archivo' => $file
+                    ];
+                }
+            }
+        }
+
+        // Mostrar los resultados de la búsqueda
+        if (!empty($resultados)) {
+            echo "Resultados de la búsqueda:\n";
+            foreach ($resultados as $resultado) {
+                echo "Cliente con IP: " . $resultado['ip'] . " tiene el archivo: " . $resultado['archivo'] . "\n";
+            }
+    } else {
+        echo "No se encontraron archivos que coincidan con el fragmento: $trozoNombreArchivo\n";
+    }
 
         } else {
             echo "Ruta GET desconocida.";
@@ -132,17 +173,6 @@ function update_files($ip_client, $clients_list, $files) {
     return $clients_list; // Devolver siempre la lista de clientes
 }
 
-function search_peers($client, $clients_list,$file_name){
-    foreach ($clients_list as $c) {
-        if (strpos($c->ip, $file_name)) {
-
-        }
-    }
-}
-
-function search_piece($client, $clients_list,$file_name){
-    
-}
 function create_new_client($client, $clients_list)
 {
     // get the ip of the client
@@ -153,7 +183,7 @@ function create_new_client($client, $clients_list)
     // check if the ip is in the clients array
     foreach ($clients_list as $c) {
         if ($c->ip == $client_ip) {
-            log_warning("Client $client_ip already exists");
+            //log_warning("Client $client_ip already exists");
             return $clients_list;
         }
     }
