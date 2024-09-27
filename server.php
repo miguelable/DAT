@@ -171,3 +171,4 @@ function create_new_client($client, $clients_list)
 }
 
 // En $clients_list cada nuevo cliente se almacena con el index del último valor de su ip
+// tengo que hacer que no salga esto log_warning("Client $client_ip already exists"); todo el rato
