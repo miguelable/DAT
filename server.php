@@ -1,7 +1,8 @@
 <?php
 
 // import error functions
-require_once "logs.php";
+define('LOG_ON', true);
+require_once realpath(__DIR__ . "/logs.php");
 
 $server_ip = "127.0.0.1";
 $server_port = 8888;
@@ -88,25 +89,25 @@ function handle_client($client, $clients_list)
 
                 // Devolver los peers seleccionados
                 foreach ($peersAleatorios as $key) {
-                    $client = $clients_list[$key];
-                    echo "Peer con IP: " . $client->ip . "\n";
+                    $peer = $clients_list[$key];
+                    echo "Peer con IP: " . $peer->ip . "\n";
                 }
                 // Caso 2: GET /search/trozoNombreArchivo
             } elseif (preg_match('/GET \/search\/([^\s]+)/', $request, $matches)) {
                 $trozoNombreArchivo = $matches[1];
-                echo "Solicitud GET para search con el fragmento del nombre del archivo: $trozoNombreArchivo";
+                echo "Solicitud GET para search con el fragmento del nombre del archivo: $trozoNombreArchivo\n";
 
                 // Array para almacenar los resultados de la búsqueda
                 $resultados = [];
 
                 // Buscar en cada cliente
-                foreach ($clients_list as $client) {
-                    foreach ($client->files as $file) {
+                foreach ($clients_list as $peer) {
+                    foreach ($peer->files as $file) {
                         // Verificar si el fragmento está contenido en el nombre del archivo
                         if (strpos($file, $trozoNombreArchivo) !== false) {
                             // Si el archivo coincide, añadir el cliente y el archivo a los resultados
                             $resultados[] = [
-                                'ip' => $client->ip,
+                                'ip' => $peer->ip,
                                 'archivo' => $file
                             ];
                         }
@@ -123,7 +124,7 @@ function handle_client($client, $clients_list)
                     echo "No se encontraron archivos que coincidan con el fragmento: $trozoNombreArchivo\n";
                 }
             } else {
-                echo "Ruta GET desconocida.";
+                echo "Ruta GET desconocida.\n";
             }
         }
         if ($data[0] == 'PUT') {
@@ -141,17 +142,17 @@ function handle_client($client, $clients_list)
             // Verificar si la decodificación fue exitosa
             if (json_last_error() === JSON_ERROR_NONE) {
                 $files = $data1['files']; // Acceder a la lista de archivos
-                print_r($files); // Imprimir el contenido de files
+                // print_r($files); // Imprimir el contenido de files
             } else {
                 echo "Error al decodificar el JSON: " . json_last_error_msg();
             }
 
             update_files($ip_client,  $clients_list, $files);
         } else {
-            echo "Método HTTP no soportado.";
+            echo "Método HTTP no soportado.\n";
         }
 
-        log_verbose("Petición:\n $request");
+        log_verbose("Petición: $request\n");
 
         // Devolver el array de clientes conecatdos
         $response = "Clientes conectados: \n";
@@ -176,7 +177,7 @@ function update_files($ip_client, $clients_list, $files)
         if ($client->ip === $ip_client) {
             // Actualizar la lista de archivos del cliente
             $client->files = $files;
-            print_r($clients_list); // Imprimir los detalles del cliente actualizado
+            // print_r($clients_list); // Imprimir los detalles del cliente actualizado
             log_info("Archivos actualizados para el cliente con IP: $ip_client");
             $client_found = true; // Cliente encontrado y actualizado
             break; // Salimos del loop porque ya encontramos al cliente
