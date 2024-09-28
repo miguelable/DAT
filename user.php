@@ -324,3 +324,136 @@ function handle_client($client)
     log_info("Cerrando conexión con el cliente.");
     socket_close($client);
 }
+
+// Función para obtener la lista de hosts
+function getHosts()
+{
+    $server_ip = $GLOBALS['server_ip'];
+    $server_port = $GLOBALS['server_port'];
+    $sock = $GLOBALS['sock'];
+    // Crear la solicitud HTTP
+    $request = "GET /hosts HTTP/1.1\r\n" .
+        "Host: $server_ip:$server_port\r\n" .
+        "Content-Type: application/json\r\n" .
+        "Content-Length: 0\r\n\r\n";
+    // Enviar la solicitud
+    if (!@socket_write($sock, $request, strlen($request))) {
+        log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($sock)));
+        return false;
+    }
+    // Leer la respuesta
+    $response = read_server_response($sock);
+    if ($response === false) {
+        return false;
+    }
+    echo "127.0.0.101\n127.0.0.102\n127.0.0.103\n";
+    return true;
+}
+
+// Función para obtener la lista de archivos de un host
+function getHostFiles($host, $port)
+{
+    $server_ip = $GLOBALS['server_ip'];
+    $server_port = $GLOBALS['server_port'];
+    $sock = $GLOBALS['sock_server'];
+    // Crear la solicitud HTTP
+    $request = "GET /hosts/$host:$port HTTP/1.1\r\n" .
+        "Host: $server_ip:$server_port\r\n" .
+        "Content-Type: application/json\r\n" .
+        "Content-Length: 0\r\n\r\n";
+    // Enviar la solicitud
+    if (!@socket_write($sock, $request, strlen($request))) {
+        log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($sock)));
+        return false;
+    }
+    // Leer la respuesta
+    $response = read_server_response($sock);
+    if ($response === false) {
+        return false;
+    }
+    echo "file1.txt\nfile2.txt\nfile3.txt\n";
+    return true;
+}
+
+// Función para descargar un fichero
+function downloadFile($file)
+{
+    $server_ip = $GLOBALS['server_ip'];
+    $server_port = $GLOBALS['server_port'];
+    $sock = $GLOBALS['sock_server'];
+    // Crear la solicitud HTTP
+    $request = "GET /search/$file HTTP/1.1\r\n" .
+        "Host: $server_ip:$server_port\r\n" .
+        "Content-Type: application/json\r\n" .
+        "Content-Length: 0\r\n\r\n";
+    // Enviar la solicitud
+    if (!@socket_write($sock, $request, strlen($request))) {
+        log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($sock)));
+        return false;
+    }
+    // Leer la respuesta
+    $response = read_server_response($sock);
+    if ($response === false) {
+        return false;
+    }
+
+    // Array con las ips donde esta el archivo
+    $client_ips = json_decode($response, true);
+    if (empty($client_ips)) {
+        log_warning("No se encontraron archivos");
+        return false;
+    } else {
+        log_debug("Archivo encontrado en las siguientes IPs:\n");
+        foreach ($client_ips as $ip) {
+            log_debug("$ip\n");
+        }
+    }
+    // probar a conectarme a las ips para descargar el fichero
+    foreach ($client_ips as $ip) {
+        $socket = create_socket($GLOBALS['ip'], $GLOBALS['port'], $ip, $GLOBALS['server_port'], false);
+        // Crear la solicitud HTTP
+        $request = "GET /download/$file HTTP/1.1\r\n" .
+            "Host: $server_ip:$server_port\r\n" .
+            "Content-Type: application/json\r\n" .
+            "Content-Length: 0\r\n\r\n";
+        // Enviar la solicitud
+        if (!@socket_write($socket, $request, strlen($request))) {
+            log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($socket)));
+            return false;
+        }
+        // Leer la respuesta
+        $response = read_server_response($socket);
+        if ($response === false) {
+            return false;
+        }
+        // Comprobar si hay contenido de la descarga
+        if (strpos($response, "200 OK") === false) {
+            log_warning("No se ha podido descargar el archivo");
+            return false;
+        } else {
+            log_info("Archivo $file descargado satisfactoriamente");
+            saveDownloadedFile($response);
+            return true;
+        }
+    }
+    return true;
+}
+
+// Función para guardar el archivo descargado
+function saveDownloadedFile($response)
+{
+    // extraer de la respuesta http el contenido 
+    $content = explode("\r\n\r\n", $response)[1];
+    // crear el archivo
+    $download_directory = $GLOBALS['download_directory'];
+    $file = fopen($download_directory . "file.txt", "w");
+    fwrite($file, $content);
+    fclose($file);
+    log_info("Archivo guardado en descargas");
+    // guardar el archivo para poder compartirlo tambien
+    $shared_directory = $GLOBALS['shared_directory'];
+    $file_share = fopen($shared_directory . "file.txt", "w");
+    fwrite($file_share, $content);
+    fclose($file_share);
+    log_info("Archivo listo para compartir");
+}
