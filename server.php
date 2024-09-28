@@ -39,120 +39,138 @@ while (true) {
     if (($client = socket_accept($sock)) !== false) {
         // create a new client
         $clients_list = create_new_client($client, $clients_list);
-        // handle the client
-        handle_client($client, $clients_list);
-
+        // Crear un nuevo proceso para manejar al cliente
+        $pid = pcntl_fork();
+        if ($pid == -1) {
+            log_error("Error al crear el proceso hijo.");
+            socket_close($client);
+        } elseif ($pid == 0) {
+            // Proceso hijo: manejar el cliente
+            handle_client($client, $clients_list);
+            exit; // Terminar el proceso hijo
+        } else {
+            // Proceso padre: cerrar el socket del cliente en el padre
+            socket_close($client);
+        }
     }
 }
 
 function handle_client($client, $clients_list)
 {
     // Leer la petición del cliente
-    $request = socket_read($client, 1024);
-    $data = explode(' ', $request);
+    while (true) {
+        $request = socket_read($client, 1024);
+        if ($request === false) {
+            log_error("Error al leer la petición del cliente: " . socket_strerror(socket_last_error($client)));
+            break; // Salir del bucle si hay un error
+        }
+        $data = explode(' ', $request);
 
-    // Verificar el método HTTP (GET o PUT)
-    if ($data[0] == 'GET') {
-        // Caso 1: GET /peers/nombreArchivo
-        if (preg_match('/GET \/peers\/([^\s]+)/', $request, $matches)) {
-            $nombreArchivo = $matches[1];
-            echo "Solicitud GET para peers con el archivo: $nombreArchivo\n";
-        
-            // Buscar los clientes que tienen el archivo solicitado
-            $peersConArchivo = array_filter($clients_list, function($client) use ($nombreArchivo) {
-                return in_array($nombreArchivo, $client->files);
-            });
-        
-            // Seleccionar hasta 5 peers de manera aleatoria
-            $peersAleatorios = array_rand($peersConArchivo, min(5, count($peersConArchivo)));
-        
-            // Asegurarse de que $peersAleatorios sea un array (si solo hay uno, array_rand devuelve una sola clave)
-            if (!is_array($peersAleatorios)) {
-                $peersAleatorios = [$peersAleatorios];
-            }
-        
-            // Devolver los peers seleccionados
-            foreach ($peersAleatorios as $key) {
-                $client = $clients_list[$key];
-                echo "Peer con IP: " . $client->ip . "\n";
-            }
-        // Caso 2: GET /search/trozoNombreArchivo
-        } elseif (preg_match('/GET \/search\/([^\s]+)/', $request, $matches)) {
-            $trozoNombreArchivo = $matches[1];
-            echo "Solicitud GET para search con el fragmento del nombre del archivo: $trozoNombreArchivo";
+        // Verificar el método HTTP (GET o PUT)
+        if ($data[0] == 'GET') {
+            // Caso 1: GET /peers/nombreArchivo
+            if (preg_match('/GET \/peers\/([^\s]+)/', $request, $matches)) {
+                $nombreArchivo = $matches[1];
+                echo "Solicitud GET para peers con el archivo: $nombreArchivo\n";
 
-            // Array para almacenar los resultados de la búsqueda
-        $resultados = [];
+                // Buscar los clientes que tienen el archivo solicitado
+                $peersConArchivo = array_filter($clients_list, function ($client) use ($nombreArchivo) {
+                    return in_array($nombreArchivo, $client->files);
+                });
 
-        // Buscar en cada cliente
-        foreach ($clients_list as $client) {
-            foreach ($client->files as $file) {
-                // Verificar si el fragmento está contenido en el nombre del archivo
-                if (strpos($file, $trozoNombreArchivo) !== false) {
-                    // Si el archivo coincide, añadir el cliente y el archivo a los resultados
-                    $resultados[] = [
-                        'ip' => $client->ip,
-                        'archivo' => $file
-                    ];
+                // Seleccionar hasta 5 peers de manera aleatoria
+                $peersAleatorios = array_rand($peersConArchivo, min(5, count($peersConArchivo)));
+
+                // Asegurarse de que $peersAleatorios sea un array (si solo hay uno, array_rand devuelve una sola clave)
+                if (!is_array($peersAleatorios)) {
+                    $peersAleatorios = [$peersAleatorios];
                 }
+
+                // Devolver los peers seleccionados
+                foreach ($peersAleatorios as $key) {
+                    $client = $clients_list[$key];
+                    echo "Peer con IP: " . $client->ip . "\n";
+                }
+                // Caso 2: GET /search/trozoNombreArchivo
+            } elseif (preg_match('/GET \/search\/([^\s]+)/', $request, $matches)) {
+                $trozoNombreArchivo = $matches[1];
+                echo "Solicitud GET para search con el fragmento del nombre del archivo: $trozoNombreArchivo";
+
+                // Array para almacenar los resultados de la búsqueda
+                $resultados = [];
+
+                // Buscar en cada cliente
+                foreach ($clients_list as $client) {
+                    foreach ($client->files as $file) {
+                        // Verificar si el fragmento está contenido en el nombre del archivo
+                        if (strpos($file, $trozoNombreArchivo) !== false) {
+                            // Si el archivo coincide, añadir el cliente y el archivo a los resultados
+                            $resultados[] = [
+                                'ip' => $client->ip,
+                                'archivo' => $file
+                            ];
+                        }
+                    }
+                }
+
+                // Mostrar los resultados de la búsqueda
+                if (!empty($resultados)) {
+                    echo "Resultados de la búsqueda:\n";
+                    foreach ($resultados as $resultado) {
+                        echo "Cliente con IP: " . $resultado['ip'] . " tiene el archivo: " . $resultado['archivo'] . "\n";
+                    }
+                } else {
+                    echo "No se encontraron archivos que coincidan con el fragmento: $trozoNombreArchivo\n";
+                }
+            } else {
+                echo "Ruta GET desconocida.";
             }
         }
-
-        // Mostrar los resultados de la búsqueda
-        if (!empty($resultados)) {
-            echo "Resultados de la búsqueda:\n";
-            foreach ($resultados as $resultado) {
-                echo "Cliente con IP: " . $resultado['ip'] . " tiene el archivo: " . $resultado['archivo'] . "\n";
+        if ($data[0] == 'PUT') {
+            // Caso 3: PUT /host/XXXX:PPP
+            // Utilizar expresión regular para extraer la IP
+            if (preg_match('/\/hosts\/([\d\.]+)/', $data[1], $matches)) {
+                $ip_client = $matches[1]; // La IP extraída
             }
-    } else {
-        echo "No se encontraron archivos que coincidan con el fragmento: $trozoNombreArchivo\n";
-    }
 
+            // Buscar la el json en $data[5]
+            $json_content = substr($data[5], strpos($data[5], '{'));
+
+            // Decodificar el JSON
+            $data1 = json_decode($json_content, true);
+            // Verificar si la decodificación fue exitosa
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $files = $data1['files']; // Acceder a la lista de archivos
+                print_r($files); // Imprimir el contenido de files
+            } else {
+                echo "Error al decodificar el JSON: " . json_last_error_msg();
+            }
+
+            update_files($ip_client,  $clients_list, $files);
         } else {
-            echo "Ruta GET desconocida.";
+            echo "Método HTTP no soportado.";
         }
 
-    } if ($data[0] == 'PUT') {
-        // Caso 3: PUT /host/XXXX:PPP
-        // Utilizar expresión regular para extraer la IP
-        if (preg_match('/\/hosts\/([\d\.]+)/', $data[1], $matches)) {
-            $ip_client = $matches[1]; // La IP extraída
+        log_verbose("Petición:\n $request");
+
+        // Devolver el array de clientes conecatdos
+        $response = "Clientes conectados: \n";
+        foreach ($clients_list as $c) {
+            $response .= $c->ip . "\n";
         }
-
-        // Buscar la el json en $data[5]
-        $json_content = substr($data[5], strpos($data[5], '{'));
-
-        // Decodificar el JSON
-        $data1 = json_decode($json_content, true);
-        // Verificar si la decodificación fue exitosa
-        if (json_last_error() === JSON_ERROR_NONE) {
-            $files = $data1['files']; // Acceder a la lista de archivos
-            print_r($files); // Imprimir el contenido de files
-        } else {
-            echo "Error al decodificar el JSON: " . json_last_error_msg();
+        log_verbose($response);
+        if (socket_write($client, $response, strlen($response)) === false) {
+            log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($client)));
+            break; // Salir si hay un error al escribir
         }
-
-        update_files($ip_client,  $clients_list, $files);
-
-    } else {
-        echo "Método HTTP no soportado.";
     }
-
-    log_verbose("Petición:\n $request");
-
-    // Devolver el array de clientes conecatdos
-    $response = "Clientes conectados: \n";
-    foreach ($clients_list as $c) {
-        $response .= $c->ip . "\n";
-    }
-    log_verbose($response);
-    socket_write($client, $response, strlen($response));
-
-    // Cerrar la conexión
+    // Cerrar la conexión al cliente
+    log_info("Cerrando conexión con el cliente.");
     socket_close($client);
 }
 
-function update_files($ip_client, $clients_list, $files) {
+function update_files($ip_client, $clients_list, $files)
+{
     $client_found = false; // Indicador para verificar si encontramos al cliente
     foreach ($clients_list as $client) {
         if ($client->ip === $ip_client) {
