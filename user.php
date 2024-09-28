@@ -16,7 +16,7 @@ $download_directory = realpath(__DIR__ . "/download/");
 $shared_directory = realpath(__DIR__ . "/shared/");
 
 // Inicializar el socket
-$sock = create_socket();
+$sock_server = create_socket($ip, $port, $server_ip, $server_port, false);
 
 // Constantes para mensajes de error
 define('ERROR_FORK_1', "Error creando el proceso 1\n");
@@ -71,27 +71,37 @@ function task_client_requests()
     client_loop();
 }
 
-// Función para crear y conectar el socket
-function create_socket()
+// Función para crear y conectar el socket o escuchar
+function create_socket($ip, $port, $server_ip, $server_port, $isReadable)
 {
-    $sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname('tcp'));
-    if ($sock === false) {
+    $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname('tcp'));
+    if ($socket === false) {
         log_error("Error creando el socket: " . socket_strerror(socket_last_error()));
         return false;
     }
-
-    if (socket_bind($sock, $GLOBALS['ip'], $GLOBALS['port']) === false) {
-        log_error("Error asociando el socket: " . socket_strerror(socket_last_error($sock)));
-        socket_close($sock);
-        return false;
+    if ($isReadable === true) {
+        if (socket_listen($socket, 10) === false) {
+            die("Error al escuchar en el socket: " . socket_strerror(socket_last_error($socket)));
+        }
+    } else {
+        if (socket_bind($socket, $ip, $port) === false) {
+            log_error("Error asociando el socket: " . socket_strerror(socket_last_error($socket)));
+            socket_close($socket);
+            return false;
+        }
+        if (socket_connect($socket,  $server_ip, $server_port) === false) {
+            log_error("Error conectando al servidor: " . socket_strerror(socket_last_error($socket)));
+            socket_close($socket);
+            return false;
+        }
     }
+    return $socket;
+}
 
-    if (socket_connect($sock,  $GLOBALS['server_ip'], $GLOBALS['server_port']) === false) {
-        log_error("Error conectando al servidor: " . socket_strerror(socket_last_error($sock)));
-        socket_close($sock);
-        return false;
-    }
-    return $sock;
+// function para crear socket sin necesidad de meter server ip y puerto
+function create_socket_r($ip, $port, $isReadable)
+{
+    return create_socket($ip, $port, "", "", $isReadable);
 }
 
 // Función para obtener los archivos que se comparten
@@ -121,7 +131,7 @@ function send_shared_files($shared_files)
     $ip = $GLOBALS['ip'];
     $server_ip = $GLOBALS['server_ip'];
     $server_port = $GLOBALS['server_port'];
-    $sock = $GLOBALS['sock'];
+    $sock = $GLOBALS['sock_server'];
 
     // Crear el JSON con los nombres de los archivos
     $shared_files_data = json_encode(["files" => $shared_files]);
@@ -142,12 +152,19 @@ function send_shared_files($shared_files)
 // Función para ejecutar el bucle de envío de archivos compartidos
 function file_sending_loop()
 {
+    $sock = $GLOBALS['sock_server'];
     while (true) {
         $shared_files = get_shared_files();
         if (!send_shared_files($shared_files)) {
             log_warning("Intentando reconectar...");
-            socket_close($GLOBALS['sock']);
-            $GLOBALS['sock'] = create_socket();
+            socket_close($sock);
+            $sock = create_socket(
+                $GLOBALS['ip'],
+                $GLOBALS['port'],
+                $GLOBALS['server_ip'],
+                $GLOBALS['server_port'],
+                false
+            );
         }
         sleep(10);
     }
@@ -186,16 +203,22 @@ function terminal_loop()
                     break;
                 }
                 // Lógica para descargar archivos (implementación pendiente)
+                downloadFile($order[1]);
                 break;
             case "hosts":
                 // Lógica para listar hosts (implementación pendiente)
+                getHosts();
                 break;
             case "host_files":
                 if (count($order) < 2 || empty($order[1]) || $order[1] === "?") {
-                    log_debug("Use: host_files <host>");
+                    log_debug("Use: host_files <ip> <port>");
                     break;
                 }
-                // Lógica para listar archivos de un host (implementación pendiente)
+                if (count($order) > 2 && !empty($order[2])) {
+                    getHostFiles($order[1], $order[2]);
+                    break;
+                }
+                getHostFiles($order[1], $GLOBALS['server_port']);
                 break;
             default:
                 log_warning("Comando no reconocido: " . $order[0]);
@@ -237,9 +260,8 @@ function show_available_commands()
 {
     echo "Comandos disponibles:\n";
     echo "search \t\t <arg> \t\t Buscar todos los archivos que contienen arg\n";
-    echo "search_file \t <file> \t Buscar un archivo\n";
     echo "download \t <file> \t Descargar un archivo\n";
-    echo "host_files \t <host> \t Obtener la lista de archivos de un host\n";
+    echo "host_files \t <ip> <port> \t Obtener la lista de archivos de un host\n";
     echo "hosts\t\t\t\t Obtener la lista de hosts\n";
     echo "exit \t\t\t\t Salir del programa\n";
 }
@@ -258,20 +280,21 @@ function read_server_response($sock)
 // Función para manejar las peticiones de los clientes
 function client_loop()
 {
-    $sock = $GLOBALS['sock'];
+    // crear un socket de lectura
+    $sock_client = create_socket_r($GLOBALS['ip'], $GLOBALS['port'], true);
     while (true) {
         // Aceptar conexiones entrantes
-        if (($client = socket_accept($sock)) !== false) {
+        if (($extern_client = socket_accept($sock_client)) !== false) {
             $pid = pcntl_fork();
             if ($pid == -1) {
                 log_error("Error al crear el proceso cliente");
-                socket_close($client);
+                socket_close($extern_client);
             } elseif ($pid == 0) {
-                handle_client($client);
+                handle_client($extern_client);
                 exit;
             } else {
                 // Proceso padre: cerrar el socket del cliente en el padre
-                socket_close($client);
+                socket_close($extern_client);
             }
         }
     }
