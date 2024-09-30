@@ -42,7 +42,7 @@ function crearFichero($ip)
     // Extraer el código de user.php
     $codigo = file_get_contents("user.php");
     // Reemplazar la IP
-    $codigo = str_replace("127.0.0.10", $ip, $codigo);
+    $codigo = preg_replace('/127\.0\.0\.10/', $ip, $codigo, 1);
     // Reemplazar la dirección de descarga y compartir
     $client_number = substr($ip, -1);
 
