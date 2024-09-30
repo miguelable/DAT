@@ -85,15 +85,15 @@ function create_socket($ip, $port, $server_ip, $server_port, $isReadable)
         return false;
     }
     if ($isReadable === true) {
-        if (socket_listen($socket, 10) === false) {
-            die("Error al escuchar en el socket: " . socket_strerror(socket_last_error($socket)));
-        }
-    } else {
         if (socket_bind($socket, $ip, $port) === false) {
             log_error("Error asociando el socket: " . socket_strerror(socket_last_error($socket)));
             socket_close($socket);
             return false;
         }
+        if (socket_listen($socket, 10) === false) {
+            die("Error al escuchar en el socket: " . socket_strerror(socket_last_error($socket)));
+        }
+    } else {
         if (socket_connect($socket,  $server_ip, $server_port) === false) {
             log_error("Error conectando al servidor: " . socket_strerror(socket_last_error($socket)));
             socket_close($socket);
