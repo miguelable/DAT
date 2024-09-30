@@ -23,11 +23,6 @@ define('ERROR_FORK_1', "Error creando el proceso 1\n");
 define('ERROR_FORK_2', "Error creando el proceso 2\n");
 define('ERROR_FORK_3', "Error creando el proceso 3\n");
 
-// Declarar los procesos
-$pid1 = -1;
-$pid2 = -1;
-$pid3 = -1;
-
 // Crear procesos hijos
 $pid1 = create_child_process('task_file_sending_loop', ERROR_FORK_1);
 if ($pid1 != -1) {
@@ -190,6 +185,9 @@ function terminal_loop()
                 break;
             case "exit":
                 log_info("Saliendo del programa...");
+                $GLOBALS['pid1'] = $GLOBALS['pid1'] ?? null;
+                $GLOBALS['pid2'] = $GLOBALS['pid2'] ?? null;
+                $GLOBALS['pid3'] = $GLOBALS['pid3'] ?? null;
                 posix_kill($GLOBALS['pid1'], SIGTERM);
                 posix_kill($GLOBALS['pid2'], SIGTERM);
                 posix_kill($GLOBALS['pid3'], SIGTERM);
