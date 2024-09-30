@@ -428,15 +428,26 @@ function downloadFile($file)
         return false;
     }
 
-    // Array con las ips donde esta el archivo
-    $client_ips = json_decode($response, true);
+    // simular la respuesta
+    $response = "HTTP/1.1 200 OK\r\n" .
+        "Content-Type: application/json\r\n" .
+        "Content-Length: 0\r\n\r\n" .
+        json_encode([
+            "127.0.0.101",
+            "127.0.0.102"
+        ]);
+
+    $client_ips = json_decode(explode("\r\n\r\n", $response)[1], true);
+
+    print_r($client_ips);
+
     if (empty($client_ips)) {
         log_warning("No se encontraron archivos");
         return false;
     } else {
         log_debug("Archivo encontrado en las siguientes IPs:\n");
         foreach ($client_ips as $ip) {
-            log_debug("$ip\n");
+            log_debug("$ip");
         }
     }
     // probar a conectarme a las ips para descargar el fichero
@@ -444,7 +455,7 @@ function downloadFile($file)
         $socket = create_socket($GLOBALS['ip'], $GLOBALS['port'], $ip, $GLOBALS['server_port'], false);
         // Crear la solicitud HTTP
         $request = "GET /download/$file HTTP/1.1\r\n" .
-            "Host: $server_ip:$server_port\r\n" .
+            "Host: $ip:$server_port\r\n" .
             "Content-Type: application/json\r\n" .
             "Content-Length: 0\r\n\r\n";
         // Enviar la solicitud
@@ -457,13 +468,16 @@ function downloadFile($file)
         if ($response === false) {
             return false;
         }
+
+        log_debug($response);
+
         // Comprobar si hay contenido de la descarga
         if (strpos($response, "200 OK") === false) {
             log_warning("No se ha podido descargar el archivo");
             return false;
         } else {
             log_info("Archivo $file descargado satisfactoriamente");
-            saveDownloadedFile($response);
+            saveDownloadedFile($file, $response);
             return true;
         }
     }
@@ -471,19 +485,21 @@ function downloadFile($file)
 }
 
 // Función para guardar el archivo descargado
-function saveDownloadedFile($response)
+function saveDownloadedFile($file, $response)
 {
     // extraer de la respuesta http el contenido 
     $content = explode("\r\n\r\n", $response)[1];
-    // crear el archivo
+    // crear el archivo ene el directorio de download   
     $download_directory = $GLOBALS['download_directory'];
-    $file = fopen($download_directory . "file.txt", "w");
-    fwrite($file, $content);
-    fclose($file);
+    $file_path_download = $download_directory . "/$file";
+    $file_download = fopen($file_path_download, "w");
+    fwrite($file_download, $content);
+    fclose($file_download);
     log_info("Archivo guardado en descargas");
     // guardar el archivo para poder compartirlo tambien
     $shared_directory = $GLOBALS['shared_directory'];
-    $file_share = fopen($shared_directory . "file.txt", "w");
+    $file_path_share = $shared_directory . "/$file";
+    $file_share = fopen($file_path_share, "w");
     fwrite($file_share, $content);
     fclose($file_share);
     log_info("Archivo listo para compartir");
