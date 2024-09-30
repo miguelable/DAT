@@ -23,6 +23,11 @@ define('ERROR_FORK_1', "Error creando el proceso 1\n");
 define('ERROR_FORK_2', "Error creando el proceso 2\n");
 define('ERROR_FORK_3', "Error creando el proceso 3\n");
 
+// Declarar los procesos
+$pid1 = -1;
+$pid2 = -1;
+$pid3 = -1;
+
 // Crear procesos hijos
 $pid1 = create_child_process('task_file_sending_loop', ERROR_FORK_1);
 if ($pid1 != -1) {
