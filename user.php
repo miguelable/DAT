@@ -235,7 +235,7 @@ function searchFile($args)
 {
     $server_ip = $GLOBALS['server_ip'];
     $server_port = $GLOBALS['server_port'];
-    $sock = $GLOBALS['sock'];
+    $sock = $GLOBALS['sock_server'];
     // Crear la solicitud HTTP
     $request = "GET /search/$args HTTP/1.1\r\n" .
         // host variables globales
