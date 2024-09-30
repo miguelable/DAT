@@ -315,14 +315,40 @@ function handle_client($client)
             log_error("Error al leer la petición del cliente: " . socket_strerror(socket_last_error($client)));
             break;
         }
-        log_verbose("Petición:\n $request");
-        // Devolver el array de clientes conecatdos
-        $response = "Respuesta provisional\n";
-        log_verbose($response);
-        // Enviar respuesta al cliente
-        if (socket_write($client, $response, strlen($response)) === false) {
-            log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($client)));
+        $data = explode(' ', $request);
+        // print data
+        print_r($data);
+        // Manejar la petición
+        if (empty($data)) {
             break;
+        }
+        $file = explode('/', $data[1])[2];
+        // comprobar si el fichero está en la carpeta para compartir
+        $shared_files = get_shared_files();
+        if (!in_array($file, $shared_files)) {
+            log_warning("El archivo $file no está disponible para compartir");
+            // enviar un mensaje de error http
+            $response = "HTTP/1.1 404 Not Found\r\n" .
+                "Content-Type: application/json\r\n" .
+                "Content-Length: 0\r\n\r\n";
+            // Enviar respuesta al cliente
+            if (socket_write($client, $response, strlen($response)) === false) {
+                log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($client)));
+                break;
+            }
+        } else {
+            // enviar el fichero
+            $file_path = $GLOBALS['shared_directory'] . "/$file";
+            $file_content = file_get_contents($file_path);
+            $response = "HTTP/1.1 200 OK\r\n" .
+                "Content-Type: application/json\r\n" .
+                "Content-Length: " . strlen($file_content) . "\r\n\r\n" .
+                $file_content;
+            // Enviar respuesta al cliente
+            if (socket_write($client, $response, strlen($response)) === false) {
+                log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($client)));
+                break;
+            }
         }
     }
     // Cerrar la conexión al cliente
