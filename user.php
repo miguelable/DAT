@@ -368,7 +368,7 @@ function getHosts()
 {
     $server_ip = $GLOBALS['server_ip'];
     $server_port = $GLOBALS['server_port'];
-    $sock = $GLOBALS['sock'];
+    $sock = $GLOBALS['sock_server'];
     // Crear la solicitud HTTP
     $request = "GET /hosts HTTP/1.1\r\n" .
         "Host: $server_ip:$server_port\r\n" .
@@ -379,7 +379,7 @@ function getHosts()
     if ($response === false) {
         return false;
     }
-    echo "127.0.0.101\n127.0.0.102\n127.0.0.103\n";
+    echo $response;
     return true;
 }
 
@@ -415,7 +415,7 @@ function downloadFile($file)
     $server_port = $GLOBALS['server_port'];
     $sock = $GLOBALS['sock_server'];
     // Crear la solicitud HTTP
-    $request = "GET /search/$file HTTP/1.1\r\n" .
+    $request = "GET /peers/$file HTTP/1.1\r\n" .
         "Host: $server_ip:$server_port\r\n" .
         "Content-Type: application/json\r\n" .
         "Content-Length: 0\r\n\r\n";
