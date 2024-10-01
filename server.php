@@ -14,13 +14,21 @@ class Client
     public $files = [];
 }
 
-// array global de clientes
-$clients_list = []; // array de clientes 
+// Crear un segmento de memoria compartida
+$shm_key = ftok(__FILE__, 't');
+$shm_id = shmop_open($shm_key, "c", 0644, 1024);
+if (!$shm_id) {
+    die("No se pudo crear el segmento de memoria compartida\n");
+}
+
+// Inicializar el array de clientes en la memoria compartida
+$clients_list = [];
+shmop_write($shm_id, serialize($clients_list), 0);
 
 // Crear un socket
-$sock = socket_create(AF_INET, SOCK_STREAM, getprotobyname('tcp'));
+$sock = @socket_create(AF_INET, SOCK_STREAM, getprotobyname('tcp'));
 if ($sock === false) {
-    die("Error al crear el socket: " . socket_strerror(socket_last_error()));
+    log_error("Error al crear el socket: " . socket_strerror(socket_last_error()));
 }
 
 // Asociar el socket a una dirección/puerto
