@@ -10,6 +10,12 @@ $server_port = 8888;
 // clase con la info de los clientes
 class Client
 {
+    // constructor to set ip and file
+    public function __construct($ip, $files)
+    {
+        $this->ip = $ip;
+        $this->files = $files;
+    }
     public $ip;
     public $files = [];
 }
