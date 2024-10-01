@@ -38,13 +38,13 @@ if ($sock === false) {
 }
 
 // Asociar el socket a una dirección/puerto
-if (socket_bind($sock, $server_ip, $server_port) === false) {
-    die("Error al asociar el socket: " . socket_strerror(socket_last_error($sock)));
+if (@socket_bind($sock, $server_ip, $server_port) === false) {
+    log_error("Error al asociar el socket: " . socket_strerror(socket_last_error($sock)));
 }
 
 // Escuchar conexiones
-if (socket_listen($sock, 10) === false) {
-    die("Error al escuchar en el socket: " . socket_strerror(socket_last_error($sock)));
+if (@socket_listen($sock, 10) === false) {
+    log_error("Error al escuchar en el socket: " . socket_strerror(socket_last_error($sock)));
 }
 
 log_info("Servidor escuchando en $server_ip:$server_port");
@@ -59,7 +59,7 @@ while (true) {
             socket_close($client);
         } elseif ($pid == 0) {
             // Proceso hijo: manejar el cliente
-            handle_client($client, $clients_list);
+            handle_client($client, $shm_id);
             exit; // Terminar el proceso hijo
         } else {
             // Proceso padre: cerrar el socket del cliente en el padre
@@ -68,7 +68,7 @@ while (true) {
     }
 }
 
-function handle_client($client, $clients_list)
+function handle_client($client, $shm_id)
 {
     // Leer la petición del cliente
     while (true) {
@@ -79,45 +79,36 @@ function handle_client($client, $clients_list)
             break; // Salir del bucle si hay un error
         }
         $data = explode(' ', $request);
-        $commit1 = $data[0] ;
-        if (preg_match('/\/([^\/]+)\/([^\/]+)/', $data[1], $matches)) {
-            $commit2 = $matches[1];  
-            $commit3 = $matches[2];
+        // comprobar si el array está vacío
+        if (count(array_filter($data)) === 0) {
+            break;
         }
+        $method = $data[0];
+        // separar los datos por / en comando y info
+        $parts = explode('/', $data[1]);
+        $command = $parts[1] ?? null;
+        $info = $parts[2] ?? null;
 
-        print_r($commit1);
-        print_r($commit2);
-        print_r($commit3);
-
-        switch ($commit1) {
+        switch ($method) {
             case 'PUT':
-                $ip_client = $commit3;
-                $clients_list = create_new_client($client, $clients_list, $ip_client);
-                put_method($ip_client, $clients_list , $data);
+                $data_files = explode("\r\n\r\n", $request)[1];
+                manage_client_files($info, $data_files, $shm_id);
                 break;
             case 'GET':
-                switch ($commit2) {
+                switch ($command) {
                     case 'hosts':
+                        get_hosts_method($client, $shm_id);
                     case 'search':
-                        $trozoNombreArchivo = $commit3;
-                        get_search_method($trozoNombreArchivo, $clients_list,$client);
+                        get_search_method($info, $client, $shm_id);
                         break;
                     case 'peers':
-                        $nombreArchivo = $commit3;
-                        get_peers_method($nombreArchivo, $clients_list);
+                        get_peers_method($info, $client, $shm_id);
                         break;
-                        
                 }
-        }
-        // Devolver el array de clientes conecatdos
-        $response = "Clientes conectados: \n";
-        foreach ($clients_list as $c) {
-            $response .= $c->ip . "\n";
-        }
-        log_verbose($response);
-        if (socket_write($client, $response, strlen($response)) === false) {
-            log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($client)));
-            break; // Salir si hay un error al escribir
+                break;
+            default:
+                log_error("Método no soportado: $method");
+                break;
         }
     }
     // Cerrar la conexión al cliente
@@ -125,10 +116,26 @@ function handle_client($client, $clients_list)
     socket_close($client);
 }
 
-function get_peers_method ( $nombreArchivo, $clients_list ) {
+function get_hosts_method($client, $shm_id)
+{
+    $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
+    // Devolver las ips
+    $response = "";
+    foreach ($clients_list as $c) {
+        $response .= $c->ip . "\n";
+    }
+    if (!@socket_write($client, $response, strlen($response))) {
+        log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($client)));
+        return false;
+    }
+}
+
+function get_peers_method($file_name, $client, $shm_id)
+{
+    $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
     // Buscar los clientes que tienen el archivo solicitado
-    $peersConArchivo = array_filter($clients_list, function ($client) use ($nombreArchivo) {
-        return in_array($nombreArchivo, $client->files);
+    $peersConArchivo = array_filter($clients_list, function ($client) use ($file_name) {
+        return in_array($file_name, $client->files);
     });
 
     // Seleccionar hasta 5 peers de manera aleatoria
@@ -146,16 +153,16 @@ function get_peers_method ( $nombreArchivo, $clients_list ) {
     }
 }
 
-function get_search_method ( $trozoNombreArchivo, $clients_list,$client ) {
+function get_search_method($file_name, $client, $shm_id)
+{
+    $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
     // Array para almacenar los resultados de la búsqueda
     $resultados = [];
-    print_r($clients_list);
-
     // Buscar en cada cliente
     foreach ($clients_list as $peer) {
         foreach ($peer->files as $file) {
             // Verificar si el fragmento está contenido en el nombre del archivo
-            if (strpos($file, $trozoNombreArchivo) !== false) {
+            if (strpos($file, $file_name) !== false) {
                 // Si el archivo coincide, añadir el cliente y el archivo a los resultados
                 $resultados[] = [
                     'ip' => $peer->ip,
@@ -169,77 +176,71 @@ function get_search_method ( $trozoNombreArchivo, $clients_list,$client ) {
     if (!empty($resultados)) {
         echo "Resultados de la búsqueda:\n";
         foreach ($resultados as $resultado) {
-            echo 
             $response = "Cliente con IP: " . $resultado['ip'] . " tiene el archivo: " . $resultado['archivo'] . "\n";
             // Enviar la solicitud
             if (!@socket_write($client, $response, strlen($response))) {
-                log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($sock)));
+                //  log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($sock)));
                 return false;
             }
-            
         }
     } else {
-        echo "No se encontraron archivos que coincidan con el fragmento: $trozoNombreArchivo\n";
+        echo "No se encontraron archivos que coincidan con el fragmento: $file_name\n";
     }
 }
 
-function put_method ( $ip_client, $clients_list , $data) {
-    // Buscar la el json en $data[5]
-    $json_content = substr($data[5], strpos($data[5], '{'));
+function manage_client_files($client_ip, $file_json, $shm_id)
+{
+    $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
+    // Decodificar JSON
+    $client_files = decode_json($file_json);
+    if ($client_files === null) {
+        echo "Error decoding json: " . json_last_error_msg();
+        return;
+    }
 
-    // Decodificar el JSON
-    $json = json_decode($json_content, true);
-    // Verificar si la decodificación fue exitosa
+    // Manejar la lista de clientes
+    if (empty($clients_list)) {
+        add_new_client($client_ip, $client_files, $shm_id);
+    } else {
+        update_or_add_client($client_ip, $client_files, $shm_id);
+    }
+}
+
+function decode_json($file_json)
+{
+    $json = json_decode($file_json, true);
     if (json_last_error() === JSON_ERROR_NONE) {
-        $files = $json['files']; // Acceder a la lista de archivos
-    } else {
-        echo "Error al decodificar el JSON: " . json_last_error_msg();
+        return $json['files'];
     }
-    update_files($ip_client,  $clients_list, $files);
+    return null;
 }
 
-function update_files($ip_client, $clients_list, $files)
+function add_new_client($client_ip, $client_files, $shm_id)
 {
-    $client_found = false; // Indicador para verificar si encontramos al cliente
+    $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
+    $new_client = new Client($client_ip, $client_files);
+    array_push($clients_list, $new_client);
+    shmop_write($shm_id, serialize($clients_list), 0);
+    log_info("New client connected with IP: $client_ip");
+}
+
+function update_or_add_client($client_ip, $client_files, $shm_id)
+{
+    $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
+    $client_found = false;
     foreach ($clients_list as $client) {
-        if ($client->ip === $ip_client) {
-            // Actualizar la lista de archivos del cliente
-            $client->files = $files;
-            print_r($clients_list); // Imprimir los detalles del cliente actualizado
-            log_info("Archivos actualizados para el cliente con IP: $ip_client");
-            $client_found = true; // Cliente encontrado y actualizado
-            break; // Salimos del loop porque ya encontramos al cliente
+        if ($client->ip === $client_ip) {
+            $client->files = $client_files;
+            log_info("Files updated for client with IP: $client_ip");
+            $client_found = true;
+            break;
         }
     }
 
-    // Si no se encontró el cliente, registramos una advertencia
     if (!$client_found) {
-        log_warning("No se encontró un cliente con la IP: $ip_client");
+        log_warning("No client found with IP: $client_ip");
+        add_new_client($client_ip, $client_files, $shm_id);
+    } else {
+        shmop_write($shm_id, serialize($clients_list), 0);
     }
-
-    return $clients_list; // Devolver siempre la lista de clientes
-}
-
-function create_new_client($client, $clients_list, $ip_client)
-{
-    $client_files = "";
-
-    // check if the ip is in the clients array
-    foreach ($clients_list as $c) {
-        if ($c->ip ==  $ip_client) {
-            //log_warning("Client $client_ip already exists");
-            return $clients_list;
-        }
-    }
-    // create a new client with the ip
-    $new_client = new Client();
-    $new_client->ip =  $ip_client;
-    $new_client->files = $client_files;
-
-    $index = substr( $ip_client, -1); // Obtener el último carácter
-
-    // add the client to the clients array
-    $clients_list[$index] = $new_client;
-    log_info("New client connected with ip:  $ip_client");
-    return $clients_list; // return the updated clients array
 }
