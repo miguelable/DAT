@@ -74,22 +74,22 @@ function task_client_requests()
 // Función para crear y conectar el socket o escuchar
 function create_socket($ip, $port, $server_ip, $server_port, $isReadable)
 {
-    $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname('tcp'));
+    $socket = @socket_create(AF_INET, SOCK_STREAM, getprotobyname('tcp'));
     if ($socket === false) {
         log_error("Error creando el socket: " . socket_strerror(socket_last_error()));
         return false;
     }
     if ($isReadable === true) {
-        if (socket_bind($socket, $ip, $port) === false) {
+        if (@socket_bind($socket, $ip, $port) === false) {
             log_error("Error asociando el socket: " . socket_strerror(socket_last_error($socket)));
             socket_close($socket);
             return false;
         }
-        if (socket_listen($socket, 10) === false) {
+        if (@socket_listen($socket, 10) === false) {
             die("Error al escuchar en el socket: " . socket_strerror(socket_last_error($socket)));
         }
     } else {
-        if (socket_connect($socket,  $server_ip, $server_port) === false) {
+        if (@socket_connect($socket,  $server_ip, $server_port) === false) {
             log_error("Error conectando al servidor: " . socket_strerror(socket_last_error($socket)));
             socket_close($socket);
             return false;
@@ -102,6 +102,22 @@ function create_socket($ip, $port, $server_ip, $server_port, $isReadable)
 function create_socket_r($ip, $port, $isReadable)
 {
     return create_socket($ip, $port, "", "", $isReadable);
+}
+
+// Función para manejar errores de socket
+function handle_socket_error($socket, $message)
+{
+    log_error("$message: " . socket_strerror(socket_last_error($socket)));
+    return false;
+}
+
+// Función para enviar solicitudes HTTP y leer respuestas
+function send_http_request($socket, $request)
+{
+    if (!@socket_write($socket, $request, strlen($request))) {
+        return handle_socket_error($socket, "Error escribiendo en el socket");
+    }
+    return read_server_response($socket);
 }
 
 // Función para obtener los archivos que se comparten
@@ -142,8 +158,8 @@ function send_shared_files($shared_files)
         "Content-Length: " . strlen($shared_files_data) . "\r\n\r\n" .
         $shared_files_data;
     // Intentar enviar la solicitud
-    if (!@socket_write($sock, $request, strlen($request))) {
-        log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($sock)));
+    $response = send_http_request($sock, $request);
+    if ($response === false) {
         return false;
     }
     return true;
@@ -244,13 +260,7 @@ function searchFile($args)
         "Content-Length: 0\r\n\r\n";
 
     // Enviar la solicitud
-    if (!@socket_write($sock, $request, strlen($request))) {
-        log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($sock)));
-        return false;
-    }
-    log_info("Solicitud enviada correctamente:\n$request");
-    // Leer la respuesta
-    $response = read_server_response($sock);
+    $response = send_http_request($sock, $request);
     if ($response === false) {
         return false;
     }
@@ -314,10 +324,8 @@ function handle_client($client)
             break;
         }
         $data = explode(' ', $request);
-        // print data
-        print_r($data);
-        // Manejar la petición
-        if (empty($data)) {
+        // comprobar si el array está vacío
+        if (count(array_filter($data)) === 0) {
             break;
         }
         $file = explode('/', $data[1])[2];
@@ -330,9 +338,9 @@ function handle_client($client)
                 "Content-Type: application/json\r\n" .
                 "Content-Length: 0\r\n\r\n";
             // Enviar respuesta al cliente
-            if (socket_write($client, $response, strlen($response)) === false) {
-                log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($client)));
-                break;
+            $response = send_http_request($client, $response);
+            if ($response === false) {
+                return false;
             }
         } else {
             // enviar el fichero
@@ -343,9 +351,10 @@ function handle_client($client)
                 "Content-Length: " . strlen($file_content) . "\r\n\r\n" .
                 $file_content;
             // Enviar respuesta al cliente
-            if (socket_write($client, $response, strlen($response)) === false) {
-                log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($client)));
-                break;
+            $response = send_http_request($client, $response);
+            log_info("Compartido el fichero $file");
+            if ($response === false) {
+                return false;
             }
         }
     }
@@ -366,12 +375,7 @@ function getHosts()
         "Content-Type: application/json\r\n" .
         "Content-Length: 0\r\n\r\n";
     // Enviar la solicitud
-    if (!@socket_write($sock, $request, strlen($request))) {
-        log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($sock)));
-        return false;
-    }
-    // Leer la respuesta
-    $response = read_server_response($sock);
+    $response = send_http_request($sock, $request);
     if ($response === false) {
         return false;
     }
@@ -391,8 +395,8 @@ function getHostFiles($host, $port)
         "Content-Type: application/json\r\n" .
         "Content-Length: 0\r\n\r\n";
     // Enviar la solicitud
-    if (!@socket_write($sock, $request, strlen($request))) {
-        log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($sock)));
+    $response = send_http_request($sock, $request);
+    if ($response === false) {
         return false;
     }
     // Leer la respuesta
@@ -416,12 +420,7 @@ function downloadFile($file)
         "Content-Type: application/json\r\n" .
         "Content-Length: 0\r\n\r\n";
     // Enviar la solicitud
-    if (!@socket_write($sock, $request, strlen($request))) {
-        log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($sock)));
-        return false;
-    }
-    // Leer la respuesta
-    $response = read_server_response($sock);
+    $response = send_http_request($sock, $request);
     if ($response === false) {
         return false;
     }
@@ -456,27 +455,25 @@ function downloadFile($file)
             "Host: $ip:$server_port\r\n" .
             "Content-Type: application/json\r\n" .
             "Content-Length: 0\r\n\r\n";
+        // comprobar si el socket se ha creado
+        if ($socket === false) {
+            continue;
+        }
         // Enviar la solicitud
-        if (!@socket_write($socket, $request, strlen($request))) {
-            log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($socket)));
-            return false;
-        }
-        // Leer la respuesta
-        $response = read_server_response($socket);
+        $response = send_http_request($socket, $request);
         if ($response === false) {
-            return false;
-        }
-
-        log_debug($response);
-
-        // Comprobar si hay contenido de la descarga
-        if (strpos($response, "200 OK") === false) {
-            log_warning("No se ha podido descargar el archivo");
-            return false;
+            continue;
         } else {
-            log_info("Archivo $file descargado satisfactoriamente");
-            saveDownloadedFile($file, $response);
-            return true;
+            log_debug($response);
+            // Comprobar si hay contenido de la descarga
+            if (strpos($response, "200 OK") === false) {
+                log_warning("No se ha podido descargar el archivo");
+                continue;
+            } else {
+                log_info("Archivo $file descargado satisfactoriamente");
+                saveDownloadedFile($file, $response);
+                return true;
+            }
         }
     }
     return true;
@@ -485,20 +482,34 @@ function downloadFile($file)
 // Función para guardar el archivo descargado
 function saveDownloadedFile($file, $response)
 {
-    // extraer de la respuesta http el contenido 
-    $content = explode("\r\n\r\n", $response)[1];
-    // crear el archivo ene el directorio de download   
+    // Extraer de la respuesta HTTP el contenido
+    $content = explode("\r\n\r\n", $response, 2)[1];
+
+    // Crear el archivo en el directorio de descarga
     $download_directory = $GLOBALS['download_directory'];
     $file_path_download = $download_directory . "/$file";
-    $file_download = fopen($file_path_download, "w");
-    fwrite($file_download, $content);
-    fclose($file_download);
-    log_info("Archivo guardado en descargas");
-    // guardar el archivo para poder compartirlo tambien
+    if (saveFile($file_path_download, $content)) {
+        log_info("Archivo guardado en descargas");
+    } else {
+        log_error("Error al guardar el archivo en descargas");
+    }
+
+    // Guardar el archivo para poder compartirlo también
     $shared_directory = $GLOBALS['shared_directory'];
     $file_path_share = $shared_directory . "/$file";
-    $file_share = fopen($file_path_share, "w");
-    fwrite($file_share, $content);
-    fclose($file_share);
-    log_info("Archivo listo para compartir");
+    if (saveFile($file_path_share, $content)) {
+        log_info("Archivo listo para compartir");
+    } else {
+        log_error("Error al guardar el archivo para compartir");
+    }
+}
+
+// Función auxiliar para guardar contenido en un archivo
+function saveFile($file_path, $content)
+{
+    if (file_put_contents($file_path, $content) !== false) {
+        return true;
+    } else {
+        return false;
+    }
 }
