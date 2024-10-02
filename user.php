@@ -274,7 +274,7 @@ function show_available_commands()
     echo "Comandos disponibles:\n";
     echo "search \t\t <arg> \t\t Buscar todos los archivos que contienen arg\n";
     echo "download \t <file> \t Descargar un archivo\n";
-    echo "host_files \t <ip> <port> \t Obtener la lista de archivos de un host\n";
+    echo "host_files \t <ip> \t\t Obtener la lista de archivos de un host\n";
     echo "hosts\t\t\t\t Obtener la lista de hosts\n";
     echo "exit \t\t\t\t Salir del programa\n";
 }
@@ -420,7 +420,7 @@ function downloadFile($file)
     if (empty($client_ips)) {
         log_warning("No se encontraron archivos");
         return false;
-    } 
+    }
 
     // probar a conectarme a las ips para descargar el fichero
     foreach ($client_ips as $ip) {
