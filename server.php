@@ -93,7 +93,7 @@ function handle_client($client, $shm_id)
         switch ($method) {
             case 'PUT':
                 $data_files = explode("\r\n\r\n", $request)[1];
-                manage_client_files($info, $data_files, $shm_id);
+                manage_client_files($client, $info, $data_files, $shm_id);
                 break;
             case 'GET':
                 switch ($command) {
@@ -107,14 +107,14 @@ function handle_client($client, $shm_id)
                                 get_hosts_files($client, $shm_id, $ip_client);
                                 break;
                         }
-                    break;
+                        break;
                     case 'search':
                         get_search_method($info, $client, $shm_id);
                         break;
                     case 'peers':
                         get_peers_method($info, $client, $shm_id);
                         break;
-                    }
+                }
                 break;
             default:
                 log_error("Método no soportado: $method");
@@ -139,11 +139,12 @@ function get_hosts_method($client, $shm_id)
     send_response_to_client($client, $response);
 }
 
-function get_hosts_files($client, $shm_id, $ip_client){
+function get_hosts_files($client, $shm_id, $ip_client)
+{
     // Obtener la lista de clientes
     $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
     // Devolver el array de clientes conecatdos
-    $response = "Archivos del cliente con IP " . $ip_client. ":\n";
+    $response = "Archivos del cliente con IP " . $ip_client . ":\n";
     foreach ($clients_list as $c) {
         if ($c->ip == $ip_client) {
             // Recorrer los archivos del cliente
@@ -200,10 +201,9 @@ function get_peers_method($file_name, $client, $shm_id)
         json_encode($ipsPeersAleatorios);
 
     print_r($response);
-      
+
     // Enviar la respuesta al cliente
     send_response_to_client($client, $response);
-
 }
 
 // Función para el método GET/search
@@ -212,7 +212,7 @@ function get_search_method($file_name, $client, $shm_id)
     $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
     // Array para almacenar los resultados de la búsqueda
     $resultados = [];
-    
+
     // Buscar en cada cliente
     foreach ($clients_list as $peer) {
         foreach ($peer->files as $file) {
@@ -226,7 +226,7 @@ function get_search_method($file_name, $client, $shm_id)
             }
         }
     }
-    
+
     // Mostrar los resultados de la búsqueda
     if (!empty($resultados)) {
         $response = "Archivos disponibles con el  nombre ' $file_name ':\n"; // Inicializamos la respuesta
@@ -236,7 +236,7 @@ function get_search_method($file_name, $client, $shm_id)
     } else {
         $response = "No se encontraron archivos que coincidan con el fragmento: $file_name\n";
     }
-    
+
     send_response_to_client($client, $response);
 }
 
@@ -247,7 +247,7 @@ function send_response_to_client($client, $response)
     if (!@socket_write($client, $response, strlen($response))) {
         return handle_socket_error($client, "Error escribiendo en el socket del cliente");
     }
-    
+
     // Si la escritura es exitosa, devolver true
     return true;
 }
@@ -260,7 +260,7 @@ function handle_socket_error($socket, $message)
 }
 
 // Función para el método PUT
-function manage_client_files($client_ip, $file_json, $shm_id)
+function manage_client_files($client, $client_ip, $file_json, $shm_id)
 {
     $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
     // Decodificar JSON
@@ -276,6 +276,13 @@ function manage_client_files($client_ip, $file_json, $shm_id)
     } else {
         update_or_add_client($client_ip, $client_files, $shm_id);
     }
+
+    // Enviar respuesta al cliente
+    $response = "HTTP/1.1 200 OK\r\n" .
+        "Content-Type: text/plain\r\n" .
+        "Content-Length: " . strlen("Archivos actualizados") . "\r\n\r\n" .
+        "Archivos actualizados";
+    send_response_to_client($client, $response);
 }
 
 // Función para la decodificación del json
