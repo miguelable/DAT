@@ -98,15 +98,23 @@ function handle_client($client, $shm_id)
             case 'GET':
                 switch ($command) {
                     case 'hosts':
-                        get_hosts_method($client, $shm_id);
-                        break;
+                        switch ($info) {
+                            case null:
+                                get_hosts_method($client, $shm_id);
+                                break;
+                            default:
+                                list($ip_client, $port_client) = explode(":", $info);
+                                get_hosts_files($client, $shm_id, $ip_client);
+                                break;
+                        }
+                    break;
                     case 'search':
                         get_search_method($info, $client, $shm_id);
                         break;
                     case 'peers':
                         get_peers_method($info, $client, $shm_id);
                         break;
-                }
+                    }
                 break;
             default:
                 log_error("Método no soportado: $method");
@@ -131,6 +139,21 @@ function get_hosts_method($client, $shm_id)
     send_response_to_client($client, $response);
 }
 
+function get_hosts_files($client, $shm_id, $ip_client){
+    // Obtener la lista de clientes
+    $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
+    // Devolver el array de clientes conecatdos
+    $response = "Archivos del cliente con IP " . $ip_client. ":\n";
+    foreach ($clients_list as $c) {
+        if ($c->ip == $ip_client) {
+            // Recorrer los archivos del cliente
+            foreach ($c->files as $file) {
+                $response .= $file . "\n"; // Concatenar cada archivo
+            }
+        }
+    }
+    send_response_to_client($client, $response);
+}
 
 // Función para el método GET/peers
 function get_peers_method($file_name, $client, $shm_id)
