@@ -68,6 +68,7 @@ while (true) {
     }
 }
 
+// Función para el manejo del cliente
 function handle_client($client, $shm_id)
 {
     // Leer la petición del cliente
@@ -86,6 +87,7 @@ function handle_client($client, $shm_id)
         $method = $data[0];
         // separar los datos por / en comando y info
         $parts = explode('/', $data[1]);
+        print_r($parts);
         $command = $parts[1] ?? null;
         $info = $parts[2] ?? null;
 
@@ -95,6 +97,7 @@ function handle_client($client, $shm_id)
                 manage_client_files($info, $data_files, $shm_id);
                 break;
             case 'GET':
+                print_r($command);
                 switch ($command) {
                     case 'hosts':
                         get_hosts_method($client, $shm_id);
@@ -111,25 +114,25 @@ function handle_client($client, $shm_id)
                 break;
         }
     }
+
     // Cerrar la conexión al cliente
     log_info("Cerrando conexión con el cliente.");
     socket_close($client);
 }
 
+// Función para el método GET/hosts
 function get_hosts_method($client, $shm_id)
 {
     $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
-    // Devolver las ips
-    $response = "";
+    // Devolver el array de clientes conecatdos
+    $response = "Clientes conectados: \n";
     foreach ($clients_list as $c) {
         $response .= $c->ip . "\n";
     }
-    if (!@socket_write($client, $response, strlen($response))) {
-        log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($client)));
-        return false;
-    }
+    send_response_to_client($client, $response);
 }
 
+// Función para el método GET/peers
 function get_peers_method($file_name, $client, $shm_id)
 {
     $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
@@ -153,6 +156,7 @@ function get_peers_method($file_name, $client, $shm_id)
     }
 }
 
+// Función para el método GET/search
 function get_search_method($file_name, $client, $shm_id)
 {
     $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
@@ -171,23 +175,37 @@ function get_search_method($file_name, $client, $shm_id)
             }
         }
     }
-
     // Mostrar los resultados de la búsqueda
     if (!empty($resultados)) {
-        echo "Resultados de la búsqueda:\n";
         foreach ($resultados as $resultado) {
-            $response = "Cliente con IP: " . $resultado['ip'] . " tiene el archivo: " . $resultado['archivo'] . "\n";
-            // Enviar la solicitud
-            if (!@socket_write($client, $response, strlen($response))) {
-                //  log_error("Error escribiendo en el socket: " . socket_strerror(socket_last_error($sock)));
-                return false;
-            }
+            $response = "Cliente con IP " . $resultado['ip'] . " tiene el archivo: " . $resultado['archivo'] . "\n";
         }
     } else {
-        echo "No se encontraron archivos que coincidan con el fragmento: $file_name\n";
+        $response = "No se encontraron archivos que coincidan con el fragmento: $file_name\n";
     }
+    send_response_to_client($client, $response);
 }
 
+// Función para enviar la respuesta al cliente
+function send_response_to_client($client, $response)
+{
+    // Intentar escribir la respuesta en el socket del cliente
+    if (!@socket_write($client, $response, strlen($response))) {
+        return handle_socket_error($client, "Error escribiendo en el socket del cliente");
+    }
+    
+    // Si la escritura es exitosa, devolver true
+    return true;
+}
+
+// Función para manejar errores de socket
+function handle_socket_error($socket, $message)
+{
+    log_error("$message: " . socket_strerror(socket_last_error($socket)));
+    return false;
+}
+
+// Función para el método PUT
 function manage_client_files($client_ip, $file_json, $shm_id)
 {
     $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
@@ -206,6 +224,7 @@ function manage_client_files($client_ip, $file_json, $shm_id)
     }
 }
 
+// Función para la decodificación del json
 function decode_json($file_json)
 {
     $json = json_decode($file_json, true);
@@ -215,6 +234,7 @@ function decode_json($file_json)
     return null;
 }
 
+// Función para crear un nuevo cliente
 function add_new_client($client_ip, $client_files, $shm_id)
 {
     $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
@@ -222,8 +242,11 @@ function add_new_client($client_ip, $client_files, $shm_id)
     array_push($clients_list, $new_client);
     shmop_write($shm_id, serialize($clients_list), 0);
     log_info("New client connected with IP: $client_ip");
+
+    print_r($clients_list);
 }
 
+// Función para actualizar o añadir un cliente
 function update_or_add_client($client_ip, $client_files, $shm_id)
 {
     $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
@@ -232,6 +255,7 @@ function update_or_add_client($client_ip, $client_files, $shm_id)
         if ($client->ip === $client_ip) {
             $client->files = $client_files;
             log_info("Files updated for client with IP: $client_ip");
+            print_r($clients_list);
             $client_found = true;
             break;
         }
