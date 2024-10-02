@@ -425,15 +425,6 @@ function downloadFile($file)
         return false;
     }
 
-    // simular la respuesta
-    $response = "HTTP/1.1 200 OK\r\n" .
-        "Content-Type: application/json\r\n" .
-        "Content-Length: 0\r\n\r\n" .
-        json_encode([
-            "127.0.0.101",
-            "127.0.0.102"
-        ]);
-
     $client_ips = json_decode(explode("\r\n\r\n", $response)[1], true);
 
     print_r($client_ips);
