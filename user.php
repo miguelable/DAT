@@ -349,7 +349,7 @@ function handle_client($client)
             $response = "HTTP/1.1 200 OK\r\n" .
                 "Content-Type: application/json\r\n" .
                 "Content-Length: " . strlen($file_content) . "\r\n\r\n" .
-                "Content: " . $file_content;
+                $file_content;
             // Enviar respuesta al cliente
             $response = send_http_request($client, $response);
             log_info("Compartido el fichero $file");
@@ -439,7 +439,7 @@ function downloadFile($file)
         if ($response === false) {
             continue;
         } else {
-            log_debug("Respuesta del servidor:\n$response\n");
+            log_debug("Seleccionando peer $ip para descargar");
             // Comprobar si hay contenido de la descarga
             if (strpos($response, "200 OK") === false) {
                 log_warning("No se ha podido descargar el archivo");

@@ -218,13 +218,11 @@ function get_peers_method($file_name, $client, $shm_id)
         $ipsPeersAleatorios[] = $peer->ip;
     }
 
-    // Simular la respuesta
+    // Respuesta
     $response = "HTTP/1.1 200 OK\r\n" .
         "Content-Type: application/json\r\n" .
         "Content-Length: " . strlen(json_encode($ipsPeersAleatorios)) . "\r\n\r\n" .
-        json_encode($ipsPeersAleatorios);
-
-    print_r($response);
+        json_encode($ipsPeersAleatorios)."\n";
 
     // Enviar la respuesta al cliente
     send_response_to_client($client, $response);
