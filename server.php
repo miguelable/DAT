@@ -62,8 +62,19 @@ while (true) {
             handle_client($client, $shm_id);
             exit; // Terminar el proceso hijo
         } else {
-            // Proceso padre: cerrar el socket del cliente en el padre
-            socket_close($client);
+            // Crear el segundo proceso hijo para otra tarea
+            $pid2 = pcntl_fork();
+            if ($pid2 == -1) {
+                log_error("Error al crear el segundo proceso hijo.");
+                socket_close($client);
+            } elseif ($pid2 == 0) {
+                // Segundo proceso hijo: eliminar de forma periodica la lista de clientes
+                erase_client_list($shm_id);
+                exit; // Terminar el segundo proceso hijo
+            } else {
+                // Proceso padre: cerrar el socket del cliente en el padre
+                socket_close($client);
+            }
         }
     }
 }
@@ -125,6 +136,19 @@ function handle_client($client, $shm_id)
     // Cerrar la conexión al cliente
     log_info("Cerrando conexión con el cliente.");
     socket_close($client);
+}
+
+// Función para eliminar la lista de clientes de forma periodica
+function erase_client_list($shm_id)
+{
+    while (true) {
+        sleep(60); // Esperar 60 segundos
+        $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
+        // eliminar todos los clientes
+        $clients_list = [];
+        // Escribir la lista de clientes en la memoria compartida
+        shmop_write($shm_id, serialize($clients_list), 0);
+    }
 }
 
 // Función para el método GET/hosts
@@ -326,9 +350,3 @@ function update_or_add_client($client_ip, $client_files, $shm_id)
         shmop_write($shm_id, serialize($clients_list), 0);
     }
 }
-
-
-// tarda muchisimo en actualizar los files
-// a veces sale: [ERROR] Error al asociar el socket: Address already in use
-// download (peers), que tengo que pasar al cliente
-// hacer algo para que cuando un cliente ya esté conectado, se avise
