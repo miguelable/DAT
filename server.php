@@ -87,7 +87,6 @@ function handle_client($client, $shm_id)
         $method = $data[0];
         // separar los datos por / en comando y info
         $parts = explode('/', $data[1]);
-        print_r($parts);
         $command = $parts[1] ?? null;
         $info = $parts[2] ?? null;
 
@@ -97,10 +96,10 @@ function handle_client($client, $shm_id)
                 manage_client_files($info, $data_files, $shm_id);
                 break;
             case 'GET':
-                print_r($command);
                 switch ($command) {
                     case 'hosts':
                         get_hosts_method($client, $shm_id);
+                        break;
                     case 'search':
                         get_search_method($info, $client, $shm_id);
                         break;
@@ -132,28 +131,56 @@ function get_hosts_method($client, $shm_id)
     send_response_to_client($client, $response);
 }
 
+
 // Función para el método GET/peers
 function get_peers_method($file_name, $client, $shm_id)
 {
+    // Obtener la lista de clientes
     $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
-    // Buscar los clientes que tienen el archivo solicitado
-    $peersConArchivo = array_filter($clients_list, function ($client) use ($file_name) {
-        return in_array($file_name, $client->files);
+
+    // Filtrar los clientes que tienen el archivo solicitado
+    $peersConArchivo = array_filter($clients_list, function ($peer) use ($file_name) {
+        return in_array($file_name, $peer->files);
     });
 
-    // Seleccionar hasta 5 peers de manera aleatoria
-    $peersAleatorios = array_rand($peersConArchivo, min(5, count($peersConArchivo)));
-
-    // Asegurarse de que $peersAleatorios sea un array (si solo hay uno, array_rand devuelve una sola clave)
-    if (!is_array($peersAleatorios)) {
-        $peersAleatorios = [$peersAleatorios];
+    // Si no hay peers con el archivo, enviar mensaje de error
+    if (empty($peersConArchivo)) {
+        $response = "No se encontraron peers con el archivo: $file_name\n";
+        send_response_to_client($client, $response);
+        return false;
     }
 
-    // Devolver los peers seleccionados
-    foreach ($peersAleatorios as $key) {
-        $peer = $clients_list[$key];
-        echo "Peer con IP: " . $peer->ip . "\n";
+    // Seleccionar hasta 5 peers aleatoriamente
+    $num_peers = min(5, count($peersConArchivo)); // Número máximo de peers a seleccionar
+    $peersAleatoriosClaves = array_rand($peersConArchivo, $num_peers);
+
+    // Asegurarse de que $peersAleatoriosClaves sea un array (cuando solo se selecciona un peer)
+    if (!is_array($peersAleatoriosClaves)) {
+        $peersAleatoriosClaves = [$peersAleatoriosClaves];
     }
+
+    // Obtener los 5 peers seleccionados
+    $peersAleatorios = array_intersect_key($peersConArchivo, array_flip($peersAleatoriosClaves));
+
+    // Crear un array para almacenar las IPs
+    $ipsPeersAleatorios = [];
+
+    // Usar foreach para extraer las IPs de cada peer
+    foreach ($peersAleatorios as $peer) {
+        $ipsPeersAleatorios[] = $peer->ip;
+    }
+
+    // Simular la respuesta
+    $response = "HTTP/1.1 200 OK\r\n" .
+        "Content-Type: application/json\r\n" .
+        "Content-Length: " . strlen(json_encode($ipsPeersAleatorios)) . "\r\n\r\n" .
+        json_encode($ipsPeersAleatorios);
+
+    print_r($response);
+      
+    // Enviar la respuesta al cliente
+    send_response_to_client($client, $response);
+
 }
 
 // Función para el método GET/search
@@ -162,6 +189,7 @@ function get_search_method($file_name, $client, $shm_id)
     $clients_list = unserialize(shmop_read($shm_id, 0, shmop_size($shm_id)));
     // Array para almacenar los resultados de la búsqueda
     $resultados = [];
+    
     // Buscar en cada cliente
     foreach ($clients_list as $peer) {
         foreach ($peer->files as $file) {
@@ -175,14 +203,17 @@ function get_search_method($file_name, $client, $shm_id)
             }
         }
     }
+    
     // Mostrar los resultados de la búsqueda
     if (!empty($resultados)) {
+        $response = "Archivos disponibles con el  nombre ' $file_name ':\n"; // Inicializamos la respuesta
         foreach ($resultados as $resultado) {
-            $response = "Cliente con IP " . $resultado['ip'] . " tiene el archivo: " . $resultado['archivo'] . "\n";
+            $response .= $resultado['archivo'] . "\n"; // Concatenamos cada archivo encontrado
         }
     } else {
         $response = "No se encontraron archivos que coincidan con el fragmento: $file_name\n";
     }
+    
     send_response_to_client($client, $response);
 }
 
@@ -242,8 +273,6 @@ function add_new_client($client_ip, $client_files, $shm_id)
     array_push($clients_list, $new_client);
     shmop_write($shm_id, serialize($clients_list), 0);
     log_info("New client connected with IP: $client_ip");
-
-    print_r($clients_list);
 }
 
 // Función para actualizar o añadir un cliente
@@ -255,7 +284,6 @@ function update_or_add_client($client_ip, $client_files, $shm_id)
         if ($client->ip === $client_ip) {
             $client->files = $client_files;
             log_info("Files updated for client with IP: $client_ip");
-            print_r($clients_list);
             $client_found = true;
             break;
         }
@@ -268,3 +296,9 @@ function update_or_add_client($client_ip, $client_files, $shm_id)
         shmop_write($shm_id, serialize($clients_list), 0);
     }
 }
+
+
+// tarda muchisimo en actualizar los files
+// a veces sale: [ERROR] Error al asociar el socket: Address already in use
+// download (peers), que tengo que pasar al cliente
+// hacer algo para que cuando un cliente ya esté conectado, se avise
