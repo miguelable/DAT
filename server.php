@@ -85,6 +85,9 @@ function handle_client($client, $shm_id)
     // Leer la petición del cliente
     while (true) {
         $request = socket_read($client, 1024);
+        if ($request !== '') {
+            log_verbose("Petición: $request\n");
+        }
         log_verbose("Petición: $request\n");
         if ($request === false) {
             log_error("Error al leer la petición del cliente: " . socket_strerror(socket_last_error($client)));
