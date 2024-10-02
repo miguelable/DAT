@@ -349,7 +349,7 @@ function handle_client($client)
             $response = "HTTP/1.1 200 OK\r\n" .
                 "Content-Type: application/json\r\n" .
                 "Content-Length: " . strlen($file_content) . "\r\n\r\n" .
-                $file_content;
+                "Content: " . $file_content;
             // Enviar respuesta al cliente
             $response = send_http_request($client, $response);
             log_info("Compartido el fichero $file");
@@ -358,9 +358,6 @@ function handle_client($client)
             }
         }
     }
-    // Cerrar la conexión al cliente
-    log_info("Cerrando conexión con el cliente.");
-    socket_close($client);
 }
 
 // Función para obtener la lista de hosts
@@ -379,7 +376,7 @@ function getHosts()
     if ($response === false) {
         return false;
     }
-    echo $response;
+    log_debug("Respuesta del servidor:\n$response");
     return true;
 }
 
@@ -394,18 +391,10 @@ function getHostFiles($host, $port)
         "Host: $server_ip:$server_port\r\n" .
         "Content-Type: application/json\r\n" .
         "Content-Length: 0\r\n\r\n";
+
     // Enviar la solicitud
     $response = send_http_request($sock, $request);
-    if ($response === false) {
-        return false;
-    }
-    // Leer la respuesta
-    $response = read_server_response($sock);
-    if ($response === false) {
-        return false;
-    }
-    echo "file1.txt\nfile2.txt\nfile3.txt\n";
-    return true;
+    log_debug("Respuesta del servidor:\n$response\n");
 }
 
 // Función para descargar un fichero
@@ -419,6 +408,7 @@ function downloadFile($file)
         "Host: $server_ip:$server_port\r\n" .
         "Content-Type: application/json\r\n" .
         "Content-Length: 0\r\n\r\n";
+
     // Enviar la solicitud
     $response = send_http_request($sock, $request);
     if ($response === false) {
@@ -427,17 +417,11 @@ function downloadFile($file)
 
     $client_ips = json_decode(explode("\r\n\r\n", $response)[1], true);
 
-    print_r($client_ips);
-
     if (empty($client_ips)) {
         log_warning("No se encontraron archivos");
         return false;
-    } else {
-        log_debug("Archivo encontrado en las siguientes IPs:\n");
-        foreach ($client_ips as $ip) {
-            log_debug("$ip");
-        }
-    }
+    } 
+
     // probar a conectarme a las ips para descargar el fichero
     foreach ($client_ips as $ip) {
         $socket = create_socket($GLOBALS['ip'], $GLOBALS['port'], $ip, $GLOBALS['server_port'], false);
@@ -455,7 +439,7 @@ function downloadFile($file)
         if ($response === false) {
             continue;
         } else {
-            log_debug($response);
+            log_debug("Respuesta del servidor:\n$response\n");
             // Comprobar si hay contenido de la descarga
             if (strpos($response, "200 OK") === false) {
                 log_warning("No se ha podido descargar el archivo");
