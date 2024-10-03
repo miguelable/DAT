@@ -121,4 +121,4 @@ Se permite la conexión simultánea de hasta 10 clientes, cada uno de los cuales
 - **Miguel Ferrer**
 - **Paula Fernández**
 
-**Fecha**: 16 de septiembre de 2024
+**Fecha**: 3 de octubre de 2024
