@@ -75,8 +75,4 @@ function crearFichero($ip)
     fwrite($log,  file_get_contents("logs.php"));
     fclose($log);
 
-
-    // Ejecutar el fichero (opcional)
-    $command = "php users/client" . $client_number . "/user.php";
-    exec($command, $output);
 }
