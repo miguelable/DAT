@@ -387,7 +387,7 @@ function getHostFiles($host, $port)
     $server_port = $GLOBALS['server_port'];
     $sock = $GLOBALS['sock_server'];
     // Crear la solicitud HTTP
-    $request = "GET /hosts/$host:$port HTTP/1.1\r\n" .
+    $request = "GET /hosts/$host HTTP/1.1\r\n" .
         "Host: $server_ip:$server_port\r\n" .
         "Content-Type: application/json\r\n" .
         "Content-Length: 0\r\n\r\n";
