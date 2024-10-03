@@ -35,7 +35,7 @@ Maneja la comunicación con un cliente conectado. Lee las solicitudes del client
 - `update_or_add_client($client_ip, $client_files, $shm_id)`: Actualiza la lista de archivos de un cliente existente o añade un nuevo cliente si no se encuentra uno con la misma IP. Maneja el registro de la conexión de los clientes.
 
 ### `user.php`
-implementa un cliente que se conecta a un servidor mediante sockets, permitiendo el intercambio y la descarga de archivos. Se establecen procesos hijos para manejar tareas específicas, como enviar archivos, recibir solicitudes de clientes y gestionar comandos de terminal. El cliente está diseñado para enviar y recibir datos utilizando el protocolo HTTP, gestionando errores y manteniendo un registro de las operaciones.
+Implementa un cliente que se conecta a un servidor mediante sockets, permitiendo el intercambio y la descarga de archivos. Se establecen procesos hijos para manejar tareas específicas, como enviar archivos, recibir solicitudes de clientes y gestionar comandos de terminal. El cliente está diseñado para enviar y recibir datos utilizando el protocolo HTTP, gestionando errores y manteniendo un registro de las operaciones.
 
 #### Configuración inicial: 
 - Se definen las direcciones IP y puertos para el cliente y el servidor, así como los directorios de descarga y compartición de archivos.
