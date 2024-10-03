@@ -75,4 +75,8 @@ function crearFichero($ip)
     fwrite($log,  file_get_contents("logs.php"));
     fclose($log);
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 6b79d37 (correccion config)
