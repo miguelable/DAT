@@ -70,6 +70,12 @@ implementa un cliente que se conecta a un servidor mediante sockets, permitiendo
 - `client_loop()`: Acepta conexiones entrantes de clientes y maneja sus solicitudes en un nuevo proceso hijo.
 - `handle_client($client)`: Maneja la petición de un cliente, verificando si el archivo solicitado está disponible y respondiendo adecuadamente.
 
+### `config.php`
+El archivo config.php configura el entorno para varios clientes en un sistema PHP. Primero, verifica y crea un directorio llamado users si no existe. Luego, utiliza un bucle para generar diez procesos hijos (de 127.0.0.100 a 127.0.0.109) mediante pcntl_fork(), cada uno de los cuales crea un archivo de configuración específico con su dirección IP. La función crearFichero($ip) es responsable de crear los directorios necesarios para descargas y archivos compartidos, así como de generar un archivo PHP (user.php) y un archivo de texto en la carpeta correspondiente del cliente. El proceso padre registra la creación de cada hijo y espera a que terminen, registrando su estado de salida.
+
+### `logs.php`
+El archivo contiene funciones de logging que permiten registrar mensajes de diferentes niveles (error, advertencia, información, depuración y verbose) en la consola. Cada función verifica si la constante LOG_ON está definida y activa antes de imprimir el mensaje, aplicando un color específico para cada tipo de log: rojo para errores, amarillo para advertencias, verde para información, azul para depuración y blanco para mensajes verbosos.
+
 ## Uso
 ### 1. Levantamiento del servidor:
 ```bash
@@ -122,3 +128,4 @@ Se permite la conexión simultánea de hasta 10 clientes, cada uno de los cuales
 - **Paula Fernández**
 
 **Fecha**: 3 de octubre de 2024
+
