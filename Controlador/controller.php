@@ -39,6 +39,7 @@ while (true) {
     // Decodificar el JSON recibido
     $data = json_decode($input, true);
     
+    if ($data !== null && json_last_error() === JSON_ERROR_NONE) {
     // Conectar a la base de datos
     try {
         $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -64,6 +65,9 @@ while (true) {
         }
     } catch (PDOException $e) {
         $response = json_encode(["status" => "error", "message" => $e->getMessage()]);
+        }
+    } else {
+        $response = json_encode(["status" => "error", "message" => "Datos JSON inválidos o no recibidos correctamente."]);
     }
 
     // Enviar respuesta al cliente
