@@ -24,3 +24,7 @@ curl_close($ch);
 
 // Mostrar la respuesta del servidor
 echo $response;
+
+// Eliminar el fichero de datos
+if ($response == 'OK')
+    unlink('datos_sonda.json');
