@@ -10,13 +10,7 @@ function recibirDatos()
         if (json_last_error() === JSON_ERROR_NONE) {
             // Almacenar los datos en un archivo JSON
             almacenarDatos($datosArray);
-
-            // Enviar datos a controller.php
-            if (enviarDatosPorSocket($datosArray)) {
-                echo json_encode(['status' => 'success', 'message' => 'Datos recibidos y enviados correctamente']);
-            } else {
-                echo json_encode(['status' => 'warning', 'message' => 'Datos almacenados, pero error al enviar']);
-            }
+            http_response_code(200);
         } else {
             http_response_code(400);
             echo json_encode(['status' => 'error', 'message' => 'Datos JSON inválidos']);
@@ -40,33 +34,6 @@ function almacenarDatos($datos)
 
     $datosExistentes[] = $datos;
     file_put_contents($archivo, json_encode($datosExistentes, JSON_PRETTY_PRINT));
-}
-
-// Función para enviar datos a controller.php mediante un socket
-function enviarDatosPorSocket($datos)
-{
-    $host = '127.0.0.1'; // Cambia según tu configuración
-    $port = 8080; // Puerto donde escucha controller.php
-
-    // Crear socket
-    $socket = socket_create(AF_INET, SOCK_STREAM, 0);
-    if ($socket === false) {
-        return false;
-    }
-
-    // Conectar al socket
-    if (socket_connect($socket, $host, $port) === false) {
-        socket_close($socket);
-        return false;
-    }
-
-    // Enviar datos JSON
-    $jsonDatos = json_encode($datos);
-    socket_write($socket, $jsonDatos, strlen($jsonDatos));
-
-    // Cerrar socket
-    socket_close($socket);
-    return true;
 }
 
 // Llamar a la función para recibir datos

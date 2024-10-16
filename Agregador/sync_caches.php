@@ -1,30 +1,73 @@
 <?php
+
+// Verificar si el archivo 'datos_sonda.json' existe
+if (!file_exists('datos_sonda.json')) {
+    die('El archivo datos_sonda.json no existe');
+}
+
 // Leer el contenido del archivo JSON
 $jsonData = file_get_contents('datos_sonda.json');
+
+// Verificar si hubo un error al leer el archivo
+if ($jsonData === false) {
+    die('Error al leer el archivo datos_sonda.json');
+}
 
 // Decodificar el JSON a un array asociativo
 $dataArray = json_decode($jsonData, true);
 
+// Verificar si hubo un error en la decodificación
+if (json_last_error() !== JSON_ERROR_NONE) {
+    die('Error al decodificar JSON: ' . json_last_error_msg());
+}
+
 // URL del servidor al que se enviarán los datos
-$url = 'http://192.168.0.1:8080';
+$url = 'http://127.0.0.1:8080';
 
-// Inicializar cURL
-$ch = curl_init($url);
+// Codificar el array de nuevo a JSON para enviarlo
+$jsonDataToSend = json_encode($dataArray, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
-// Configurar cURL para enviar una solicitud POST con los datos JSON
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($dataArray));
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+// Verificar si hubo un error al codificar los datos
+if ($jsonDataToSend === false) {
+    die('Error al codificar datos a JSON: ' . json_last_error_msg());
+}
 
-// Ejecutar la solicitud y obtener la respuesta
-$response = curl_exec($ch);
+// Mostrar el JSON que se enviará (para depuración)
+echo "Datos JSON que se enviarán:\n";
+echo $jsonDataToSend . "\n\n";
 
-// Cerrar cURL
-curl_close($ch);
+// Configurar las opciones de la solicitud HTTP
+$options = [
+    'http' => [
+        'header'  => "Content-type: application/json\r\n",
+        'method'  => 'POST',
+        'content' => $jsonDataToSend,
+    ],
+];
 
-// Mostrar la respuesta del servidor
+// Crear el contexto de la solicitud
+$context  = stream_context_create($options);
+
+// Enviar la solicitud y obtener la respuesta
+$response = @file_get_contents($url, false, $context);
+
+// Verificar si la solicitud fue exitosa
+if ($response === false) {
+    $error = error_get_last();
+    die('Error al enviar la solicitud: ' . $error['message']);
+}
+
+// Mostrar la respuesta del servidor (para depuración)
+echo "Respuesta del servidor:\n";
 echo $response;
 
-// Eliminar el fichero de datos
-if ($response == 'OK')
-    unlink('datos_sonda.json');
+// Eliminar el fichero de datos si la respuesta es 'OK'
+if (trim($response) === 'OK') {
+    if (!unlink('datos_sonda.json')) {
+        echo 'Error al eliminar el archivo datos_sonda.json';
+    } else {
+        echo 'Archivo datos_sonda.json eliminado correctamente';
+    }
+} else {
+    echo 'El servidor no respondió con "OK". Archivo no eliminado.';
+}

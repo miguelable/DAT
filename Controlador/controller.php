@@ -1,6 +1,6 @@
 <?php
 // Configuración de la base de datos
-$host = "localhost"; 
+$host = "localhost";
 $dbname = "data"; // Nombre de la base de datos
 $username = "grupo03"; // Usuario de SQL
 $password = "Hola1234+"; // Contraseña de SQL
@@ -35,36 +35,41 @@ while (true) {
 
     // Recibir datos del cliente
     $input = socket_read($clientSocket, 1024);
-    
+
+    // separar la cabecera de los datos
+    $input = explode("\r\n\r\n", $input)[1];
+    $datos = explode("\r\n", $input)[0];
     // Decodificar el JSON recibido
-    $data = json_decode($input, true);
-    
+    $data = json_decode($datos, true);
+
+    // print json
+    print_r($data);
+
     if ($data !== null && json_last_error() === JSON_ERROR_NONE) {
-    // Conectar a la base de datos
-    try {
-        $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        try {
+            $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Verificar y preparar la consulta
-        if (isset($data['temperatura']) && isset($data['humedad'])) {
-            $temperatura = $data['temperatura'];
-            $humedad = $data['humedad'];
+            // Verificar y preparar la consulta
+            if (isset($data['temperatura']) && isset($data['humedad'])) {
+                $temperatura = $data['temperatura'];
+                $humedad = $data['humedad'];
 
-            $stmt = $conn->prepare("INSERT INTO data (temperatura, humedad) VALUES (:temperatura, :humedad)");
-            $stmt->bindParam(':temperatura', $temperatura);
-            $stmt->bindParam(':humedad', $humedad);
-            
-            // Ejecutar la consulta
-            if ($stmt->execute()) {
-                $response = json_encode(["status" => "success", "message" => "Datos insertados correctamente."]);
+                $stmt = $conn->prepare("INSERT INTO data (temperatura, humedad) VALUES (:temperatura, :humedad)");
+                $stmt->bindParam(':temperatura', $temperatura);
+                $stmt->bindParam(':humedad', $humedad);
+
+                // Ejecutar la consulta
+                if ($stmt->execute()) {
+                    $response = json_encode(["status" => "success", "message" => "Datos insertados correctamente."]);
+                } else {
+                    $response = json_encode(["status" => "error", "message" => "Error al insertar los datos."]);
+                }
             } else {
-                $response = json_encode(["status" => "error", "message" => "Error al insertar los datos."]);
+                $response = json_encode(["status" => "error", "message" => "Datos no válidos."]);
             }
-        } else {
-            $response = json_encode(["status" => "error", "message" => "Datos no válidos."]);
-        }
-    } catch (PDOException $e) {
-        $response = json_encode(["status" => "error", "message" => $e->getMessage()]);
+        } catch (PDOException $e) {
+            $response = json_encode(["status" => "error", "message" => $e->getMessage()]);
         }
     } else {
         $response = json_encode(["status" => "error", "message" => "Datos JSON inválidos o no recibidos correctamente."]);
@@ -79,4 +84,3 @@ while (true) {
 
 // Cerrar el socket del servidor
 socket_close($serverSocket);
-
