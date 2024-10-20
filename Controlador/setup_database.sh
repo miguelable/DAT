@@ -12,7 +12,8 @@ SQL_COMMANDS=$(cat <<EOF
 CREATE DATABASE IF NOT EXISTS $DB_NAME;
 USE $DB_NAME;
 CREATE TABLE IF NOT EXISTS $TABLE_NAME (
-    id_sonda INT NOT NULL PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_sonda INT NOT NULL,
     temperatura FLOAT NOT NULL,
     humedad FLOAT NOT NULL,
     tiempo_muestra TIMESTAMP NOT NULL,
@@ -26,6 +27,7 @@ EOF
 
 # Comandos SQL para mostrar la estructura de la tabla y sus datos
 SHOW_TABLE_STRUCTURE=$(cat <<EOF
+SELECT User, Host FROM mysql.user;
 USE $DB_NAME;
 SHOW TABLES;
 DESCRIBE $TABLE_NAME;
