@@ -1,4 +1,39 @@
 <?php
+
+/**
+ * Este script configura un socket de servidor para escuchar conexiones entrantes,
+ * recibe datos JSON de los clientes e inserta los datos en una base de datos MySQL.
+ *
+ * Configuración:
+ * - Los detalles de la conexión a la base de datos se definen usando constantes.
+ * - El servidor escucha en el puerto 8080 por defecto.
+ *
+ * Flujo de Trabajo:
+ * 1. Crear un socket de servidor.
+ * 2. Enlazar el socket a una dirección IP y un puerto.
+ * 3. Escuchar conexiones entrantes.
+ * 4. Aceptar conexiones y leer datos de los clientes.
+ * 5. Analizar los datos JSON recibidos.
+ * 6. Insertar los datos analizados en una base de datos MySQL.
+ * 7. Enviar una respuesta HTTP de vuelta al cliente.
+ *
+ * Manejo de Errores:
+ * - Registra errores en el registro de errores si la creación, el enlace, la escucha o la aceptación del socket falla.
+ * - Registra errores si la lectura de datos del cliente o la inserción de datos en la base de datos falla.
+ * - Envía códigos de estado HTTP y mensajes apropiados en la respuesta.
+ *
+ * Funciones:
+ * - getHttpStatusMessage($statusCode): Devuelve el mensaje de estado HTTP para un código de estado dado.
+ *
+ * Dependencias:
+ * - Extensión de Sockets de PHP
+ * - Extensión PDO de PHP para MySQL
+ *
+ * Nota:
+ * - Asegúrate de que la base de datos MySQL y la tabla estén configuradas correctamente antes de ejecutar este script.
+ * - Ajusta los detalles de la conexión a la base de datos y el número de puerto según sea necesario.
+ */
+
 // Configuración de la base de datos
 define('DB_HOST', 'localhost');
 define('DB_NAME', 't_h_DataBase');

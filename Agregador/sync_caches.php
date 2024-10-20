@@ -1,5 +1,32 @@
 <?php
 
+/**
+ * Este script sincroniza datos JSON locales con un servidor remoto.
+ * 
+ * Realiza los siguientes pasos:
+ * 1. Verifica si el archivo 'datos_sonda.json' existe.
+ * 2. Lee el contenido del archivo JSON.
+ * 3. Decodifica el contenido JSON en un array asociativo.
+ * 4. Envía los datos JSON a una URL de servidor especificada mediante una solicitud HTTP POST.
+ * 5. Maneja errores en cada paso y proporciona mensajes de error apropiados.
+ * 6. Si la respuesta del servidor es exitosa y contiene un código de estado 200,
+ *    elimina el archivo JSON local.
+ * 
+ * Uso:
+ * - Asegúrate de que el archivo 'datos_sonda.json' esté presente en el mismo directorio que este script.
+ * - Actualiza la variable $url con el endpoint del servidor deseado.
+ * - Ejecuta el script desde la línea de comandos o un servidor web.
+ * 
+ * Nota:
+ * - El script utiliza las funciones file_get_contents y stream_context_create de PHP
+ *   para manejar solicitudes HTTP.
+ * - El manejo de errores se implementa usando die() para terminar el script con un mensaje de error.
+ * - El script muestra las respuestas del servidor y la información de depuración en la consola.
+ * 
+ * @file sync_caches.php
+ * @location /home/user/miguel/DAT/Agregador/sync_caches.php
+ */
+
 // Verificar si el archivo 'datos_sonda.json' existe
 if (!file_exists('datos_sonda.json')) {
     die('El archivo datos_sonda.json no existe');

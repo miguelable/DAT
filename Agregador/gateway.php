@@ -1,5 +1,26 @@
 <?php
 
+/**
+ *
+ * Este script maneja solicitudes POST para recibir y almacenar datos JSON.
+ *
+ * Funciones:
+ * - recibirDatos(): Recibe solicitudes POST, decodifica datos JSON y los almacena en un archivo.
+ * - almacenarDatos(array $datos): Almacena los datos proporcionados en un archivo JSON.
+ *
+ * recibirDatos():
+ * - Verifica si el método de la solicitud es POST.
+ * - Lee los datos brutos de POST y los decodifica desde JSON.
+ * - Si los datos JSON son válidos, llama a almacenarDatos() para almacenar los datos y responde con HTTP 200.
+ * - Si los datos JSON son inválidos, responde con HTTP 400 y un mensaje de error.
+ * - Si el método de la solicitud no es POST, responde con HTTP 405 y un mensaje de error.
+ *
+ * almacenarDatos(array $datos):
+ * - Lee los datos existentes de 'datos_sonda.json' si existe.
+ * - Añade los nuevos datos a los datos existentes.
+ * - Escribe los datos actualizados de nuevo en 'datos_sonda.json' en un formato JSON con formato bonito.
+ */
+
 // Función para recibir las peticiones POST
 function recibirDatos()
 {

@@ -1,3 +1,22 @@
+# 
+# Este script envía datos de temperatura y humedad simulados a un gateway en formato JSON cada 10 segundos.
+# 
+# Dependencias:
+# - bc: Para realizar cálculos de punto flotante.
+# - curl: Para enviar solicitudes HTTP.
+# 
+# Funciones:
+# - command_exists: Verifica si un comando está disponible en el sistema.
+# 
+# Flujo del script:
+# 1. Verifica si las dependencias (bc, curl) están instaladas. Si no, las instala usando apt-get.
+# 2. Genera un ID de sensor.
+# 3. En un bucle infinito, genera valores aleatorios de temperatura (0-50) y humedad (0-100) con un decimal.
+# 4. Construye un objeto JSON con el ID del sensor, temperatura, humedad y la marca de tiempo actual.
+# 5. Envía el objeto JSON al gateway usando curl.
+# 6. Espera 10 segundos antes de repetir el proceso.
+
+
 #!/bin/bash
 
 # Función para verificar si un comando está disponible
@@ -16,12 +35,6 @@ if ! command_exists curl; then
     echo "Instalando curl..."
     sudo apt-get update
     sudo apt-get install -y curl
-fi
-
-if ! command_exists jq; then
-    echo "Instalando jq..."
-    sudo apt-get update
-    sudo apt-get install -y jq
 fi
 
 ID=48
