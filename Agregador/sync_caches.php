@@ -33,8 +33,8 @@ if ($jsonDataToSend === false) {
 }
 
 // Mostrar el JSON que se enviará (para depuración)
-echo "Datos JSON que se enviarán:\n";
-echo $jsonDataToSend . "\n\n";
+// echo "Datos JSON que se enviarán:\n";
+// echo $jsonDataToSend . "\n\n";
 
 // Configurar las opciones de la solicitud HTTP
 $options = [
