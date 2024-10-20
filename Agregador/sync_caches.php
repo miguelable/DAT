@@ -59,15 +59,19 @@ if ($response === false) {
 
 // Mostrar la respuesta del servidor (para depuración)
 echo "Respuesta del servidor:\n";
-echo $response;
+echo $response . "\n";
 
-// Eliminar el fichero de datos si la respuesta es 'OK'
-if (trim($response) === 'OK') {
+// Decodificar la respuesta del servidor
+$responseData = json_decode($response, true);
+
+// Verificar si la respuesta es válida y contiene un código de estado 200
+if ($responseData && isset($responseData['status']) && $responseData['status'] == 200) {
+    // Eliminar el fichero de datos si la respuesta es 'OK'
     if (!unlink('datos_sonda.json')) {
-        echo 'Error al eliminar el archivo datos_sonda.json';
+        echo "Error al eliminar el archivo datos_sonda.json\n";
     } else {
-        echo 'Archivo datos_sonda.json eliminado correctamente';
+        echo "Archivo datos_sonda.json eliminado correctamente\n";
     }
 } else {
-    echo 'El servidor no respondió con "OK". Archivo no eliminado.';
+    echo "La respuesta del servidor no fue exitosa o no contiene un estado 200\n";
 }
