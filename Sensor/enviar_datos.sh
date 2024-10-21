@@ -56,6 +56,12 @@ do
     JSON="{\"ID\": $ID, \"temperatura\": $TEMPERATURA, \"humedad\": $HUMEDAD, \"timestamp\": \"$FECHA\"}"
     # Enviar datos al gateway
     curl -X POST http://localhost:8081/gateway.php -H "Content-Type: application/json" -d "$JSON"
+    
+    if [ $? -ne 0 ]; then
+        echo "Error al enviar los datos."
+    else
+        echo "Datos enviados: $JSON"
+    fi
     # Esperar 10 segundos   
     sleep 10
 done
