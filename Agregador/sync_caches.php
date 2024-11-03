@@ -49,7 +49,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 }
 
 // URL del servidor al que se enviarán los datos
-$url = 'http://127.0.0.1:8080';
+$url = 'http://webalumnos.tlm.unavarra.es:10303/';
 
 // Codificar el array de nuevo a JSON para enviarlo
 $jsonDataToSend = json_encode($dataArray, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
