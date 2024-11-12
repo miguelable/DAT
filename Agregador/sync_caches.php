@@ -57,7 +57,7 @@ function sendJsonData($type, $filePath)
 }
 
 // Llamar a la función para `ledStatus`
-sendJsonData('ledStatus', 'sensor_status.json');
+sendJsonData('ledStatus', 'led_status.json');
 
 // Llamar a la función para `sensorData`
 sendJsonData('sensorData', 'sensor_data.json');
