@@ -30,11 +30,11 @@
 #!/bin/bash
 
 # Variables de configuración
-DB_HOST="localhost"
-DB_NAME="t_h_DataBase"
+DB_HOST="localhost"         # Cambiar localhost por el nombre del servidor
+DB_NAME="grupo03"          # Cambiar nombre si es necesario
 DB_USER="grupo03"
 DB_PASS="Hola1234+"
-TABLE_NAME="data"
+TABLE_NAME="POT_SENSOR"
 
 # Comandos SQL para crear la base de datos, el usuario y la tabla
 SQL_COMMANDS=$(cat <<EOF
@@ -43,9 +43,9 @@ USE $DB_NAME;
 CREATE TABLE IF NOT EXISTS $TABLE_NAME (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_sonda INT NOT NULL,
-    temperatura FLOAT NOT NULL,
-    humedad FLOAT NOT NULL,
+    potencia INT NOT NULL,
     tiempo_muestra TIMESTAMP NOT NULL,
+    estado_led BOOLEAN NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE USER IF NOT EXISTS '$DB_USER'@'$DB_HOST' IDENTIFIED BY '$DB_PASS';
