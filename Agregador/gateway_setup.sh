@@ -43,7 +43,7 @@ fi
 chmod +x "$SYNC_PATH"
 
 # Intervalo en minutos
-INTERVALO_MINUTOS=2
+INTERVALO_MINUTOS=1
 
 # Bucle infinito para ejecutar el script cada INTERVALO_MINUTOS minutos
 while true; do
