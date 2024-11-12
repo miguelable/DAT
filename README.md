@@ -91,3 +91,10 @@ El script [`enviar_datos.sh`](Sensor/enviar_datos.sh) simula la recolección de 
 > ```
 >
 > Ingresa la contraseña del usuario `grupo03` cuando se te solicite.
+
+<!-- Para acceder a la base de datos de dat -->
+
+mysql -h dbserver -u grupo03 -p
+tai1mui1Go
+USE grupo03
+show tables;
