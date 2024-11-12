@@ -1,60 +1,77 @@
 <?php
 
-/**
- *
- * Este script maneja solicitudes POST para recibir y almacenar datos JSON.
- *
- * Funciones:
- * - recibirDatos(): Recibe solicitudes POST, decodifica datos JSON y los almacena en un archivo.
- * - almacenarDatos(array $datos): Almacena los datos proporcionados en un archivo JSON.
- *
- * recibirDatos():
- * - Verifica si el método de la solicitud es POST.
- * - Lee los datos brutos de POST y los decodifica desde JSON.
- * - Si los datos JSON son válidos, llama a almacenarDatos() para almacenar los datos y responde con HTTP 200.
- * - Si los datos JSON son inválidos, responde con HTTP 400 y un mensaje de error.
- * - Si el método de la solicitud no es POST, responde con HTTP 405 y un mensaje de error.
- *
- * almacenarDatos(array $datos):
- * - Lee los datos existentes de 'datos_sonda.json' si existe.
- * - Añade los nuevos datos a los datos existentes.
- * - Escribe los datos actualizados de nuevo en 'datos_sonda.json' en un formato JSON con formato bonito.
- */
-
 // Función para recibir las peticiones POST
 function recibirDatos()
 {
+    // Verificar si el archivo existe y, si no, inicializarlo con un arreglo vacío
+    if (!file_exists('led_status.json')) {
+        file_put_contents('led_status.json', '[]');
+    }
+
+    // Obtener los datos del fichero JSON de led_status.json
+    $ledStatus = json_decode(file_get_contents('led_status.json'), true);
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $datos = file_get_contents('php://input');
-        $datosArray = json_decode($datos, true);
+        $value = json_decode($datos, true);
 
-        if (json_last_error() === JSON_ERROR_NONE) {
-            // Almacenar los datos en un archivo JSON
-            almacenarDatos($datosArray);
-            http_response_code(200);
-        } else {
-            http_response_code(400);
-            echo json_encode(['status' => 'error', 'message' => 'Datos JSON inválidos']);
+        // extraer el actual_status y devolver el desired_status correspondiente
+        $id_sonda = $value['id_sonda'];
+        $actual_status = $value['actual_status'];
+
+        // Buscar el id_sonda en el array ledStatus
+        $found = false;
+        foreach ($ledStatus as &$led) {
+            if ($led['id_sonda'] == $id_sonda) {
+                // Si se encuentra, actualizar el actual_status
+                $led['actual_status'] = $actual_status;
+                $desiredStatus = ['id_sonda' => $id_sonda, 'desired_status' => $led['desired_status']];
+                $found = true;
+                break;
+            }
         }
+
+        // Si no se encuentra, agregar un nuevo objeto
+        if (!$found) {
+            $newLedStatus = [
+                'id_sonda' => $id_sonda,
+                'desired_status' => $actual_status,
+                'actual_status' => $actual_status
+            ];
+            $ledStatus[] = $newLedStatus;
+            $desiredStatus = ['id_sonda' => $id_sonda, 'desired_status' => $actual_status];
+        }
+
+        // Guardar los cambios en el archivo led_status.json
+        file_put_contents('led_status.json', json_encode($ledStatus, JSON_PRETTY_PRINT));
+
+        // Devolver el desired_status correspondiente
+        echo json_encode($desiredStatus);
+
+        // Almacenar los datos en el archivo JSON
+        almacenarDatos($value);
     } else {
         http_response_code(405);
-        echo json_encode(['status' => 'error', 'message' => 'Método no permitido']);
+        echo 'Método no permitido';
     }
 }
 
 // Función para almacenar los datos en un archivo JSON
-function almacenarDatos($datos)
+function almacenarDatos($value)
 {
-    $archivo = 'datos_sonda.json';
-    $datosExistentes = [];
-
-    if (file_exists($archivo)) {
-        $contenido = file_get_contents($archivo);
-        $datosExistentes = json_decode($contenido, true);
+    // Verificar si el archivo existe y, si no, inicializarlo con un arreglo vacío
+    if (!file_exists('sensor_data.json')) {
+        file_put_contents('sensor_data.json', '[]');
     }
 
-    $datosExistentes[] = $datos;
-    file_put_contents($archivo, json_encode($datosExistentes, JSON_PRETTY_PRINT));
+    // Leer el contenido existente del archivo y decodificarlo
+    $data = json_decode(file_get_contents('sensor_data.json'), true);
+
+    // Añadir los nuevos datos al final del arreglo existente
+    $data[] = $value;
+
+    // Guardar el arreglo actualizado en el archivo JSON
+    file_put_contents('sensor_data.json', json_encode($data, JSON_PRETTY_PRINT));
 }
 
 // Llamar a la función para recibir datos
