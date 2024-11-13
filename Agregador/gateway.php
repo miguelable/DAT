@@ -1,8 +1,25 @@
 <?php
 
+// Token de autenticación
+define('AUTH_TOKEN', 'mi_token_super_secreto');
+
+// Función para verificar el token de autenticación
+function verificarToken($headers)
+{
+    if (!isset($headers['Authorization']) || $headers['Authorization'] !== 'Bearer mi_token_super_secreto') {
+        http_response_code(401);
+        echo json_encode(['error' => 'Unauthorized']);
+        exit;
+    }
+}
+
 // Función para recibir las peticiones POST
 function recibirDatos()
 {
+    // Verificar el token de autenticación
+    $headers = apache_request_headers();
+    verificarToken($headers);
+
     // Verificar si el archivo existe y, si no, inicializarlo con un arreglo vacío
     if (!file_exists('led_status.json')) {
         file_put_contents('led_status.json', '[]');
