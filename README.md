@@ -2,6 +2,9 @@
 
 Este proyecto implementa un sistema de gateway para la gestión, recepción y sincronización de datos de sensores de potencia y estados de LEDs. Está diseñado para ejecutar el procesamiento en un servidor local y sincronizar estos datos periódicamente con un servidor remoto. El sistema incluye scripts en Bash y PHP para el envío, almacenamiento y sincronización de datos, con la autenticación y control necesarios para garantizar la seguridad de la información.
 
+> [!NOTE]
+> La parte del controlador se ha implementado en el servidor de clase.
+
 ## Componentes del Proyecto
 
 El sistema se compone de tres módulos principales:
