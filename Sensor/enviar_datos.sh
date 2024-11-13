@@ -20,6 +20,7 @@ fi
 
 ID=48
 ESTADO_LED=1
+AUTH_TOKEN="mi_token_super_secreto"
 
 # Enviar de forma periódica datos de temperatura aleatorios entre 0 y 50 cada 10 segundos con decimal
 # Se envían al gateway en formato JSON
@@ -35,18 +36,19 @@ do
     # Construir el JSON
     JSON="{\"id_sonda\": $ID, \"potencia\": $POTENCIA, \"timestamp\": \"$FECHA\", \"actual_status\": $ESTADO_LED}"
     # Enviar datos al gateway y esperar respuesta de desired led state
-    respuesta=$(curl -s -X POST -H "Content-Type: application/json" -d "$JSON" http://localhost:8081/gateway.php)
+    respuesta=$(curl -s -k -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $AUTH_TOKEN" -d "$JSON" https://localhost:8443/gateway.php)  
     # Datos enviados
-    echo "Datos enviados: $JSON"
+    echo "Datos enviados: $JSON - Respuesta: $respuesta"
     # Extraer desired_status de la respuesta
     desired_status=$(echo $respuesta | jq -r '.desired_status')
 
-    # Comparar desired_status con ESTADO_LED
-    if [ "$desired_status" != "$ESTADO_LED" ]; then
-        echo "Cambiando estado del LED de $ESTADO_LED a $desired_status"
-        ESTADO_LED=$desired_status
+    # Comparar desired_status con ESTADO_LED y verificar si existe $desired_status
+    if [ -n "$desired_status" ]; then
+        if [ "$desired_status" != "$ESTADO_LED" ]; then
+            echo "Cambiando estado del LED de $ESTADO_LED a $desired_status"
+            ESTADO_LED=$desired_status
+        fi
     fi
-
-    # Esperar 10 segundos   
-    sleep 10
+    # Esperar 2 segundos   
+    sleep 2
 done
