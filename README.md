@@ -1,100 +1,86 @@
 # Practica 3
 
-## Configuración del Sistema
+Este proyecto implementa un sistema de gateway para la gestión, recepción y sincronización de datos de sensores de potencia y estados de LEDs. Está diseñado para ejecutar el procesamiento en un servidor local y sincronizar estos datos periódicamente con un servidor remoto. El sistema incluye scripts en Bash y PHP para el envío, almacenamiento y sincronización de datos, con la autenticación y control necesarios para garantizar la seguridad de la información.
 
-### 1. Configuración de la Base de Datos
+## Componentes del Proyecto
 
-El script [`setup_database.sh`](Controlador/setup_database.sh) configura una base de datos MySQL para almacenar los datos del sensor.
+El sistema se compone de tres módulos principales:
 
-#### Pasos:
+1. **Gateway Local** - Recepción y procesamiento de datos.
+2. **Sincronización de Datos** - Actualización de datos en un servidor remoto.
+3. **Simulador de Datos de Sonda** - Generación y envío de datos de prueba desde un sensor simulado.
 
-1. Abre una terminal en la carpeta `Controlador`.
-2. Ejecuta el script de configuración de la base de datos:
-   ```sh
-   ./setup_database.sh
-   ```
-3. Ingresa la contraseña de root de MySQL cuando se te solicite.
+Cada módulo se configura y ejecuta mediante los siguientes archivos:
 
-### 2. Configuración del Gateway
+### 1. `gateway.php`
 
-El script [`gateway_setup.sh`](Agregador/gateway_setup.sh) configura un servidor PHP y ejecuta periódicamente un script para sincronizar cachés.
+Este script PHP recibe datos de sensores en formato JSON y responde con el estado deseado de un LED. Los datos de sensores y los estados de LEDs se almacenan localmente en `sensor_data.json` y `led_status.json`.
 
-#### Pasos:
+**Funciones principales**:
 
-1. Abre una terminal en la carpeta `Agregador`.
-2. Asegúrate de que el script tenga permisos de ejecución:
-   ```sh
-   chmod +x gateway_setup.sh
-   ```
-3. Ejecuta el script de configuración del gateway:
-   ```sh
-   ./gateway_setup.sh
-   ```
+- **Autenticación**: Verifica el token de autenticación de cada solicitud para asegurar el acceso autorizado.
+- **Recepción y Respuesta de Datos**: Guarda el estado actual del sensor y devuelve el `desired_status` de los LEDs.
+- **Almacenamiento de Datos**: Almacena los datos de sensores y estados de LEDs en archivos JSON.
 
-### 3. Ejecución del Sensor
+**Ejecución**:
+Este archivo es iniciado por el servidor PHP configurado en `gateway_setup.sh` y escucha las solicitudes en `https://localhost:8081/gateway.php`.
 
-El script [`enviar_datos.sh`](Sensor/enviar_datos.sh) simula la recolección de datos de temperatura y humedad y los envía al gateway.
+### 2. `sync_caches.php`
 
-#### Pasos:
+Este script maneja la sincronización de datos con el servidor remoto, actualizando los `desired_status` de los LEDs y eliminando los datos de sensores enviados exitosamente.
 
-1. Abre una terminal en la carpeta `Sensor`.
-2. Asegúrate de que el script tenga permisos de ejecución:
-   ```sh
-   chmod +x enviar_datos.sh
-   ```
-3. Ejecuta el script del sensor:
-   ```sh
-   ./enviar_datos.sh
-   ```
+**Funciones principales**:
 
-## Descripción de Archivos
+- **Envío de Datos**: Envía datos JSON almacenados en `led_status.json` y `sensor_data.json` al servidor remoto `manage_data.php`.
+- **Actualización de Datos**: Actualiza el `desired_status` de los LEDs o elimina datos de sensores enviados correctamente (estado 200).
 
-### Agregador
+**Ejecución**:
+Este script es ejecutado periódicamente por `gateway_setup.sh` para sincronizar los datos cada 10 segundos y registra los logs en `SyncLog.txt`.
 
-- [`gateway.php`](Agregador/gateway.php): Maneja solicitudes POST para recibir y almacenar datos JSON.
-- [`gateway_setup.sh`](Agregador/gateway_setup.sh): Configura un servidor PHP y ejecuta periódicamente el script `sync_caches.php`.
-- [`sync_caches.php`](Agregador/sync_caches.php): Sincroniza datos JSON locales con un servidor remoto.
-- `datos_sonda.json`: Archivo JSON donde se almacenan temporalmente los datos recibidos.
-- `SyncLog.txt`: Archivo de log donde se registran las ejecuciones del script `sync_caches.php`.
+### 3. `gateway_setup.sh`
 
-### Controlador
+Este script configura y ejecuta el gateway local, gestionando el servidor PHP y la sincronización de datos.
 
-- [`controller.php`](Controlador/controller.php): Configura un socket de servidor para recibir datos JSON y almacenarlos en una base de datos MySQL.
-- [`setup_database.sh`](Controlador/setup_database.sh): Configura la base de datos MySQL, el usuario y la tabla para almacenar los datos del sensor.
+**Funciones principales**:
 
-### Sensor
+- **Inicio del Servidor PHP**: Configura el servidor en `http://localhost:8081`.
+- **Configuración de Stunnel**: Inicia `stunnel` para manejar conexiones seguras.
+- **Ejecución de Sincronización**: Llama a `sync_caches.php` cada 10 segundos para sincronizar los datos con el servidor remoto.
 
-- [`enviar_datos.sh`](Sensor/enviar_datos.sh): Simula la recolección de datos de temperatura y humedad y los envía al gateway en formato JSON cada 10 segundos.
+**Ejecución**:
+Ejecuta este script una vez para iniciar y mantener el sistema funcionando:
 
-## Información Útil
+```bash
+cd Agregador
+./gateway_setup.sh
+```
 
-- Asegúrate de tener instaladas las dependencias necesarias:
-  - `bc` y `curl` para el script del sensor.
-  - Extensiones de PHP para Sockets y PDO MySQL.
-- Puedes ajustar los detalles de conexión a la base de datos y el puerto del servidor en los scripts correspondientes.
-- Los datos se envían al gateway en formato JSON y se almacenan temporalmente en `datos_sonda.json` antes de ser sincronizados con el servidor remoto.
+### 4. `enviar_datos.sh` (Simulador de Sonda)
 
-## Ejecución del Sistema
+Este script en Bash simula el envío de datos de potencia aleatorios desde una sonda hacia `gateway.php`. Genera datos de sensores en formato JSON y verifica continuamente si hay cambios en el estado deseado de los LEDs.
 
-1. Configura la base de datos ejecutando `setup_database.sh`.
-2. Configura y ejecuta el gateway con `gateway_setup.sh`.
-3. Ejecuta el sensor con `enviar_datos.sh`.
+**Funciones principales**:
 
-¡Listo! Ahora tu sistema debería estar funcionando correctamente, recolectando datos del sensor, enviándolos al gateway y almacenándolos en la base de datos.
+- **Generación de Datos Aleatorios**: Genera valores de potencia aleatorios y una marca temporal para cada envío.
+- **Envío de Datos**: Usa `curl` para enviar los datos al servidor local.
+- **Cambio de Estado del LED**: Verifica el `desired_status` del LED en cada respuesta del servidor y actualiza el estado del LED si detecta algún cambio.
 
-> [!TIP]
->
-> Para leer los datos de la base de datos, puedes utilizar el siguiente comando en la terminal:
->
-> ```sh
-> mysql -u grupo03 -p -e "USE t_h_DataBase; SELECT >* FROM data;"
-> ```
->
-> Ingresa la contraseña del usuario `grupo03` cuando se te solicite.
+**Requisitos**
 
-<!-- Para acceder a la base de datos de dat -->
+Este script necesita las herramientas `bc`, `curl` y `jq`. Si no están presentes en el sistema, el script intentará instalarlas automáticamente.
 
-mysql -h dbserver -u grupo03 -p
-tai1mui1Go
-USE grupo03
-show tables;
+**Ejecución**
+
+Para iniciar el simulador, asegúrate de tener permisos de administrador y ejecuta:
+
+```bash
+cd Sensor
+./enviar_datos.sh
+```
+
+## Resumen de Ejecución
+
+Para poner en marcha el sistema completo:
+
+1. Ejecuta `gateway_setup.sh` para iniciar el servidor PHP y la sincronización de datos.
+2. En una terminal independiente, ejecuta `enviar_datos.sh` para simular el envío de datos desde una sonda.
