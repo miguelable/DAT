@@ -1,6 +1,7 @@
 # Documentación de Archivos PHP
 
 Este proyecto consiste en varios scripts PHP que manejan la configuración y sincronización de datos de sensores y estados de LEDs. A continuación se describe brevemente la funcionalidad de cada archivo.
+Este directorio incluye además todos los archivos existentes en el servidor del grupo03 a fecha de 13 Noviembre 2024.
 
 ## Archivos
 
