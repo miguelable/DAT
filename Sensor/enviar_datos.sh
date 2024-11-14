@@ -18,6 +18,12 @@ if ! command_exists curl; then
     sudo apt-get install -y curl
 fi
 
+if ! command_exists jq; then
+    echo "Instalando jq..."
+    sudo apt-get update
+    sudo apt-get install -y jq
+fi
+
 ID=48
 ESTADO_LED=1
 AUTH_TOKEN="mi_token_super_secreto"

@@ -11,7 +11,7 @@ Este script requiere de las herramientas `bc`, `curl` y `jq`. Si no están insta
 El script realiza las siguientes operaciones:
 
 1. **Verificación e Instalación de Dependencias**  
-   Primero, el script verifica si las herramientas `bc` y `curl` están disponibles en el sistema:
+   Primero, el script verifica si las herramientas `bc` , `curl` y `jq` están disponibles en el sistema:
 
    - Si no están instaladas, las instala usando `sudo apt-get install`.
 
