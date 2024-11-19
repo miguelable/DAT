@@ -1,20 +1,38 @@
+// Autor: Miguel Ferrer y Paula Fernandez
+#define MIGUEL
+
+#ifdef MIGUEL
+#include <Arduino.h>
+#include <NeoPixelBus.h>
+#endif
 #include <NTPClient.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
 #include <ArduinoJson.h>
 #include <freertos/semphr.h>
 
+#ifdef MIGUEL
+#define PIXEL_COUNT 1
+#endif
 #define POT_PIN 34
 #define LED_PIN 4
 #define ID 4636
 #define SERVER_PORT 54471
+#ifndef MIGUEL
 #define THRESHOLD 2048
+#endif
 // wifi credentials
 const char* ssid = "GL-MT300N-V2-0bb";
 const char* password = "goodlife";
 WiFiClient client;
 IPAddress serverIP;
 
+#ifdef MIGUEL
+// Color deseado
+RgbColor actualColor(0, 0, 0);
+// Configurar el objeto de tira de LED
+NeoPixelBus<NeoGrbFeature, NeoEsp32I2s1800KbpsMethod> strip(PIXEL_COUNT, LED_PIN);
+#endif
 // Variable para controlar el estado del LED
 bool ledOn = true;
 
@@ -37,6 +55,26 @@ TaskHandle_t askDataTaskHandle = NULL;
 // Mutex para proteger las secciones críticas
 SemaphoreHandle_t xMutex;
 
+#ifdef MIGUEL
+// Función para obtener el color en función del valor del potenciómetro
+void setColor(uint16_t potValue) {
+    // Calcular los componentes RGB basados en una progresión lineal
+    uint8_t red = map(potValue, 0, 4095, 0, 255);
+    uint8_t green = map(potValue, 0, 4095, 255, 0);
+    uint8_t blue = 0; // No hay componente azul en la progresión verde-rojo
+
+    RgbColor desiredColor(red, green, blue);
+    bool colorChanged = false;
+
+    if (desiredColor != actualColor) {
+        actualColor = desiredColor;
+        colorChanged = true;
+        strip.SetPixelColor(0, actualColor);
+        strip.Show();
+    }
+}
+#endif
+
 // Tarea para leer el valor del potenciómetro
 void readPotTask(void* parameter) {
     while (true) {
@@ -44,14 +82,19 @@ void readPotTask(void* parameter) {
         sumPotValues += potValue;
         numReadings++;
         uint16_t averagePotValue = sumPotValues / numReadings;
-        
-        // Control del LED según el estado de ledOn
+        // Serial.printf(">Pot value: %d\n", potValue);
+        // Serial.printf(">Average: %d\n", averagePotValue);
+#ifdef MIGUEL
+        if (ledOn)
+            setColor(potValue);
+#else
+            // Control del LED según el estado de ledOn
         if (ledOn) {
             digitalWrite(LED_PIN, HIGH);  // Encender el LED
         } else {
             digitalWrite(LED_PIN, LOW);   // Apagar el LED
         }
-
+#endif
         vTaskDelay(100);
     }
 }
@@ -72,7 +115,7 @@ void sendDataTask(void* parameter) {
         StaticJsonDocument<200> doc;
         doc["id_sonda"] = ID;
         doc["potencia"] = sumPotValues / numReadings;
-        doc["tiempo_muestra"] = timeClient.getEpochTime();
+        doc["timestamp"] = timeClient.getEpochTime();
         // Reiniciar la suma y el contador
         sumPotValues = 0;
         numReadings = 0;
@@ -101,13 +144,9 @@ void sendDataTask(void* parameter) {
             request += "\r\n";
             request += json;
 
-            client.print(request);
-
+            client.println(request);
             Serial.println("Datos enviados al servidor: " + json);
-            if (client.available()) {
-                String response = client.readString().c_str();
-                Serial.println("Respuesta del servidor: " + response);
-            }
+
             xSemaphoreGive(xMutex);
         }
         vTaskDelay(10000);
@@ -119,8 +158,8 @@ void askDataTask(void* parameter) {
     while (true) {
         // Crear el JSON con el ID de la sonda
         StaticJsonDocument<200> doc;
-        doc["id"] = ID;
-        doc["ledStatus"] = ledOn;
+        doc["id_sonda"] = ID;
+        doc["ledStatus"] = ledOn ? "1" : "0";
         String json;
         serializeJson(doc, json);
         // Proteger la sección crítica con el mutex
@@ -137,28 +176,16 @@ void askDataTask(void* parameter) {
                     Serial.println("Conectado al servidor");
                 }
             }
-            String request = "GET /ledStatus?id=" + String(ID) + " HTTP/1.1\r\n";
+            // Solicitar datos al servidor
+            String request = "GET /ledStatus HTTP/1.1\r\n";
             request += "Host: " + serverIP.toString() + "\r\n";
             request += "Content-Type: application/json\r\n";
-            request += "\r\n";  // Fin de las cabeceras, línea en blanco para separar el cuerpo
+            request += "Content-Length: " + String(json.length()) + "\r\n";
+            request += "\r\n";
+            request += json;
+            client.println(request);
 
-            client.print(request);
-
-            Serial.println("Datos del led solicitados al servidor");
-            Serial.println("Datos del led actual: " + json);
-            if (client.available()) {
-              String response = client.readString().c_str();
-              Serial.println("Respuesta del servidor: " + response);
-              
-              // Comparar la respuesta con "false" o "true"
-              if (response.indexOf("false") != -1) {
-                  ledOn = false;
-              } else if (response.indexOf("true") != -1) {
-                  ledOn = true;
-              } else {
-                  Serial.println("Respuesta desconocida.");
-              }
-          }
+            Serial.println("Status enviado al servidor" + json);
             xSemaphoreGive(xMutex);
         }
         vTaskDelay(5000);
@@ -167,11 +194,18 @@ void askDataTask(void* parameter) {
 
 void setup()
 {
+#ifdef MIGUEL
+    Serial.begin(115200);
+    // initialize strip
+    strip.Begin();
+    strip.Show();
+#else
     Serial.begin(9600);
+    pinMode(LED_PIN, OUTPUT);
+#endif
     // set potentiometer pin as input
     pinMode(POT_PIN, INPUT);
-    pinMode(LED_PIN, OUTPUT);
-
+    
     // Conexión a la red WiFi
     Serial.println("Conectando a WiFi...");
     WiFi.begin(ssid, password);
@@ -238,10 +272,36 @@ void loop()
         char command = Serial.read();
         if (command == '1') {
             ledOn = true;
+#ifdef MIGUEL
+            strip.SetPixelColor(0, actualColor);
+            strip.Show();
+#endif
         } else if (command == '0') {
             ledOn = false;
-            
+#ifdef MIGUEL
+            strip.SetPixelColor(0, RgbColor(0, 0, 0));
+            strip.Show();
+#endif
+        }
+    }
+    if (client.available()) {
+        String response = client.readString().c_str();
+        Serial.println("Respuesta del servidor: \n" + response);
+        StaticJsonDocument<200> doc;
+        deserializeJson(doc, response);
+        bool desired_status = doc["desired_status"] == "1" ? true : false;
+        if (desired_status != ledOn) {
+            ledOn = desired_status;
+            Serial.printf("Cambiando estado del LED a: %s\n", ledOn ? "ON" : "OFF");
+#ifdef MIGUEL
+            if (ledOn) {
+                strip.SetPixelColor(0, actualColor);
+                strip.Show();
+            } else {
+                strip.SetPixelColor(0, RgbColor(0, 0, 0));
+                strip.Show();
+            }
+#endif
         }
     }
 }
-
