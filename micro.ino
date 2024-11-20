@@ -1,33 +1,62 @@
 // Autor: Miguel Ferrer y Paula Fernandez
-#define MIGUEL
+#define LED_RGB
 
-#ifdef MIGUEL
+#ifdef LED_RGB
 #include <Arduino.h>
 #include <NeoPixelBus.h>
 #endif
 #include <NTPClient.h>
+#include <WiFiClientSecure.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
 #include <ArduinoJson.h>
 #include <freertos/semphr.h>
 
-#ifdef MIGUEL
+#ifdef LED_RGB
 #define PIXEL_COUNT 1
 #endif
 #define POT_PIN 34
 #define LED_PIN 4
-#define ID 4636
-#define SERVER_PORT 54471
-#ifndef MIGUEL
+#define ID 34
+#define SERVER_PORT 54472
+#ifndef LED_RGB
 #define THRESHOLD 2048
 #endif
 // wifi credentials
 const char* ssid = "GL-MT300N-V2-0bb";
 const char* password = "goodlife";
-WiFiClient client;
+WiFiClientSecure client;
 IPAddress serverIP;
 
-#ifdef MIGUEL
+// Certificado del servidor (certificado público)
+const char* server_cert = R"EOF(
+-----BEGIN CERTIFICATE-----
+MIID9zCCAt+gAwIBAgIUZKPYCVsl3aqE4EZDs/1agNCfFWcwDQYJKoZIhvcNAQEL
+BQAwgYoxCzAJBgNVBAYTAkFVMQswCQYDVQQIDAJFUzERMA8GA1UEBwwIUGFtcGxv
+bmExEDAOBgNVBAoMB0dydXBvMDMxDDAKBgNVBAsMA0RBVDEPMA0GA1UEAwwGTWln
+dWVsMSowKAYJKoZIhvcNAQkBFhtmZXJyZXIuMTIxMjQyQGUudW5hdmFycmEuZXMw
+HhcNMjQxMTIwMTczNDI0WhcNMjUxMTIwMTczNDI0WjCBijELMAkGA1UEBhMCQVUx
+CzAJBgNVBAgMAkVTMREwDwYDVQQHDAhQYW1wbG9uYTEQMA4GA1UECgwHR3J1cG8w
+MzEMMAoGA1UECwwDREFUMQ8wDQYDVQQDDAZNaWd1ZWwxKjAoBgkqhkiG9w0BCQEW
+G2ZlcnJlci4xMjEyNDJAZS51bmF2YXJyYS5lczCCASIwDQYJKoZIhvcNAQEBBQAD
+ggEPADCCAQoCggEBALyFjQ5SjSVnuOkT7ATSalnqldf7dsFmzPmA4raNJYCnrV5V
+kw1pePUrWYUrJIaBeyiL9bl94NOT+NdzDujj/lHiEINiqEApesLYzQ9nDFDS36FC
+yJ4kSvg3vDf4qy11J+FNrkZQQM40RePNpEGis3jDfXmJNHplmfiaT+dVC04GRlYh
+8ejt+L0Ms2Po6SeePG4qofCr6PtRYeYOtQAFKSMut6ihE4oH6FDSWb4pqhaL3/Gi
+8x7I6+2NxCEdgifbJrPcHFXtL4oLk6NJUbxw9Z/+BhaIC760IxjFlF5WfwggwGs3
+2IzJxu8DhGkW1Ob4zcj0yVbXDmDfw0KiSl6j7lkCAwEAAaNTMFEwHQYDVR0OBBYE
+FJf3xjP6AHuRnNzMmlHL6ZlD6uUQMB8GA1UdIwQYMBaAFJf3xjP6AHuRnNzMmlHL
+6ZlD6uUQMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAGt9T6Ck
+XVrrfbo4oMfIqV6KcVvLzowrdGQxft4wKm/MOxC1Jp1griqg8SnMmFupePOxgY0R
+Y6MSqGpBrH3Sz435WI+3+mPZunvKJYpqz07gNZA1xh7TgiPn7M14fP0HXPHwUpTb
+f/CGQHAPY6MrQ++56Ej4ciHyAP9klPfB16XX7wYmtLpIC8ds+C4msl3TgPRl0SvT
+ea75O+JV+uaM5xdA8D7QFaTGsGj8e1Ps+XqclVEsmUT2RYP5cpCka4xVV15zyTYJ
+DfsG1AMLXq0xX6D66OzZyjpJygOApCpThPkYz3QEbBF4aJthmZ5vQr67L/A7fPYP
+FnAxRrpGfjne7Ks=
+-----END CERTIFICATE-----
+)EOF";
+
+#ifdef LED_RGB
 // Color deseado
 RgbColor actualColor(0, 0, 0);
 // Configurar el objeto de tira de LED
@@ -55,7 +84,7 @@ TaskHandle_t askDataTaskHandle = NULL;
 // Mutex para proteger las secciones críticas
 SemaphoreHandle_t xMutex;
 
-#ifdef MIGUEL
+#ifdef LED_RGB
 // Función para obtener el color en función del valor del potenciómetro
 void setColor(uint16_t potValue) {
     // Calcular los componentes RGB basados en una progresión lineal
@@ -84,7 +113,7 @@ void readPotTask(void* parameter) {
         uint16_t averagePotValue = sumPotValues / numReadings;
         // Serial.printf(">Pot value: %d\n", potValue);
         // Serial.printf(">Average: %d\n", averagePotValue);
-#ifdef MIGUEL
+#ifdef LED_RGB
         if (ledOn)
             setColor(potValue);
 #else
@@ -194,7 +223,7 @@ void askDataTask(void* parameter) {
 
 void setup()
 {
-#ifdef MIGUEL
+#ifdef LED_RGB
     Serial.begin(115200);
     // initialize strip
     strip.Begin();
@@ -244,6 +273,10 @@ void setup()
     serverIP = localIP;
     serverIP[3] = 1;
     Serial.printf("Server ip: %s\n", serverIP.toString().c_str());
+    // Configurar el cliente seguro
+    client.setCACert(server_cert);
+    client.setInsecure();
+    // Inicializar el servidor
     if (!client.connect(serverIP, SERVER_PORT)) {
         Serial.println("Failed to connect to server");
     } else {
@@ -272,13 +305,13 @@ void loop()
         char command = Serial.read();
         if (command == '1') {
             ledOn = true;
-#ifdef MIGUEL
+#ifdef LED_RGB
             strip.SetPixelColor(0, actualColor);
             strip.Show();
 #endif
         } else if (command == '0') {
             ledOn = false;
-#ifdef MIGUEL
+#ifdef LED_RGB
             strip.SetPixelColor(0, RgbColor(0, 0, 0));
             strip.Show();
 #endif
@@ -293,7 +326,7 @@ void loop()
         if (desired_status != ledOn) {
             ledOn = desired_status;
             Serial.printf("Cambiando estado del LED a: %s\n", ledOn ? "ON" : "OFF");
-#ifdef MIGUEL
+#ifdef LED_RGB
             if (ledOn) {
                 strip.SetPixelColor(0, actualColor);
                 strip.Show();
