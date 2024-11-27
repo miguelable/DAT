@@ -1,0 +1,48 @@
+#!/bin/sh /etc/rc.common
+# Script para iniciar el servidor PHP con php-cgi
+START=99
+STOP=10
+
+# Ruta al script PHP
+PHP_SCRIPT="/Agregador/sync_caches.php"
+PHP_CGI="/usr/bin/php-cgi"
+CONTROL_FILE="/tmp/syncServer.control"
+
+start() {
+    echo "Iniciando la sincronizacion de medidas"
+    
+    # Crear archivo de control
+    touch $CONTROL_FILE
+    
+    # Ejecutar el script PHP en un bucle cada 5 segundos
+    (
+        while [ -f $CONTROL_FILE ]; do
+            $PHP_CGI "$PHP_SCRIPT" >> /tmp/syncServer.log 2>&1
+            sleep 5
+        done
+    ) &
+    
+    if [ $? -eq 0 ]; then
+        echo "Sincronizacion de medidas iniciada correctamente."
+    else
+        echo "Error al iniciar la sincronizacion."
+    fi
+}
+
+stop() {
+    echo "Deteniendo la sincronización de medidas..."
+    
+    # Eliminar archivo de control para detener el bucle
+    rm -f $CONTROL_FILE
+    
+    # Detener cualquier instancia de php-cgi ejecutando el script PHP
+    for pid in $(ps | grep "$PHP_SCRIPT" | grep -v grep | awk '{print $1}'); do
+        kill -9 $pid
+    done
+    
+    if [ $? -eq 0 ]; then
+        echo "Sincronizacion medidas detenida correctamente."
+    else
+        echo "Error al detener la sincronizacion de medidas."
+    fi
+}
