@@ -30,8 +30,11 @@ El código sincroniza datos almacenados localmente con un servidor procesando do
 3. `Ficheros init.d`
    - `gatewayServer` : Ejecuta el gateway.php nada más iniciar el router de modo que no es necesario ejecutarlo manualmente
    - `syncServer` : Ejecuta la sincronización periódica de los datos y los estados de las sondas
+     
      > [!CAUTION]
-     > Necesario ejecutar ```/etc/init.d/syncServer start``` en el router para inicializar la sincronización
+     > Necesario ejecutar en el router para inicializar la sincronización
+     > ```/etc/init.d/syncServer start```
+     
    - `stunnel` : Necesario para redireccionar el tráfico del puerto 54472 (https) al puerto donde está corriendo gateway.php 54471 (http)
 
 ### Sonda Arduino (ESP32)
