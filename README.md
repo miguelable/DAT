@@ -19,9 +19,9 @@ Este componente se encarga de gestionar y procesar la comunicación de datos ent
 
     Este archivo administra de forma continua todos los datos que recibe y envía. Su función principal es procesar las solicitudes provenientes de la sonda y de la página web, ejecutando las operaciones necesarias en cada caso.
 
-    - Cuando recibe una petición POST desde la sonda, el servidor procesa la información y almacena los datos de potencia junto con la marca de tiempo en un archivo llamado `sensor_data.josn`. 
+    - Cuando recibe una petición POST desde la sonda, el servidor procesa la información y almacena los datos de potencia junto con la marca de tiempo en un archivo llamado `sensor_data.json`. 
 
-    - En el caso de una solicitud GET , busca el ID de la sonda en el archivo  `led_status` y devuelve el estado actual del LED correspondiente.
+    - En el caso de una solicitud GET , busca el ID de la sonda en el archivo  `led_status.json` y devuelve el estado actual del LED correspondiente.
 
 Estos archivos json se mandan como se explicará mas adelante a la base de datos.
 
