@@ -12,7 +12,7 @@ Para realizar la conexión mediante SSL se ha hecho un tunel entre un puerto htt
 ### Servidor Router
 Este componente se encarga de gestionar y procesar la comunicación de datos entre la sonda y el servidor web. Para ello, se han introducido diferentes archivos en el:
 
-1. `Ficheros carpeta agregador`
+1. `Ficheros carpeta Agregador`
 
 - `gateway.php`
 
