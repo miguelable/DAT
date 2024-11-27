@@ -56,15 +56,15 @@ LED convencional como para un LED RGB.
 Para cambiar entre estas configuraciones, solo es necesario 
 comentar o descomentar la línea: `#define LED_RGB `. 
 
-1. `Conexión al Router`
+**1. `Conexión al Router`**
 
 Para realizar el intercambio de información en ambas direcciones, es necesario establecer una conexión con el servidor. Para ello, nos conectamos a la red WiFi proporcionada por nuestro router, a la cual tendremos acceso siempre que el servidor esté en funcionamiento.
 
-2. `Envio de datos`
+**2. `Envio de datos`**
 
 Configuramos el pin 34 del ESP32 para leer los valores generados por el potenciómetro y calcular el promedio de estos cada 10 segundos. Estos datos se almacenarán en un archivo JSON y se enviarán al router mediante una solicitud POST.
 
-3. `Recibir el estado deseado del LED`
+**3. `Recibir el estado deseado del LED`**
 
 De manera similar, realizamos solicitudes GET para obtener el estado deseado del LED desde el servidor web. Además, el ESP32 enviará su estado actual del LED al servidor.
 
@@ -76,14 +76,14 @@ Este código tendrá incluida la implemantación de la conexión SSL con el rout
 En la dirección http://webalumnos.tlm.unavarra.es:10303/ se mostrarán, en tiempo real, los datos de potencia capturados por el potenciómetro para cada sonda, así como el estado del LED.
 Estos datos se extraen directamente de la base de datos y se presentan en diferentes tablas, que se visualizan según el botón seleccionado. Además, se incluye la opción de eliminar todos los datos de las tablas, lo que también los elimina de la base de datos. Para ello, se han implementado los códigos HTML, CSS y JS necesarios para el diseño de la interfaz web. Además, se han creado varios archivos PHP para gestionar las conexiones entre los dispositivos y la base de datos, permitiendo la actualización y visualización de los datos de manera eficiente. Estos son:
 
-- `manage_data.php`: Gestiona solicitudes HTTP para sincronizar estados de LEDs y registrar datos de sensores en MySQL, validando y devolviendo respuestas en formato JSON según el tipo de solicitud.
+- **`manage_data.php`**: Gestiona solicitudes HTTP para sincronizar estados de LEDs y registrar datos de sensores en MySQL, validando y devolviendo respuestas en formato JSON según el tipo de solicitud.
 
-- `show_data.php`: Muestra los datos de la tabla POT_SENSOR ordenados por tiempo_muestra en orden descendente .
+- **`show_data.php`**: Muestra los datos de la tabla POT_SENSOR ordenados por tiempo_muestra en orden descendente .
 
-- `show_leds_data.php`: Recupera los registros de la tabla LED_STATUS, muestra los datos en una tabla HTML y permite actualizar el desired_status a través de un menú desplegable, con un botón para eliminar los datos.
+- **`show_leds_data.php`**: Recupera los registros de la tabla LED_STATUS, muestra los datos en una tabla HTML y permite actualizar el desired_status a través de un menú desplegable, con un botón para eliminar los datos.
 
-- `update_led_status.php`: Actualiza el desired_status de una sonda en la tabla LED_STATUS si la solicitud proviene de un usuario.
+- **`update_led_status.php`**: Actualiza el desired_status de una sonda en la tabla LED_STATUS si la solicitud proviene de un usuario.
 
-- `delete_pot_sensor.php`: Elimina todos los registros de la tabla POT_SENSOR en MySQL y muestra un mensaje de éxito o error.
+- **`delete_pot_sensor.php`**: Elimina todos los registros de la tabla POT_SENSOR en MySQL y muestra un mensaje de éxito o error.
 
-- `detele_led_status.php`: Elimina todos los registros de la tabla POT_SENSOR en MySQL y muestra un mensaje de éxito o error.
+- **`detele_led_status.php`**: Elimina todos los registros de la tabla POT_SENSOR en MySQL y muestra un mensaje de éxito o error.
