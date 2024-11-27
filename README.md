@@ -12,29 +12,38 @@ Para realizar la conexión mediante SSL se ha hecho un tunel entre un puerto htt
 ### Servidor Router
 Este componente se encarga de gestionar y procesar la comunicación de datos entre la sonda y el servidor web. Para ello, se han introducido diferentes archivos en el:
 
-1. `gateway.php`
+1. `Ficheros carpeta agregador`
 
-Este archivo administra de forma continua todos los datos que recibe y envía. Su función principal es procesar las solicitudes provenientes de la sonda y de la página web, ejecutando las operaciones necesarias en cada caso.
+- `gateway.php`
 
-- Cuando recibe una petición POST desde la sonda, el servidor procesa la información y almacena los datos de potencia junto con la marca de tiempo en un archivo llamado `sensor_data.josn`. 
-- En el caso de una solicitud GET , busca el ID de la sonda en el archivo  `led_status` y devuelve el estado actual del LED correspondiente.
+
+    Este archivo administra de forma continua todos los datos que recibe y envía. Su función principal es procesar las solicitudes provenientes de la sonda y de la página web, ejecutando las operaciones necesarias en cada caso.
+
+    - Cuando recibe una petición POST desde la sonda, el servidor procesa la información y almacena los datos de potencia junto con la marca de tiempo en un archivo llamado `sensor_data.josn`. 
+
+    - En el caso de una solicitud GET , busca el ID de la sonda en el archivo  `led_status` y devuelve el estado actual del LED correspondiente.
 
 Estos archivos json se mandan como se explicará mas adelante a la base de datos.
 
-
-2. `sync_caches`
+- `sync_caches.php`
 
 El código sincroniza datos almacenados localmente con un servidor procesando dos tipos de información. Verifica la existencia de los archivos JSON, lee su contenido, realiza transformaciones específicas si es necesario (como formatear fechas), y los envía al servidor codificados en formato JSON utilizando cURL. Tras recibir la respuesta, actualiza los datos locales según el tipo: modificando valores específicos o eliminando registros exitosamente procesados. Finalmente, guarda los cambios en los archivos locales, asegurando que la información permanezca consistente entre el servidor y los archivos JSON utilizados.
 
-3. `Ficheros init.d`
-   - `gatewayServer` : Ejecuta el gateway.php nada más iniciar el router de modo que no es necesario ejecutarlo manualmente
-   - `syncServer` : Ejecuta la sincronización periódica de los datos y los estados de las sondas
+2. `Ficheros carpeta init.d`
+- `gatewayServer` : Ejecuta el gateway.php nada más iniciar el router de modo que no es necesario ejecutarlo manualmente
+- `syncServer` : Ejecuta la sincronización periódica de los datos y los estados de las sondas
      
-     > [!CAUTION]
-     > Necesario ejecutar en el router para inicializar la sincronización
-     > ```/etc/init.d/syncServer start```
+    > ⚠️ Es necesario ejecutar el siguiente comando en el router para inicializar la sincronización:
+    >
+    > ```bash
+    > /etc/init.d/syncServer start
+    > ```
      
-   - `stunnel` : Necesario para redireccionar el tráfico del puerto 54472 (https) al puerto donde está corriendo gateway.php 54471 (http)
+- `stunnel` : Necesario para redireccionar el tráfico del puerto 54472 (https) al puerto donde está corriendo gateway.php 54471 (http)
+
+   3. `Ficheros carpeta stunnel`
+   
+Incluye los archivos que contienen la clave, el certificado y la configuración necesaria para stunnel.
 
 ### Sonda Arduino (ESP32)
 
