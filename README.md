@@ -5,8 +5,7 @@ Este proyecto implementa un sistema de gateway para la gestión, recepción y si
 2. **Sonda en Arduino** - Generación y envío de datos de prueba desde el Arduino ESP32.
 3. **Servidor Web** - Volcado de información de la sonda en la web.
 
- NOSE 
-COMO EXPLICAR LO DE LA SEGURIDAD 
+Para realizar la conexión mediante SSL se ha hecho un tunel entre un puerto https y el puerto http en el que corre gateway.php. Se han creado los certificados propios y se ha ejecutado stunnel para redireccionar el puerto. 
 
 ## Componentes del Proyecto
 
@@ -61,7 +60,7 @@ Configuramos el pin 34 del ESP32 para leer los valores generados por el potenci�
 De manera similar, realizamos solicitudes GET para obtener el estado deseado del LED desde el servidor web. Además, el ESP32 enviará su estado actual del LED al servidor.
 
 
-Este código tendrá incluida la implemantación de NOSE COMO EXPLICAR LO DE LA SEGURIDAD x2
+Este código tendrá incluida la implemantación de la conexión SSL con el router. Para ello se ha utilizado WiFiClientSecure y se ha seteado el certificado generado con stunnel. Se ha configurado el cilente con setInsecure ya que es un certificado autofirmado.
 
 ### Servidor Web
 
