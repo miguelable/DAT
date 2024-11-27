@@ -33,7 +33,7 @@ El código sincroniza datos almacenados localmente con un servidor procesando do
 - `gatewayServer` : Ejecuta el gateway.php nada más iniciar el router de modo que no es necesario ejecutarlo manualmente
 - `syncServer` : Ejecuta la sincronización periódica de los datos y los estados de las sondas
      
-    > ⚠️ Es necesario ejecutar el siguiente comando en el router para inicializar la sincronización:
+    > [!warning] Es necesario ejecutar el siguiente comando en el router para inicializar la sincronización:
     >
     > ```bash
     > /etc/init.d/syncServer start
@@ -71,6 +71,8 @@ De manera similar, realizamos solicitudes GET para obtener el estado deseado del
 
 Este código tendrá incluida la implemantación de la conexión SSL con el router. Para ello se ha utilizado WiFiClientSecure y se ha seteado el certificado generado con stunnel. Se ha configurado el cilente con setInsecure ya que es un certificado autofirmado.
 
+![Texto alternativo](images/circuito.png)
+
 ### Servidor Web
 
 En la dirección http://webalumnos.tlm.unavarra.es:10303/ se mostrarán, en tiempo real, los datos de potencia capturados por el potenciómetro para cada sonda, así como el estado del LED.
@@ -89,3 +91,4 @@ Estos datos se extraen directamente de la base de datos y se presentan en difere
 - **`detele_led_status.php`**: Elimina todos los registros de la tabla POT_SENSOR en MySQL y muestra un mensaje de éxito o error.
 
 ![Texto alternativo](images/web_potencia.png)
+![Texto alternativo](images/web_led.png)
