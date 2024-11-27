@@ -33,7 +33,7 @@ El código sincroniza datos almacenados localmente con un servidor procesando do
 - `gatewayServer` : Ejecuta el gateway.php nada más iniciar el router de modo que no es necesario ejecutarlo manualmente
 - `syncServer` : Ejecuta la sincronización periódica de los datos y los estados de las sondas
      
-    > [!warning] Es necesario ejecutar el siguiente comando en el router para inicializar la sincronización:
+    > ⚠️ Es necesario ejecutar el siguiente comando en el router para inicializar la sincronización:
     >
     > ```bash
     > /etc/init.d/syncServer start
@@ -71,7 +71,7 @@ De manera similar, realizamos solicitudes GET para obtener el estado deseado del
 
 Este código tendrá incluida la implemantación de la conexión SSL con el router. Para ello se ha utilizado WiFiClientSecure y se ha seteado el certificado generado con stunnel. Se ha configurado el cilente con setInsecure ya que es un certificado autofirmado.
 
-![Texto alternativo](images/circuito.png)
+![Texto alternativo](images/circuito.jpg)
 
 ### Servidor Web
 
