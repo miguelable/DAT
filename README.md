@@ -27,7 +27,12 @@ Estos archivos json se mandan como se explicará mas adelante a la base de datos
 
 El código sincroniza datos almacenados localmente con un servidor procesando dos tipos de información. Verifica la existencia de los archivos JSON, lee su contenido, realiza transformaciones específicas si es necesario (como formatear fechas), y los envía al servidor codificados en formato JSON utilizando cURL. Tras recibir la respuesta, actualiza los datos locales según el tipo: modificando valores específicos o eliminando registros exitosamente procesados. Finalmente, guarda los cambios en los archivos locales, asegurando que la información permanezca consistente entre el servidor y los archivos JSON utilizados.
 
-3. `syncServer`
+3. `Ficheros init.d`
+   - `gatewayServer` : Ejecuta el gateway.php nada más iniciar el router de modo que no es necesario ejecutarlo manualmente
+   - `syncServer` : Ejecuta la sincronización periódica de los datos y los estados de las sondas
+     > [!CAUTION]
+     > Necesario ejecutar ```/etc/init.d/syncServer start``` en el router para inicializar la sincronización
+   - `stunnel` : Necesario para redireccionar el tráfico del puerto 54472 (https) al puerto donde está corriendo gateway.php 54471 (http)
 
 ### Sonda Arduino (ESP32)
 
