@@ -71,7 +71,6 @@ De manera similar, realizamos solicitudes GET para obtener el estado deseado del
 
 Este código tendrá incluida la implemantación de la conexión SSL con el router. Para ello se ha utilizado WiFiClientSecure y se ha seteado el certificado generado con stunnel. Se ha configurado el cilente con setInsecure ya que es un certificado autofirmado.
 
-![Texto alternativo](images/circuito.jpg)
 
 ### Servidor Web
 
