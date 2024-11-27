@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina Grupo 3</title>
+    <link rel="stylesheet" href="css/styles.css"> <!-- Enlace al CSS en la carpeta css -->
+    <script src="js/scripts.js" defer></script> <!-- Enlace al JS en la carpeta js -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <header>
+        <h1>Grupo 3 Webpage</h1>
+    </header>
+
+    <main>
+        <p>Miguel Ferrer</p>
+        <p>Paula Fernandez</p>
+
+        <!-- Boton que carga la tabla de potencia-->
+        <button onclick="cargarDatosPotencia(true);">Mostrar Datos Potencia</button>
+        <!-- Boton que carga la tabla de led status -->
+        <button onclick="cargarDatosLed(true);">Mostrar Datos Led</button>
+        <!-- Contenedor para la tabla not displayed --> 
+        <div id="tabla-container-potencia">
+        </div>
+        <div id="tabla-container-led">
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Grupo 3. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>
