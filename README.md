@@ -41,7 +41,7 @@ El código sincroniza datos almacenados localmente con un servidor procesando do
      
 - `stunnel` : Necesario para redireccionar el tráfico del puerto 54472 (https) al puerto donde está corriendo gateway.php 54471 (http)
 
-   3. `Ficheros carpeta stunnel`
+3. `Ficheros carpeta stunnel`
    
 Incluye los archivos que contienen la clave, el certificado y la configuración necesaria para stunnel.
 
