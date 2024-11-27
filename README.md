@@ -87,3 +87,5 @@ Estos datos se extraen directamente de la base de datos y se presentan en difere
 - **`delete_pot_sensor.php`**: Elimina todos los registros de la tabla POT_SENSOR en MySQL y muestra un mensaje de éxito o error.
 
 - **`detele_led_status.php`**: Elimina todos los registros de la tabla POT_SENSOR en MySQL y muestra un mensaje de éxito o error.
+
+![Texto alternativo](images/web_potencia.png)
