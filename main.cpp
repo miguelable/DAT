@@ -1,16 +1,4 @@
 // App to subscribe to publish and subscribe to a mqtt topic
-// Publish data from the Gateway to the MQTT broker
-// mosquitto_pub -h localhost -p 8883 --cafile /etc/mosquitto/certs/mqtt-server.crt -t grupo01/4636/desiredStatus -m
-// "{"desired_status":0}"
-
-// Subscribe to the topic on the Gateway
-// mosquitto_sub -h localhost -p 8883 --cafile /etc/mosquitto/certs/mqtt-server.crt --insecure -t grupo01/4636/potValue
-// mosquitto_sub -h localhost -p 8883 --cafile /etc/mosquitto/certs/mqtt-server.crt --insecure -t grupo01/4636/ledStatus
-
-// Publish data to the device to change led
-// mosquitto_pub -h webalumnos.tlm.unavarra.es -p 10320 -t 'grupo01/4636/desiredStatus' -m '{"desired_status":0}'
-// mosquitto_pub -h webalumnos.tlm.unavarra.es -p 10320 -t 'grupo01/4636/desiredStatus' -m '{"desired_status":1}'
-
 #define LED_RGB
 
 #ifdef LED_RGB
