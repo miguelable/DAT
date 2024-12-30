@@ -6,6 +6,12 @@ HCSR04::HCSR04(uint8_t trigPin, uint8_t echoPin)
   _echoPin = echoPin;
 }
 
+HCSR04::HCSR04()
+{
+  _trigPin = DEFAULT_TRIG;
+  _echoPin = DEFAULT_ECHO;
+}
+
 HCSR04::~HCSR04()
 {
   // Delete running tasks
@@ -84,7 +90,7 @@ void HCSR04::sensorDataTask(void* pvParameters)
     if (sensor->_distance < sensor->_threshold)
       sensor->_callback();
 
-    vTaskDelay(1);
+    vTaskDelay(20 / portTICK_PERIOD_MS);
   }
 }
 

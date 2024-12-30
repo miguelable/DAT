@@ -15,6 +15,7 @@ class HCSR04
 public:
   // Constructor & Destructor
   HCSR04(uint8_t trigPin, uint8_t echoPin);
+  HCSR04();
   ~HCSR04();
 
   void init();
@@ -30,11 +31,11 @@ private:
   static void  sensorDataTask(void* pvParameters);
   TaskHandle_t _sensorDataTask = NULL;
 
-  float              _threshold = 0;
-  float              _distance  = 0;
-  float              _duration  = 0;
-  uint8_t            _trigPin   = DEFAULT_TRIG;
-  uint8_t            _echoPin   = DEFAULT_ECHO;
+  float              _threshold;
+  float              _distance;
+  float              _duration;
+  uint8_t            _trigPin;
+  uint8_t            _echoPin;
   ActivationCallback _callback;
 };
 
