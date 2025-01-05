@@ -31,9 +31,9 @@ private:
   static void  sensorDataTask(void* pvParameters);
   TaskHandle_t _sensorDataTask = NULL;
 
-  float              _threshold;
-  float              _distance;
-  float              _duration;
+  float              _threshold = 0;
+  float              _distance  = 0;
+  float              _duration  = 0;
   uint8_t            _trigPin;
   uint8_t            _echoPin;
   ActivationCallback _callback;

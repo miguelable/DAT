@@ -87,9 +87,11 @@ void HCSR04::sensorDataTask(void* pvParameters)
     sensor->_duration = pulseIn(sensor->_echoPin, HIGH);
     sensor->_distance = (sensor->_duration * .0343) / 2;
 
-    if (sensor->_distance < sensor->_threshold)
-      sensor->_callback();
-
+    if (sensor->_distance < sensor->_threshold && sensor->_callback != NULL)
+      if (sensor->_distance > 1) {
+        // Serial.printf("Distance: %0.2f cm\n", sensor->_distance);
+        sensor->_callback();
+      }
     vTaskDelay(20 / portTICK_PERIOD_MS);
   }
 }

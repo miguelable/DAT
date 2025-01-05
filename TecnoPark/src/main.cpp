@@ -2,7 +2,7 @@
 #include "hcsr04.h"
 #include <Arduino.h>
 
-#define FLASH_PIN 2
+#define FLASH_PIN 4
 #define PIXEL_COUNT 1
 #define LED_PIN 13
 #define TRIG_PIN 14
