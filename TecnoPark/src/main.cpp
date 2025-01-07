@@ -7,6 +7,7 @@
 #define LED_PIN 13
 #define TRIG_PIN 14
 #define ECHO_PIN 15
+#define BUTTON_PIN 12
 
 HCSR04 sensor(TRIG_PIN, ECHO_PIN);
 
@@ -26,6 +27,7 @@ void setup()
   sensor.setCallback(15, activationCallback);
   sensor.init();
   pinMode(FLASH_PIN, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT);
   setupLed();
   Serial.println("Setup done");
 }
@@ -83,6 +85,10 @@ void loop()
       return;
   }
 
-  effectIndex++;
-  delay(10000); // Cambiar de efecto cada 5 segundos
+  if (digitalRead(BUTTON_PIN) == HIGH) {
+    effectIndex++;
+    Serial.println("Button pressed");
+    delay(500);
+  }
+  delay(1);
 }
