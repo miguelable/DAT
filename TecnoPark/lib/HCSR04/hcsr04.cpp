@@ -1,3 +1,18 @@
+/**
+ * @file hcsr04.cpp
+ * @author Miguel Ferrer (mferrer@inbiot.es)
+ * @brief Implementation of HCSR04 class
+ * @version 0.1
+ * @date 2025-01-14
+ *
+ * This file contains the implementation of the HCSR04 class, which provides functions to manage the HC-SR04 ultrasonic
+ * sensor. The class includes functions to initialize the sensor, start and stop measurements, and retrieve distance and
+ * duration data. The class also supports setting a callback function to trigger an action when the distance exceeds a
+ * specified threshold.
+ *
+ * @copyright Copyright (c) 2025
+ *
+ */
 #include "hcsr04.h"
 
 HCSR04::HCSR04(uint8_t trigPin, uint8_t echoPin)
@@ -74,6 +89,22 @@ void HCSR04::init()
       log_i("sensorDataTask task created");
 }
 
+/**
+ * @brief Task to continuously measure distance using the HCSR04 sensor.
+ *
+ * This function is intended to be run as a FreeRTOS task. It continuously triggers
+ * the HCSR04 ultrasonic sensor to measure distance and calls a user-defined callback
+ * function if the measured distance is below a specified threshold.
+ *
+ * @param pvParameters Pointer to the HCSR04 object instance.
+ *
+ * The function performs the following steps in an infinite loop:
+ * 1. Triggers the ultrasonic sensor by sending a HIGH pulse to the trigger pin.
+ * 2. Measures the duration of the echo pulse.
+ * 3. Calculates the distance based on the duration of the echo pulse.
+ * 4. If the distance is below the threshold and greater than 1 cm, it calls the user-defined callback function.
+ * 5. Delays the task for 20 milliseconds before repeating the process.
+ */
 void HCSR04::sensorDataTask(void* pvParameters)
 {
   HCSR04* sensor = static_cast<HCSR04*>(pvParameters);

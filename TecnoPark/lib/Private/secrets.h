@@ -1,17 +1,29 @@
+/**
+ * @file secrets.h
+ * @author Miguel Ferrer (mferrer@inbiot.es)
+ * @brief Secret credentials and configuration settings.
+ * @version 0.1
+ * @date 2025-01-14
+ *
+ * This file contains secret credentials and configuration settings that should not be shared publicly.
+ * It includes WiFi credentials, NTP server settings, and server certificates for secure communication.
+ *
+ * @copyright Copyright (c) 2025
+ *
+ */
 #ifndef SECRETS_H
 #define SECRETS_H
 
 // NTP
-const char* ntpServer     = "pool.ntp.org";
-const long  gmtOffset_sec = 3600; // Ajuste de zona horaria (Ejemplo: GMT+1 Madrid)
+const char* ntpServer     = "pool.ntp.org"; /*!< NTP server address. */
+const long  gmtOffset_sec = 3600;           /*!< GMT offset in seconds. */
 
 // WiFi credentials
-const char* ssid     = "GL-MT300N-V2-0bb";
-const char* password = "goodlife";
+const char* ssid     = "GL-MT300N-V2-0bb"; /*!< WiFi SSID. */
+const char* password = "goodlife";         /*!< WiFi password. */
 // const char* ssid     = "Pixel_3021";
 // const char* password = "miguelferrer";
 
-// Certificado del servidor (certificado público)
 const char* server_cert = R"EOF(
 -----BEGIN CERTIFICATE-----
 MIID9zCCAt+gAwIBAgIUZKPYCVsl3aqE4EZDs/1agNCfFWcwDQYJKoZIhvcNAQEL
@@ -37,6 +49,6 @@ ea75O+JV+uaM5xdA8D7QFaTGsGj8e1Ps+XqclVEsmUT2RYP5cpCka4xVV15zyTYJ
 DfsG1AMLXq0xX6D66OzZyjpJygOApCpThPkYz3QEbBF4aJthmZ5vQr67L/A7fPYP
 FnAxRrpGfjne7Ks=
 -----END CERTIFICATE-----
-)EOF";
+)EOF"; /*!< Server certificate for secure communication. */
 
 #endif // SECRETS_H
