@@ -7,8 +7,9 @@
 #include "OV2640Streamer.h"
 #include "SimStreamer.h"
 
-OV2640 cam;
+OV2640     cam;
 WiFiServer rtspServer(8554);
+#define FLASH_LED 4
 
 #include "wifikeys.h"
 
@@ -19,6 +20,8 @@ void setup()
   while (!Serial) {
     ;
   }
+  // init flash LED (active low)
+  pinMode(FLASH_LED, OUTPUT);
   cam.init(esp32cam_aithinker_config);
 
   IPAddress ip;
@@ -68,6 +71,8 @@ void loop()
       delete streamer;
       session  = NULL;
       streamer = NULL;
+      // turn off the LED to show we are not streaming
+      digitalWrite(FLASH_LED, LOW);
     }
   }
   else {
@@ -75,8 +80,10 @@ void loop()
 
     if (client) {
       // streamer = new SimStreamer(&client, true);             // our streamer for UDP/TCP based RTP transport
-      streamer = new OV2640Streamer(&client, cam); // our streamer for UDP/TCP based RTP transport
-      session = new CRtspSession(&client, streamer); // our threads RTSP session and state
+      streamer = new OV2640Streamer(&client, cam);    // our streamer for UDP/TCP based RTP transport
+      session  = new CRtspSession(&client, streamer); // our threads RTSP session and state
+      // turn on the LED to show we are streaming
+      digitalWrite(FLASH_LED, HIGH);
     }
   }
 }
