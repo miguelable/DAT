@@ -64,7 +64,7 @@ public:
    *   - Frame buffer count: 1
    *
    */
-  void init();
+  bool init();
 
   /**
    * @brief Returns the frame buffer to the ESP32 camera driver.

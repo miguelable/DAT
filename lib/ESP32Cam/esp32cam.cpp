@@ -14,7 +14,7 @@
  */
 #include "esp32cam.h"
 
-void ESP32Cam::init()
+bool ESP32Cam::init()
 {
   _config.ledc_channel = LEDC_CHANNEL_0;
   _config.ledc_timer   = LEDC_TIMER_0;
@@ -39,8 +39,8 @@ void ESP32Cam::init()
 
   // Configuración basada en la disponibilidad de PSRAM
   if (psramFound()) {
-    _config.frame_size   = FRAMESIZE_HD; // Reduce resolución para mayor fluidez
-    _config.jpeg_quality = 10;           // Calidad media para menor tamaño de imagen
+    _config.frame_size   = FRAMESIZE_SXGA; // Reduce resolución para mayor fluidez
+    _config.jpeg_quality = 8;              // Calidad media para menor tamaño de imagen
     _config.fb_count     = 2;
   }
   else {
@@ -53,8 +53,9 @@ void ESP32Cam::init()
   esp_err_t err = esp_camera_init(&_config);
   if (err != ESP_OK) {
     Serial.printf("Fallo al inicializar la cámara: 0x%x\n", err);
-    return;
+    return false;
   }
+  return true;
 }
 
 camera_fb_t* ESP32Cam::getImage()
