@@ -23,7 +23,6 @@
  */
 #include "LedEffects.h"
 #include <Arduino.h>
-#include <freertos/queue.h>
 #include <freertos/task.h>
 
 // Configuración
@@ -184,11 +183,13 @@ void handleEffect(LedEffect effect)
       fadeIn(500, RgbColor(0, 255, 0));
       vTaskDelay(3000 / portTICK_PERIOD_MS);
       fadeOut(500);
+      setLedEffect(Waiting);
       break;
     case Error:
       fadeIn(500, RgbColor(255, 0, 0));
       vTaskDelay(3000 / portTICK_PERIOD_MS);
       fadeOut(500);
+      setLedEffect(Waiting);
       break;
     case Warning:
       fadeInOut(500, RgbColor(255, 128, 0), 200, 0);
@@ -252,17 +253,17 @@ void setupLed()
 
   effectQueue = xQueueCreate(5, sizeof(LedEffect));
   if (effectQueue == nullptr) {
-    Serial.println("Error: No se pudo crear la cola.");
+    log_e("No se pudo crear la cola");
     return;
   }
   else {
-    Serial.println("Cola de efectos creada.");
+    log_d("Cola de efectos creada");
   }
 
   if (xTaskCreate(ledTaskFunction, "LED Task", 2048, nullptr, 1, &ledTask) != pdPASS) {
-    Serial.println("Error: No se pudo crear la tarea LED.");
+    log_e("No se pudo crear la tarea LED");
   }
   else {
-    Serial.println("Tarea LED creada.");
+    log_i("Tarea LED creada");
   }
 }
