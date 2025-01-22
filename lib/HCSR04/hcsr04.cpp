@@ -63,7 +63,7 @@ void HCSR04::stopMeasure()
 void HCSR04::startMeasure()
 {
   if (_sensorDataTask == NULL) {
-    if (xTaskCreate(sensorDataTask, "sensorDataTask", 4096, this, 1, &_sensorDataTask) != pdPASS)
+    if (xTaskCreate(sensorDataTask, "sensorDataTask", 81, this, 1, &_sensorDataTask) != pdPASS)
       log_w("Failed to create sensorDataTask task");
     else
       log_i("sensorDataTask task created");
@@ -83,7 +83,7 @@ void HCSR04::init()
   pinMode(_trigPin, OUTPUT);
   pinMode(_echoPin, INPUT);
   if (_sensorDataTask == NULL)
-    if (xTaskCreate(sensorDataTask, "sensorDataTask", 4096, this, 1, &_sensorDataTask) != pdPASS)
+    if (xTaskCreate(sensorDataTask, "sensorDataTask", 8192, this, 1, &_sensorDataTask) != pdPASS)
       log_w("Failed to create sensorDataTask task");
     else
       log_i("sensorDataTask task created");
@@ -119,7 +119,7 @@ void HCSR04::sensorDataTask(void* pvParameters)
     sensor->_distance = (sensor->_duration * .0343) / 2;
 
     if (sensor->_distance < sensor->_threshold && sensor->_callback != NULL)
-      if (sensor->_distance > 1) {
+      if (sensor->_distance > 5) {
         // Serial.printf("Distance: %0.2f cm\n", sensor->_distance);
         sensor->_callback();
       }
