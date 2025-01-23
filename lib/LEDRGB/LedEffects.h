@@ -1,12 +1,12 @@
 /**
  * @file LedEffects.h
- * @author Miguel Ferrer (mferrer@inbiot.es)
- * @brief  Library for managing LED effects on an RGB LED strip.
+ * @author Miguel Ferrer
+ * @brief Biblioteca para gestionar efectos LED en una tira LED RGB.
  * @version 0.1
  * @date 2025-01-14
  *
- * This library provides functions to manage LED effects on an RGB LED strip.
- * The library uses the NeoPixelBus and NeoPixelAnimator libraries to control the LED strip.
+ * Esta biblioteca proporciona funciones para gestionar efectos LED en una tira LED RGB.
+ * La biblioteca utiliza las bibliotecas NeoPixelBus y NeoPixelAnimator para controlar la tira LED.
  *
  * @copyright Copyright (c) 2025
  *
@@ -20,62 +20,62 @@
 #include <freertos/queue.h>
 
 // Configuración
-extern const uint16_t PixelCount;        /*!< Number of pixels in the LED strip. */
-extern const uint8_t  PixelPin;          /*!< Pin number where the LED strip is connected. */
-extern const uint8_t  AnimationChannels; /*!< Number of animation channels. */
+extern const uint16_t PixelCount;        /*!< Número de píxeles en la tira LED. */
+extern const uint8_t  PixelPin;          /*!< Número de pin donde está conectada la tira LED. */
+extern const uint8_t  AnimationChannels; /*!< Número de canales de animación. */
 
 // Declaraciones de objetos
-extern NeoPixelBus<NeoGrbFeature, NeoWs2812xMethod> strip;      /*!< Object to control the LED strip. */
-extern NeoPixelAnimator                             animations; /*!< Object to manage animations. */
+extern NeoPixelBus<NeoGrbFeature, NeoWs2812xMethod> strip;      /*!< Objeto para controlar la tira LED. */
+extern NeoPixelAnimator                             animations; /*!< Objeto para gestionar animaciones. */
 
-// Task y cola para gestionar las animaciones
-extern TaskHandle_t  ledTask;     /*!< Task to manage LED effects. */
-extern QueueHandle_t effectQueue; /*!< Queue to send LED effects. */
+// Tarea y cola para gestionar las animaciones
+extern TaskHandle_t  ledTask;     /*!< Tarea para gestionar efectos LED. */
+extern QueueHandle_t effectQueue; /*!< Cola para enviar efectos LED. */
 
 /**
- * @brief Enumeration of LED effects.
+ * @brief Enumeración de efectos LED.
  *
- * This enumeration defines the different LED effects that can be applied to the LED strip.
- * The effects include flashing, processing, success, error, warning, closed, opened, waiting, and revision needed.
- * The None effect is used to clear the LED strip.
+ * Esta enumeración define los diferentes efectos LED que se pueden aplicar a la tira LED.
+ * Los efectos incluyen parpadeo, procesamiento, éxito, error, advertencia, cerrado, abierto, espera y revisión
+ * necesaria. El efecto None se utiliza para limpiar la tira LED.
  *
  */
 enum LedEffect
 {
-  None,          /*!< No effect. */
-  Clear,         /*!< Clear the LED strip. */
-  Flashing,      /*!< Flashing effect with cyan color. */
-  Processing,    /*!< Processing effect with cyan color fading in and out. */
-  Success,       /*!< Success effect with green color. */
-  Error,         /*!< Error effect with red color. */
-  Warning,       /*!< Warning effect with orange color fading in and out. */
-  Closed,        /*!< Closed effect with red color fading in and out. */
-  Opened,        /*!< Opened effect with green color fading in and out. */
-  Waiting,       /*!< Waiting effect with gray color fading in and out. */
-  RevisionNeeded /*!< Revision needed effect with yellow color. */
+  None,          /*!< Sin efecto. */
+  Clear,         /*!< Limpiar la tira LED. */
+  Flashing,      /*!< Efecto de parpadeo con color cian. */
+  Processing,    /*!< Efecto de procesamiento con color cian desvaneciéndose. */
+  Success,       /*!< Efecto de éxito con color verde. */
+  Error,         /*!< Efecto de error con color rojo. */
+  Warning,       /*!< Efecto de advertencia con color naranja desvaneciéndose. */
+  Closed,        /*!< Efecto de cerrado con color rojo desvaneciéndose. */
+  Opened,        /*!< Efecto de abierto con color verde desvaneciéndose. */
+  Waiting,       /*!< Efecto de espera con color gris desvaneciéndose. */
+  RevisionNeeded /*!< Efecto de revisión necesaria con color amarillo. */
 };
 
 /**
- * @brief Initializes the LED strip and sets up the task and queue for LED effects.
+ * @brief Inicializa la tira LED y configura la tarea y la cola para los efectos LED.
  *
- * This function performs the following steps:
- * 1. Initializes the LED strip and displays the initial state.
- * 2. Creates a queue for LED effects with a maximum of 5 elements.
- *    - If the queue creation fails, it prints an error message and returns.
- *    - If the queue creation succeeds, it prints a success message.
- * 3. Creates a task to handle LED effects.
- *    - If the task creation fails, it prints an error message.
- *    - If the task creation succeeds, it prints a success message.
+ * Esta función realiza los siguientes pasos:
+ * 1. Inicializa la tira LED y muestra el estado inicial.
+ * 2. Crea una cola para los efectos LED con un máximo de 5 elementos.
+ *    - Si la creación de la cola falla, imprime un mensaje de error y retorna.
+ *    - Si la creación de la cola tiene éxito, imprime un mensaje de éxito.
+ * 3. Crea una tarea para manejar los efectos LED.
+ *    - Si la creación de la tarea falla, imprime un mensaje de error.
+ *    - Si la creación de la tarea tiene éxito, imprime un mensaje de éxito.
  */
 void setupLed();
 
 /**
- * @brief Sets the LED effect by sending it to the effect queue.
+ * @brief Establece el efecto LED enviándolo a la cola de efectos.
  *
- * This function sends the specified LED effect to the effect queue if the queue is not null.
- * The effect will be processed by the consumer of the queue.
+ * Esta función envía el efecto LED especificado a la cola de efectos si la cola no es nula.
+ * El efecto será procesado por el consumidor de la cola.
  *
- * @param effect The LED effect to be set.
+ * @param effect El efecto LED a establecer.
  */
 void setLedEffect(LedEffect effect);
 

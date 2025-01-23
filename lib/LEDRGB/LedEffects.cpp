@@ -1,22 +1,22 @@
 /**
  * @file LedEffects.cpp
- * @author Miguel Ferrer (mferrer@inbiot.es
- * @brief  Implementation of LedEffects class
+ * @author Miguel Ferrer
+ * @brief Implementación de la clase LedEffects
  * @version 0.1
  * @date 2025-01-14
  *
- * This file contains the implementation of the LedEffects class, which provides functions to manage LED effects on an
- * RGB LED strip. The class uses the NeoPixelBus and NeoPixelAnimator libraries to control the LED strip. The different
- * LED effects are defined in the LedEffect enumeration.
- * 1. None: No effect.
- * 2. Clear: Clear the LED strip.
- * 3. Flashing: Flashing effect with cyan color.
- * 4. Processing: Processing effect with cyan color fading in and out.
- * 5. Success: Success effect with green color.
- * 6. Error: Error effect with red color.
- * 7. Warning: Warning effect with orange color fading in and out.
- * 8. Closed: Closed effect with red color fading in and out.
- * 9. Opened: Opened effect with green color fading in and out.
+ * Este archivo contiene la implementación de la clase LedEffects, que proporciona funciones para gestionar efectos LED
+ * en una tira LED RGB. La clase utiliza las bibliotecas NeoPixelBus y NeoPixelAnimator para controlar la tira LED. Los
+ * diferentes efectos LED están definidos en la enumeración LedEffect.
+ * 1. None: Sin efecto.
+ * 2. Clear: Limpiar la tira LED.
+ * 3. Flashing: Efecto de parpadeo con color cian.
+ * 4. Processing: Efecto de procesamiento con color cian desvaneciéndose.
+ * 5. Success: Efecto de éxito con color verde.
+ * 6. Error: Efecto de error con color rojo.
+ * 7. Warning: Efecto de advertencia con color naranja desvaneciéndose.
+ * 8. Closed: Efecto de cerrado con color rojo desvaneciéndose.
+ * 9. Opened: Efecto de abierto con color verde desvaneciéndose.
  *
  * @copyright Copyright (c) 2025
  *
@@ -26,42 +26,42 @@
 #include <freertos/task.h>
 
 // Configuración
-const uint16_t PixelCount        = 1;
-const uint8_t  PixelPin          = 13;
-const uint8_t  AnimationChannels = 1;
+const uint16_t PixelCount        = 1;  /*!< Número de píxeles en la tira LED. */
+const uint8_t  PixelPin          = 13; /*!< Número de pin donde está conectada la tira LED. */
+const uint8_t  AnimationChannels = 1;  /*!< Número de canales de animación. */
 
 // Objetos globales
-NeoPixelBus<NeoGrbFeature, NeoWs2812xMethod> strip(PixelCount, PixelPin);   /*!< Controller of the LED strip. */
-NeoPixelAnimator                             animations(AnimationChannels); /*!< Manager of animations. */
+NeoPixelBus<NeoGrbFeature, NeoWs2812xMethod> strip(PixelCount, PixelPin);   /*!< Controlador de la tira LED. */
+NeoPixelAnimator                             animations(AnimationChannels); /*!< Gestor de animaciones. */
 
-// Task y cola para animaciones
-TaskHandle_t  ledTask;
-QueueHandle_t effectQueue;
+// Tarea y cola para animaciones
+TaskHandle_t  ledTask;     /*!< Manejador de la tarea de efectos LED. */
+QueueHandle_t effectQueue; /*!< Cola para enviar efectos LED. */
 
 // Variables internas
 struct MyAnimationState
-/**
- * @brief Structure to represent the starting and ending colors for an LED effect.
- *
- * This structure contains two members:
- * - StartingColor: The initial color of the LED effect.
- * - EndingColor: The final color of the LED effect.
- */
 {
-  RgbColor StartingColor; /*!< The starting color of the LED effect. */
-  RgbColor EndingColor;   /*!< The ending color of the LED effect. */
+  /**
+   * @brief Estructura para representar los colores inicial y final de un efecto LED.
+   *
+   * Esta estructura contiene dos miembros:
+   * - StartingColor: El color inicial del efecto LED.
+   * - EndingColor: El color final del efecto LED.
+   */
+  RgbColor StartingColor; /*!< El color inicial del efecto LED. */
+  RgbColor EndingColor;   /*!< El color final del efecto LED. */
 };
-MyAnimationState animationState[AnimationChannels]; /*!< Array of animation states. */
+MyAnimationState animationState[AnimationChannels]; /*!< Array de estados de animación. */
 
 // Función para actualizar animaciones
 /**
- * @brief Updates the color of the LED strip based on the animation parameters.
+ * @brief Actualiza el color de la tira LED basado en los parámetros de animación.
  *
- * This function performs a linear blend between the starting and ending colors
- * of the animation state for the given animation parameter. It then sets the
- * color of each pixel in the LED strip to the resulting blended color.
+ * Esta función realiza una mezcla lineal entre los colores inicial y final
+ * del estado de animación para el parámetro de animación dado. Luego establece el
+ * color de cada píxel en la tira LED al color resultante de la mezcla.
  *
- * @param param The animation parameter containing the index and progress of the animation.
+ * @param param El parámetro de animación que contiene el índice y el progreso de la animación.
  */
 void blendAnimUpdate(const AnimationParam& param)
 {
@@ -74,13 +74,13 @@ void blendAnimUpdate(const AnimationParam& param)
 
 // Funciones de animación
 /**
- * @brief Fades in an LED to a target color over a specified time.
+ * @brief Desvanece un LED a un color objetivo durante un tiempo especificado.
  *
- * This function initiates an animation that gradually changes the color of an LED
- * from its current color to a specified target color over a given duration.
+ * Esta función inicia una animación que cambia gradualmente el color de un LED
+ * desde su color actual a un color objetivo especificado durante una duración dada.
  *
- * @param time The duration of the fade-in effect in milliseconds.
- * @param target The target color to fade into, represented as an RgbColor object.
+ * @param time La duración del efecto de desvanecimiento en milisegundos.
+ * @param target El color objetivo al que se desvanecerá, representado como un objeto RgbColor.
  */
 void fadeIn(uint16_t time, RgbColor target)
 {
@@ -95,12 +95,12 @@ void fadeIn(uint16_t time, RgbColor target)
 }
 
 /**
- * @brief Gradually fades out the LED to off state over a specified time.
+ * @brief Desvanece gradualmente el LED hasta el estado apagado durante un tiempo especificado.
  *
- * This function reduces the brightness of the LED to zero over the duration
- * specified by the `time` parameter.
+ * Esta función reduce el brillo del LED a cero durante la duración
+ * especificada por el parámetro `time`.
  *
- * @param time The duration in milliseconds over which the LED should fade out.
+ * @param time La duración en milisegundos durante la cual el LED debe desvanecerse.
  */
 void fadeOut(uint16_t time)
 {
@@ -108,16 +108,17 @@ void fadeOut(uint16_t time)
 }
 
 /**
- * @brief Executes a fade in and fade out effect on an LED with specified parameters.
+ * @brief Ejecuta un efecto de desvanecimiento y desvanecimiento en un LED con parámetros especificados.
  *
- * This function performs a fade in and fade out animation on an LED with the given target color.
- * It repeats the animation for a specified number of times, or indefinitely if repeat is set to 0.
- * The function also checks for new effects in the queue and exits the loop if a new effect is detected.
+ * Esta función realiza una animación de desvanecimiento y desvanecimiento en un LED con el color objetivo dado.
+ * Repite la animación un número especificado de veces, o indefinidamente si repeat se establece en 0.
+ * La función también verifica si hay nuevos efectos en la cola y sale del bucle si se detecta un nuevo efecto.
  *
- * @param time The duration of the fade in and fade out animations in milliseconds.
- * @param target The target color for the fade in animation.
- * @param wait The wait time in milliseconds between each repetition of the animation.
- * @param repeat The number of times to repeat the animation. If set to 0, the animation repeats indefinitely.
+ * @param time La duración de las animaciones de desvanecimiento y desvanecimiento en milisegundos.
+ * @param target El color objetivo para la animación de desvanecimiento.
+ * @param wait El tiempo de espera en milisegundos entre cada repetición de la animación.
+ * @param repeat El número de veces que se debe repetir la animación. Si se establece en 0, la animación se repite
+ * indefinidamente.
  */
 void fadeInOut(uint16_t time, RgbColor target, uint16_t wait, uint16_t repeat)
 {
@@ -144,28 +145,28 @@ void fadeInOut(uint16_t time, RgbColor target, uint16_t wait, uint16_t repeat)
 
 // Implementación del efecto
 /**
- * @brief Handles different LED effects based on the provided LedEffect enum.
+ * @brief Maneja diferentes efectos LED basados en la enumeración LedEffect proporcionada.
  *
- * @param effect The LedEffect enum value that determines which LED effect to execute.
+ * @param effect El valor de la enumeración LedEffect que determina qué efecto LED ejecutar.
  *
- * The function supports the following effects:
- * - Clear: Fades out the LED over 500 milliseconds.
- * - Flashing: Fades in the LED with cyan color (0, 255, 255) over 500 milliseconds.
- * - Processing: Fades in and out the LED with cyan color (0, 255, 255) over 1000 milliseconds, with 200 milliseconds
- * on and 0 milliseconds off.
- * - Success: Fades in the LED with green color (0, 255, 0) over 500 milliseconds, waits for 3000 milliseconds, then
- * fades out over 500 milliseconds.
- * - Error: Fades in the LED with red color (255, 0, 0) over 500 milliseconds, waits for 3000 milliseconds, then fades
- * out over 500 milliseconds.
- * - Warning: Fades in and out the LED with orange color (255, 128, 0) over 500 milliseconds, with 200 milliseconds on
- * and 0 milliseconds off.
- * - Closed: Fades in and out the LED with red color (255, 0, 0) over 3000 milliseconds, with 1000 milliseconds on and
- * 0 milliseconds off.
- * - Opened: Fades in and out the LED with green color (0, 255, 0) over 3000 milliseconds, with 100 milliseconds on
- * and 0 milliseconds off.
- * - Waiting: Fades in and out the LED with gray color (128, 128, 128) over 1000 milliseconds, with 200 milliseconds
- * on and 0 milliseconds off.
- * - RevisionNeeded: Fades in the LED with yellow color (255, 255, 0) over 500 milliseconds.
+ * La función admite los siguientes efectos:
+ * - Clear: Desvanece el LED durante 500 milisegundos.
+ * - Flashing: Desvanece el LED con color cian (0, 255, 255) durante 500 milisegundos.
+ * - Processing: Desvanece y desvanece el LED con color cian (0, 255, 255) durante 1000 milisegundos, con 200
+ * milisegundos encendido y 0 milisegundos apagado.
+ * - Success: Desvanece el LED con color verde (0, 255, 0) durante 500 milisegundos, espera 3000 milisegundos, luego
+ * desvanece durante 500 milisegundos.
+ * - Error: Desvanece el LED con color rojo (255, 0, 0) durante 500 milisegundos, espera 3000 milisegundos, luego
+ * desvanece durante 500 milisegundos.
+ * - Warning: Desvanece y desvanece el LED con color naranja (255, 128, 0) durante 500 milisegundos, con 200
+ * milisegundos encendido y 0 milisegundos apagado.
+ * - Closed: Desvanece y desvanece el LED con color rojo (255, 0, 0) durante 3000 milisegundos, con 1000 milisegundos
+ * encendido y 0 milisegundos apagado.
+ * - Opened: Desvanece y desvanece el LED con color verde (0, 255, 0) durante 3000 milisegundos, con 100 milisegundos
+ * encendido y 0 milisegundos apagado.
+ * - Waiting: Desvanece y desvanece el LED con color gris (128, 128, 128) durante 1000 milisegundos, con 200
+ * milisegundos encendido y 0 milisegundos apagado.
+ * - RevisionNeeded: Desvanece el LED con color amarillo (255, 255, 0) durante 500 milisegundos.
  */
 void handleEffect(LedEffect effect)
 {
@@ -211,14 +212,14 @@ void handleEffect(LedEffect effect)
 
 // Tarea principal de gestión de LED
 /**
- * @brief Task function to handle LED effects.
+ * @brief Función de tarea para gestionar efectos LED.
  *
- * This function runs indefinitely, waiting for new LED effects to be received
- * from a queue. When a new effect is received, it processes the effect by
- * clearing the queue to avoid accumulation of old effects and then executing
- * the received effect.
+ * Esta función se ejecuta indefinidamente, esperando nuevos efectos LED que se reciban
+ * de una cola. Cuando se recibe un nuevo efecto, lo procesa
+ * limpiando la cola para evitar la acumulación de efectos antiguos y luego ejecutando
+ * el efecto recibido.
  *
- * @param pvParameters Pointer to the parameters passed to the task (not used).
+ * @param pvParameters Puntero a los parámetros pasados a la tarea (no utilizado).
  */
 void ledTaskFunction(void* pvParameters)
 {
@@ -238,6 +239,14 @@ void ledTaskFunction(void* pvParameters)
 }
 
 // Función para establecer un efecto
+/**
+ * @brief Establece el efecto LED enviándolo a la cola de efectos.
+ *
+ * Esta función envía el efecto LED especificado a la cola de efectos si la cola no es nula.
+ * El efecto será procesado por el consumidor de la cola.
+ *
+ * @param effect El efecto LED a establecer.
+ */
 void setLedEffect(LedEffect effect)
 {
   if (effectQueue != nullptr) {
@@ -246,6 +255,18 @@ void setLedEffect(LedEffect effect)
 }
 
 // Inicialización de LED y Task
+/**
+ * @brief Inicializa la tira LED y configura la tarea y la cola para los efectos LED.
+ *
+ * Esta función realiza los siguientes pasos:
+ * 1. Inicializa la tira LED y muestra el estado inicial.
+ * 2. Crea una cola para los efectos LED con un máximo de 5 elementos.
+ *    - Si la creación de la cola falla, imprime un mensaje de error y retorna.
+ *    - Si la creación de la cola tiene éxito, imprime un mensaje de éxito.
+ * 3. Crea una tarea para manejar los efectos LED.
+ *    - Si la creación de la tarea falla, imprime un mensaje de error.
+ *    - Si la creación de la tarea tiene éxito, imprime un mensaje de éxito.
+ */
 void setupLed()
 {
   strip.Begin();
