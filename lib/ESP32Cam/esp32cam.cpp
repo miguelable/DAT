@@ -1,13 +1,15 @@
 /**
  * @file esp32cam.cpp
- * @author Miguel Ferrer (mferrer@inbiot.es)
- * @brief  Implementation of ESP32Cam class
+ * @author Miguel Ferrer
+ * @brief  Implementación de la clase ESP32Cam
  * @version 0.1
  * @date 2025-01-14
  *
- * This file contains the implementation of the ESP32Cam class, which provides functions to manage the ESP32-CAM camera
- * module. The class uses the ESP32 Camera library to interact with the camera module. The functions include
- * initialization, image capture, and configuration retrieval.
+ Este archivo contiene la implementación de la clase ESP32Cam, que proporciona funciones para gestionar el módulo de
+ cámara ESP32-CAM.
+ * La clase utiliza la biblioteca de cámara ESP32 para interactuar con el módulo de cámara. Las funciones incluyen
+ inicialización, captura de imágenes y recuperación de configuración.
+ *
  *
  * @copyright Copyright (c) 2025
  *

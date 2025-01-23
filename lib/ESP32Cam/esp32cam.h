@@ -1,9 +1,13 @@
 /**
  * @file esp32cam.h
- * @author Miguel Ferrer (mferrer@inbiot.es)
- * @brief Library for managing the ESP32-CAM camera module.
+ * @author Miguel Ferrer
+ * @brief Biblioteca para gestionar el módulo de cámara ESP32-CAM.
  * @version 0.1
  * @date 2025-01-14
+ *
+ * Este archivo contiene la declaración de la clase ESP32Cam, que proporciona funciones para inicializar el módulo de
+ * cámara ESP32-CAM y capturar imágenes. La clase utiliza la biblioteca ESP32 Camera para interactuar con el módulo de
+ * cámara.
  *
  * @copyright Copyright (c) 2025
  *
@@ -16,87 +20,87 @@
 #include <Arduino.h>
 
 /**
- * @brief Class to manage the ESP32-CAM camera module.
+ * @brief Clase para gestionar el módulo de cámara ESP32-CAM.
  *
- * This class provides functions to initialize the camera module and capture images.
- * The class uses the ESP32 Camera library to interact with the camera module.
+ * Esta clase proporciona funciones para inicializar el módulo de cámara y capturar imágenes.
+ * La clase utiliza la biblioteca ESP32 Camera para interactuar con el módulo de cámara.
  */
 class ESP32Cam
 {
 public:
   /**
-   * @brief Construct a new ESP32Cam object
+   * @brief Constructor para el objeto ESP32Cam
    *
    */
   ESP32Cam(){};
   /**
-   * @brief Destroy the ESP32Cam object
+   * @brief Destructor para el objeto ESP32Cam
    *
    */
   ~ESP32Cam(){};
 
   /**
-   * @brief Initializes the ESP32 camera with the specified configuration.
+   * @brief Inicializa la cámara ESP32 con la configuración especificada.
    *
-   * This function sets up the camera configuration parameters such as pin assignments,
-   * clock frequency, and pixel format. It also adjusts the frame size, JPEG quality,
-   * and frame buffer count based on the availability of PSRAM. Finally, it initializes
-   * the camera and prints an error message if the initialization fails.
+   * Esta función configura los parámetros de configuración de la cámara, como las asignaciones de pines,
+   * la frecuencia del reloj y el formato de píxeles. También ajusta el tamaño del marco, la calidad JPEG
+   * y la cantidad de búferes de marco según la disponibilidad de PSRAM. Finalmente, inicializa la cámara
+   * e imprime un mensaje de error si la inicialización falla.
    *
-   * Configuration details:
-   * - LEDC channel and timer
-   * - Data pins (D0 to D7)
-   * - Clock pins (XCLK, PCLK)
-   * - Synchronization pins (VSYNC, HREF)
-   * - SCCB pins (SDA, SCL)
-   * - Power down and reset pins
-   * - Clock frequency: 20 MHz
-   * - Pixel format: JPEG
+   * Detalles de configuración:
+   * - Canal y temporizador LEDC
+   * - Pines de datos (D0 a D7)
+   * - Pines de reloj (XCLK, PCLK)
+   * - Pines de sincronización (VSYNC, HREF)
+   * - Pines SCCB (SDA, SCL)
+   * - Pines de apagado y reinicio
+   * - Frecuencia del reloj: 20 MHz
+   * - Formato de píxeles: JPEG
    *
-   * PSRAM availability:
-   * - If PSRAM is available:
-   *   - Frame size: HD
-   *   - JPEG quality: 10 (medium quality)
-   *   - Frame buffer count: 2
-   * - If PSRAM is not available:
-   *   - Frame size: QVGA
-   *   - JPEG quality: 12 (higher compression)
-   *   - Frame buffer count: 1
+   * Disponibilidad de PSRAM:
+   * - Si PSRAM está disponible:
+   *   - Tamaño del marco: HD
+   *   - Calidad JPEG: 10 (calidad media)
+   *   - Cantidad de búferes de marco: 2
+   * - Si PSRAM no está disponible:
+   *   - Tamaño del marco: QVGA
+   *   - Calidad JPEG: 12 (mayor compresión)
+   *   - Cantidad de búferes de marco: 1
    *
    */
   bool init();
 
   /**
-   * @brief Returns the frame buffer to the ESP32 camera driver.
+   * @brief Devuelve el búfer de marco al controlador de la cámara ESP32.
    *
-   * This function releases the frame buffer that was previously obtained
-   * from the ESP32 camera driver, making it available for future use.
+   * Esta función libera el búfer de marco que se obtuvo previamente
+   * del controlador de la cámara ESP32, haciéndolo disponible para uso futuro.
    */
   void returnBuffer();
 
   /**
-   * @brief Captures an image using the ESP32 camera and returns the framebuffer.
+   * @brief Captura una imagen usando la cámara ESP32 y devuelve el búfer de marco.
    *
-   * This function captures an image using the ESP32 camera module and stores it
-   * in the internal framebuffer. If the capture is successful, it returns a pointer
-   * to the framebuffer containing the image data. If the capture fails, it logs an
-   * error message and returns nullptr.
+   * Esta función captura una imagen usando el módulo de cámara ESP32 y la almacena
+   * en el búfer de marco interno. Si la captura es exitosa, devuelve un puntero
+   * al búfer de marco que contiene los datos de la imagen. Si la captura falla, registra un
+   * mensaje de error y devuelve nullptr.
    *
-   * @return camera_fb_t* Pointer to the framebuffer containing the captured image,
-   *                      or nullptr if the capture failed.
+   * @return camera_fb_t* Puntero al búfer de marco que contiene la imagen capturada,
+   *                      o nullptr si la captura falló.
    */
   camera_fb_t* getImage();
 
   /**
-   * @brief Retrieves the current camera configuration.
+   * @brief Recupera la configuración actual de la cámara.
    *
-   * @return The current camera configuration as a camera_config_t object.
+   * @return La configuración actual de la cámara como un objeto camera_config_t.
    */
   camera_config_t getConfig();
 
 private:
-  camera_config_t _config;
-  camera_fb_t*    _framebuffer; /*!< Frame buffer for storing captured images. */
+  camera_config_t _config;      /*!< Configuración de la cámara ESP32. */
+  camera_fb_t*    _framebuffer; /*!< Búfer de marco para almacenar imágenes capturadas. */
 };
 
 #endif // ESP32CAM_H
