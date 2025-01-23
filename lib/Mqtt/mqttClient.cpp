@@ -1,19 +1,46 @@
+/**
+ * @file mqttClient.cpp
+ * @author Miguel Ferrer
+ * @brief  Clase para gestionar la conexión MQTT.
+ * @version 0.1
+ * @date 2025-01-23
+ *
+ * Este archivo contiene la implementación de la clase MqttClient, que proporciona funciones para conectarse a un broker
+ * MQTT. La clase utiliza las bibliotecas PubSubClient y WiFiClientSecure para establecer una conexión segura con el
+ * broker MQTT. La clase también define las constantes de configuración del broker MQTT.
+ *
+ * @copyright Copyright (c) 2025
+ *
+ */
 #include "mqttClient.h"
 #include "LedEffects.h"
 #include "websockets.h"
 
-#define DEVICE_ID "3"
+#define DEVICE_ID "3" /*!< ID del dispositivo. */
 
-WiFiClientSecure mqttClient;
-PubSubClient     mqtt(mqttClient);
+WiFiClientSecure mqttClient;       /*!< Cliente seguro para MQTT. */
+PubSubClient     mqtt(mqttClient); /*!< Cliente MQTT. */
 
 // Topics to subscribe
-const char* portaventuraWorldTopic = "portaventura/status";
-const char* ferrarilandTopic       = "ferrariland/status";
-const char* caribeAcuaticTopic     = "caribeAcuatic/status";
-const char* deviceStatusTopic      = "status/device/" DEVICE_ID;
-const char* deviceActivationTopic  = "activation";
+const char* portaventuraWorldTopic = "portaventura/status";      /*!< Tema de PortAventura World. */
+const char* ferrarilandTopic       = "ferrariland/status";       /*!< Tema de Ferrari Land. */
+const char* caribeAcuaticTopic     = "caribeAcuatic/status";     /*!< Tema de Caribe Acuatic. */
+const char* deviceStatusTopic      = "status/device/" DEVICE_ID; /*!< Tema de estado del dispositivo. */
+const char* deviceActivationTopic  = "activation";               /*!< Tema de activación del dispositivo. */
 
+/**
+ * @brief Conecta al servidor MQTT y se suscribe a varios temas.
+ *
+ * Esta función intenta conectarse al servidor MQTT utilizando el ID de cliente "ESP32Client".
+ * Si la conexión es exitosa, se suscribe a los siguientes temas:
+ * - portaventuraWorldTopic
+ * - ferrarilandTopic
+ * - caribeAcuaticTopic
+ * - deviceStatusTopic
+ *
+ * Para cada suscripción, registra si la suscripción fue exitosa o si hubo un error.
+ * Si la conexión al servidor MQTT falla, registra el estado de error y reintenta después de un retraso de 5 segundos.
+ */
 void connectToMQTT()
 {
   while (!mqtt.connected()) {
@@ -52,7 +79,31 @@ void connectToMQTT()
   }
 }
 
-// Callback para manejar mensajes MQTT
+/**
+ * @brief Función de callback para manejar mensajes MQTT entrantes.
+ *
+ * Esta función se llama cada vez que se recibe un mensaje en un tema MQTT suscrito.
+ * Procesa la carga útil del mensaje, la deserializa en un documento JSON y realiza
+ * acciones basadas en el contenido del mensaje.
+ *
+ * @param topic El tema en el que se recibió el mensaje.
+ * @param payload La carga útil del mensaje.
+ * @param length La longitud de la carga útil.
+ *
+ * La función espera que la carga útil sea una cadena JSON con la siguiente estructura:
+ * {
+ *   "device": "<device_id>",
+ *   "current_status": "<status>"
+ * }
+ *
+ * El <device_id> debe coincidir con la constante DEVICE_ID. El <status> puede ser uno de los siguientes:
+ * - "Apagado": Apaga el dispositivo y establece el efecto LED en Cerrado.
+ * - "Encendido": Enciende el dispositivo y establece el efecto LED en Abierto.
+ * - "Error": Indica un error, establece el efecto LED en Error y reactiva el dispositivo después de 4 segundos.
+ * - "Exito": Indica éxito, establece el efecto LED en Éxito y reactiva el dispositivo después de 4 segundos.
+ *
+ * Si el mensaje es inválido o el ID del dispositivo no coincide, se registra un error.
+ */
 void mqttCallback(char* topic, byte* payload, unsigned int length)
 {
   String message;
@@ -90,7 +141,8 @@ void mqttCallback(char* topic, byte* payload, unsigned int length)
       // esperar 4 segundos para activar el dispositivo otra vez
       vTaskDelay(4000);
       deviceActivated = true;
-    } else {
+    }
+    else {
       log_e("Mensaje no valido");
     }
   }
