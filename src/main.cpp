@@ -1,9 +1,9 @@
 /**
  * @file main.cpp
- * @autor Miguel Ferrer (mferrer@inbiot.es)
+ * @author Miguel Ferrer (mferrer@inbiot.es)
  * @brief Archivo principal para el proyecto TecnoPark.
- * @versión 0.1
- * @fecha 2025-01-14
+ * @version 0.1
+ * @date 2025-01-14
  *
  * Este archivo contiene las funciones principales de configuración y bucle para el proyecto TecnoPark.
  * Inicializa el sensor ultrasónico HCSR04, configura los efectos LED y maneja la pulsación del botón
@@ -30,7 +30,7 @@ HCSR04 sensor; /*!< Objeto del sensor HCSR04. */
  * a un estado de advertencia y espera 10 segundos antes de permitir que el dispositivo
  * se active nuevamente.
  *
- * @nota La función usa vTaskDelay para implementar la demora,
+ * @note La función usa vTaskDelay para implementar la demora,
  * se utiliza dentro de una tarea de FreeRTOS.
  */
 void activationCallback()
