@@ -1,9 +1,12 @@
 /**
  * @file websockets.cpp
- * @author Miguel Ferrer (mferrer@inbiot.es)
- * @brief   WebSockets client library.
+ * @author Miguel Ferrer
+ * @brief   Librería para WebSocket y cámara ESP32.
  * @version 0.1
  * @date 2025-01-20
+ *
+ * Este archivo contiene la implementación de la librería para WebSocket y cámara ESP32.
+ * La librería proporciona funciones para conectarse a una red WiFi, establecer una conexión
  *
  * @copyright Copyright (c) 2025
  *
@@ -15,23 +18,30 @@
 #include <ArduinoJson.h>
 #include <base64.h>
 
-bool deviceActivated = false; /*!< Device activation status. */
+bool deviceActivated = false; /*!< Estado de activación del dispositivo. */
 
-TaskHandle_t sendDataTask         = NULL; /*!< Task to send data to the server. */
-TaskHandle_t updateTimeTaskHandle = NULL; /*!< Task to update the time. */
+TaskHandle_t sendDataTask         = NULL; /*!< Manejador de la tarea de envío de datos. */
+TaskHandle_t updateTimeTaskHandle = NULL; /*!< Manejador de la tarea de actualización de la hora. */
 
 // Objeto UDP para NTP
-WiFiUDP   ntpUDP;                                       /*!< UDP client for NTP. */
-NTPClient timeClient(ntpUDP, ntpServer, gmtOffset_sec); /*!< NTP client. */
+WiFiUDP   ntpUDP;                                       /*!< Objeto UDP para NTP. */
+NTPClient timeClient(ntpUDP, ntpServer, gmtOffset_sec); /*!<  Cliente NTP para obtener la hora actual. */
 
 // Cliente seguro para WebSockets
-WiFiClientSecure client; /*!< Secure client for WebSockets. */
+WiFiClientSecure client; /*!< Cliente seguro para WebSockets. */
 
-IPAddress serverIP; /*!< Server IP address. */
+IPAddress serverIP; /*!< Dirección IP del servidor. */
 
-ESP32Cam camera; /*!< ESP32 camera object. */
+ESP32Cam camera; /*!< Objeto de la cámara ESP32. */
 
-// Tarea para actualizar la hora
+/**
+ * @brief Tarea para actualizar continuamente la hora utilizando el cliente de tiempo.
+ *
+ * Esta función ejecuta un bucle infinito donde actualiza el cliente de tiempo
+ * y luego espera 1000 milisegundos (1 segundo) antes de repetir.
+ *
+ * @param parameter Un puntero a los parámetros pasados a la tarea (no utilizado en esta función).
+ */
 void updateTimeTask(void* parameter)
 {
   while (true) {
