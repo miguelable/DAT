@@ -1,12 +1,12 @@
 /**
  * @file secrets.h
- * @author Miguel Ferrer (mferrer@inbiot.es)
- * @brief Secret credentials and configuration settings.
+ * @author Miguel Ferrer
+ * @brief Credenciales secretas y configuraciones de seguridad.
  * @version 0.1
  * @date 2025-01-14
  *
- * This file contains secret credentials and configuration settings that should not be shared publicly.
- * It includes WiFi credentials, NTP server settings, and server certificates for secure communication.
+ * Este archivo contiene credenciales secretas y configuraciones de seguridad que no deben compartirse públicamente.
+ * Incluye credenciales de WiFi, configuraciones del servidor NTP y certificados del servidor para comunicación segura.
  *
  * @copyright Copyright (c) 2025
  *
@@ -15,16 +15,16 @@
 #define SECRETS_H
 
 // NTP
-const char* const ntpServer     = "pool.ntp.org"; /*!< NTP server address. */
-const long  gmtOffset_sec = 3600;           /*!< GMT offset in seconds. */
+const char* const ntpServer     = "pool.ntp.org"; /*!< Dirección del servidor NTP. */
+const long        gmtOffset_sec = 3600;           /*!< Desfase GMT en segundos. */
 
-// WiFi credentials
-const char* const ssid     = "GL-MT300N-V2-0bb"; /*!< WiFi SSID. */
-const char* const password = "goodlife";         /*!< WiFi password. */
+// Credenciales de WiFi
+const char* const ssid     = "GL-MT300N-V2-0bb"; /*!< SSID de WiFi. */
+const char* const password = "goodlife";         /*!< Contraseña de WiFi. */
 // const char* ssid     = "Pixel_3021";
 // const char* password = "miguelferrer";
 
-// Server certificate
+// Certificado del servidor
 const char* const server_cert = R"EOF(
 -----BEGIN CERTIFICATE-----
 MIID9zCCAt+gAwIBAgIUZKPYCVsl3aqE4EZDs/1agNCfFWcwDQYJKoZIhvcNAQEL
@@ -50,9 +50,9 @@ ea75O+JV+uaM5xdA8D7QFaTGsGj8e1Ps+XqclVEsmUT2RYP5cpCka4xVV15zyTYJ
 DfsG1AMLXq0xX6D66OzZyjpJygOApCpThPkYz3QEbBF4aJthmZ5vQr67L/A7fPYP
 FnAxRrpGfjne7Ks=
 -----END CERTIFICATE-----
-)EOF"; /*!< Server certificate for secure communication. */
+)EOF"; /*!< Certificado del servidor para comunicación segura https */
 
-// Ca certificate for secure communication
+// Certificado CA para comunicación segura
 const char* const ca_cert = R"EOF(
 -----BEGIN CERTIFICATE-----
 MIIDpzCCAo8CFHhZVxXafcgMu5vPsHLZYBpoj8uqMA0GCSqGSIb3DQEBCwUAMIGP
@@ -76,6 +76,6 @@ MEabp2xaIZhU4VdU0X4UpPNNGh+J4yqugRNs1FsIPzwNT6rLf7EGq9HJb4TLzXwh
 8nRlkTA5WvARLNR4kHjvlApgkZF+aCgXF3rKys+fJCssoZOB1FJ7dsd1BCeD/0Fi
 a6Tzmg6mrfc/Z8KGf6Tjl1R5KFY/FGrqJnRd
 -----END CERTIFICATE-----
-)EOF";
+)EOF"; /*!< Certificado CA para comunicación segura con mqtt */
 
 #endif // SECRETS_H
