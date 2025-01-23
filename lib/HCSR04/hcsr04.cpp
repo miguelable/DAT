@@ -1,14 +1,14 @@
 /**
  * @file hcsr04.cpp
- * @author Miguel Ferrer (mferrer@inbiot.es)
- * @brief Implementation of HCSR04 class
+ * @author Miguel Ferrer
+ * @brief Implementación de la clase HCSR04
  * @version 0.1
  * @date 2025-01-14
  *
- * This file contains the implementation of the HCSR04 class, which provides functions to manage the HC-SR04 ultrasonic
- * sensor. The class includes functions to initialize the sensor, start and stop measurements, and retrieve distance and
- * duration data. The class also supports setting a callback function to trigger an action when the distance exceeds a
- * specified threshold.
+ * Este archivo contiene la implementación de la clase HCSR04, que proporciona funciones para gestionar el sensor
+ * ultrasónico HC-SR04. La clase incluye funciones para inicializar el sensor, iniciar y detener las mediciones, y
+ * recuperar datos de distancia y duración. La clase también soporta la configuración de una función de callback para
+ * activar una acción cuando la distancia supera un umbral especificado.
  *
  * @copyright Copyright (c) 2025
  *
@@ -90,20 +90,21 @@ void HCSR04::init()
 }
 
 /**
- * @brief Task to continuously measure distance using the HCSR04 sensor.
+ * @brief Tarea para medir continuamente la distancia utilizando el sensor HCSR04.
  *
- * This function is intended to be run as a FreeRTOS task. It continuously triggers
- * the HCSR04 ultrasonic sensor to measure distance and calls a user-defined callback
- * function if the measured distance is below a specified threshold.
+ * Esta función está destinada a ejecutarse como una tarea de FreeRTOS. Continuamente activa
+ * el sensor ultrasónico HCSR04 para medir la distancia y llama a una función de callback definida por el usuario
+ * si la distancia medida está por debajo de un umbral especificado.
  *
- * @param pvParameters Pointer to the HCSR04 object instance.
+ * @param pvParameters Puntero a la instancia del objeto HCSR04.
  *
- * The function performs the following steps in an infinite loop:
- * 1. Triggers the ultrasonic sensor by sending a HIGH pulse to the trigger pin.
- * 2. Measures the duration of the echo pulse.
- * 3. Calculates the distance based on the duration of the echo pulse.
- * 4. If the distance is below the threshold and greater than 1 cm, it calls the user-defined callback function.
- * 5. Delays the task for 20 milliseconds before repeating the process.
+ * La función realiza los siguientes pasos en un bucle infinito:
+ * 1. Activa el sensor ultrasónico enviando un pulso HIGH al pin de disparo.
+ * 2. Mide la duración del pulso de eco.
+ * 3. Calcula la distancia basada en la duración del pulso de eco.
+ * 4. Si la distancia está por debajo del umbral y es mayor de 1 cm, llama a la función de callback definida por el
+ * usuario.
+ * 5. Retrasa la tarea durante 20 milisegundos antes de repetir el proceso.
  */
 void HCSR04::sensorDataTask(void* pvParameters)
 {
