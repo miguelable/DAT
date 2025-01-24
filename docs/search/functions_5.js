@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['handleeffect_0',['handleEffect',['../LedEffects_8cpp.html#aa831c6793ee1d08dc8038fcc4ea0a327',1,'LedEffects.cpp']]],
-  ['hcsr04_1',['HCSR04',['../classHCSR04.html#ab885b7530f74f5ad5950ccde4e8f17f9',1,'HCSR04::HCSR04(uint8_t trigPin, uint8_t echoPin)'],['../classHCSR04.html#a84d6bba2b28d9a617e0dba76626393f7',1,'HCSR04::HCSR04()']]]
+  ['getconfig_0',['getConfig',['../classESP32Cam.html#ae7dc1dbe7b860335b4530a043f90e0bf',1,'ESP32Cam']]],
+  ['getdistancedata_1',['getDistanceData',['../classHCSR04.html#ac1de75c015c5874f17e8c993d38cb240',1,'HCSR04']]],
+  ['getdurationdata_2',['getDurationData',['../classHCSR04.html#a0e27915629f1a8ad077092410bd4936e',1,'HCSR04']]],
+  ['getimage_3',['getImage',['../classESP32Cam.html#a597e8398e77085698633c78d98c13457',1,'ESP32Cam']]]
 ];

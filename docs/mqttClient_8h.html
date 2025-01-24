@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>TecnoPark Project: Referencia del archivo lib/Mqtt/mqttClient.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">TecnoPark Project<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Gestion de parques temáticos</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.13.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('mqttClient_8h.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#define-members">defines</a> &#124;
+<a href="#func-members">Funciones</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">Referencia del archivo mqttClient.h</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Clase para gestionar la conexión MQTT.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="secrets_8h_source.html">secrets.h</a>&quot;</code><br />
+<code>#include &lt;Arduino.h&gt;</code><br />
+<code>#include &lt;ArduinoJson.h&gt;</code><br />
+<code>#include &lt;PubSubClient.h&gt;</code><br />
+<code>#include &lt;WiFi.h&gt;</code><br />
+<code>#include &lt;WiFiClientSecure.h&gt;</code><br />
+</div>
+<p><a href="mqttClient_8h_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+defines</h2></td></tr>
+<tr class="memitem:a682a2df91d9534f65919c407c25ed981" id="r_a682a2df91d9534f65919c407c25ed981"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a682a2df91d9534f65919c407c25ed981">MQTTPORT</a>&#160;&#160;&#160;8883</td></tr>
+<tr class="separator:a682a2df91d9534f65919c407c25ed981"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a3cff6686f09444558b7c9436e082e73c" id="r_a3cff6686f09444558b7c9436e082e73c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3cff6686f09444558b7c9436e082e73c">setupMQTT</a> ()</td></tr>
+<tr class="memdesc:a3cff6686f09444558b7c9436e082e73c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configura el cliente MQTT y se conecta al servidor MQTT.  <br /></td></tr>
+<tr class="separator:a3cff6686f09444558b7c9436e082e73c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a38bd917fd580fe7ac85ef0553c9db492" id="r_a38bd917fd580fe7ac85ef0553c9db492"><td class="memItemLeft" align="right" valign="top">WiFiClientSecure&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38bd917fd580fe7ac85ef0553c9db492">mqttClient</a></td></tr>
+<tr class="separator:a38bd917fd580fe7ac85ef0553c9db492"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27702b084a4a8011efcd2bb59b3c191b" id="r_a27702b084a4a8011efcd2bb59b3c191b"><td class="memItemLeft" align="right" valign="top">PubSubClient&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27702b084a4a8011efcd2bb59b3c191b">mqtt</a></td></tr>
+<tr class="separator:a27702b084a4a8011efcd2bb59b3c191b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Clase para gestionar la conexión MQTT. </p>
+<dl class="section author"><dt>Autor</dt><dd>Miguel Ferrer </dd></dl>
+<dl class="section version"><dt>Versión</dt><dd>0.1 </dd></dl>
+<dl class="section date"><dt>Fecha</dt><dd>2025-01-23</dd></dl>
+<p>Este archivo contiene la implementación de la clase MqttClient, que proporciona funciones para conectarse a un broker MQTT. La clase utiliza las bibliotecas PubSubClient y WiFiClientSecure para establecer una conexión segura con el broker MQTT. La clase también define las constantes de configuración del broker MQTT.</p>
+<dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2025 </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="mqttClient_8h_source.html">mqttClient.h</a>.</p>
+</div><h2 class="groupheader">Documentación de «define»</h2>
+<a id="a682a2df91d9534f65919c407c25ed981" name="a682a2df91d9534f65919c407c25ed981"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a682a2df91d9534f65919c407c25ed981">&#9670;&#160;</a></span>MQTTPORT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MQTTPORT&#160;&#160;&#160;8883</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Puerto del servidor MQTT. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8h_source.html#l00026">26</a> del archivo <a class="el" href="mqttClient_8h_source.html">mqttClient.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Documentación de funciones</h2>
+<a id="a3cff6686f09444558b7c9436e082e73c" name="a3cff6686f09444558b7c9436e082e73c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cff6686f09444558b7c9436e082e73c">&#9670;&#160;</a></span>setupMQTT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setupMQTT </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Configura el cliente MQTT y se conecta al servidor MQTT. </p>
+<p>Esta función realiza los siguientes pasos:</p><ol type="1">
+<li>Recupera la dirección IP local y establece el último octeto en 1 para formar la IP del servidor.</li>
+<li>Configura el cliente MQTT con el certificado CA y lo establece en modo inseguro.</li>
+<li>Inicializa el cliente MQTT con la IP del servidor y el puerto.</li>
+<li>Establece la función de callback para manejar los mensajes MQTT entrantes.</li>
+<li>Se conecta al servidor MQTT.</li>
+<li>Publica un mensaje de inicio en el tema de activación del dispositivo si la conexión es exitosa.</li>
+</ol>
+<p>Si la conexión al servidor MQTT falla, se registra un mensaje de error. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8cpp_source.html#l00154">154</a> del archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Documentación de variables</h2>
+<a id="a27702b084a4a8011efcd2bb59b3c191b" name="a27702b084a4a8011efcd2bb59b3c191b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27702b084a4a8011efcd2bb59b3c191b">&#9670;&#160;</a></span>mqtt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">PubSubClient mqtt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel extern">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Cliente MQTT. </p>
+
+</div>
+</div>
+<a id="a38bd917fd580fe7ac85ef0553c9db492" name="a38bd917fd580fe7ac85ef0553c9db492"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38bd917fd580fe7ac85ef0553c9db492">&#9670;&#160;</a></span>mqttClient</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">WiFiClientSecure mqttClient</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel extern">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Cliente seguro para MQTT. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8cpp_source.html#l00021">21</a> del archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a class="el" href="dir_2fee1dd044c58baa0235735367bc7093.html">Mqtt</a></li><li class="navelem"><a class="el" href="mqttClient_8h.html">mqttClient.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
+  </ul>
+</div>
+</body>
+</html>

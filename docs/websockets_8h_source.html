@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>TecnoPark Project: Archivo de código fuente lib/websocket/websockets.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">TecnoPark Project<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Gestion de parques temáticos</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.13.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('websockets_8h_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">websockets.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="websockets_8h.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#ifndef WEBSOCKETS_H</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#define WEBSOCKETS_H</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="esp32cam_8h.html">esp32cam.h</a>&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;NTPClient.h&gt;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;WiFi.h&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;WiFiClientSecure.h&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;WiFiUdp.h&gt;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;freertos/FreeRTOS.h&gt;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="websockets_8h.html#ac42367fe5c999ec6650de83e9d72fe8c">   21</a></span><span class="preprocessor">#define SERVER_PORT 54472 </span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="websockets_8h.html#a2911e6621d4c8b1d010cffe5a2655f34">   22</a></span><span class="preprocessor">#define FLASH_PIN 4       </span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">// Device status</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> <a class="code hl_variable" href="websockets_8cpp.html#a62e83d015cf018fb9d359512a886b24d">deviceActivated</a>; </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">extern</span> TaskHandle_t <a class="code hl_variable" href="websockets_8cpp.html#aa817525bb3e0902bb62afaef35d7ec78">sendDataTask</a>; </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keyword">extern</span> NTPClient <a class="code hl_variable" href="websockets_8h.html#a7c209affaecb8017bde749a6cba378e5">timeClient</a>; </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="keywordtype">void</span> <a class="code hl_function" href="websockets_8h.html#ae786f8044734bf7283b0df88675335c5">connectToWiFi</a>();</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="keywordtype">void</span> <a class="code hl_function" href="websockets_8h.html#a869e72ce54480f78ddc261f6e50012a8">connectToServer</a>();</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="keywordtype">void</span> <a class="code hl_function" href="websockets_8h.html#ad1df123d9f3cacd6707a51455cd0c1ff">startCamera</a>();</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="keywordtype">bool</span> <a class="code hl_function" href="websockets_8h.html#ae052416633a92a9b15ddb35343f91665">sendImageToServer</a>();</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="preprocessor">#endif </span><span class="comment">// WEBSOCKETS_H</span></div>
+<div class="ttc" id="aesp32cam_8h_html"><div class="ttname"><a href="esp32cam_8h.html">esp32cam.h</a></div><div class="ttdoc">Biblioteca para gestionar el módulo de cámara ESP32-CAM.</div></div>
+<div class="ttc" id="awebsockets_8cpp_html_a62e83d015cf018fb9d359512a886b24d"><div class="ttname"><a href="websockets_8cpp.html#a62e83d015cf018fb9d359512a886b24d">deviceActivated</a></div><div class="ttdeci">bool deviceActivated</div><div class="ttdef"><b>Definition</b> <a href="websockets_8cpp_source.html#l00021">websockets.cpp:21</a></div></div>
+<div class="ttc" id="awebsockets_8cpp_html_aa817525bb3e0902bb62afaef35d7ec78"><div class="ttname"><a href="websockets_8cpp.html#aa817525bb3e0902bb62afaef35d7ec78">sendDataTask</a></div><div class="ttdeci">TaskHandle_t sendDataTask</div><div class="ttdef"><b>Definition</b> <a href="websockets_8cpp_source.html#l00023">websockets.cpp:23</a></div></div>
+<div class="ttc" id="awebsockets_8h_html_a7c209affaecb8017bde749a6cba378e5"><div class="ttname"><a href="websockets_8h.html#a7c209affaecb8017bde749a6cba378e5">timeClient</a></div><div class="ttdeci">NTPClient timeClient</div></div>
+<div class="ttc" id="awebsockets_8h_html_a869e72ce54480f78ddc261f6e50012a8"><div class="ttname"><a href="websockets_8h.html#a869e72ce54480f78ddc261f6e50012a8">connectToServer</a></div><div class="ttdeci">void connectToServer()</div><div class="ttdoc">Establece una conexión segura con el servidor.</div><div class="ttdef"><b>Definition</b> <a href="websockets_8cpp_source.html#l00080">websockets.cpp:80</a></div></div>
+<div class="ttc" id="awebsockets_8h_html_ad1df123d9f3cacd6707a51455cd0c1ff"><div class="ttname"><a href="websockets_8h.html#ad1df123d9f3cacd6707a51455cd0c1ff">startCamera</a></div><div class="ttdeci">void startCamera()</div><div class="ttdoc">Inicializa la cámara y registra el resultado.</div><div class="ttdef"><b>Definition</b> <a href="websockets_8cpp_source.html#l00094">websockets.cpp:94</a></div></div>
+<div class="ttc" id="awebsockets_8h_html_ae052416633a92a9b15ddb35343f91665"><div class="ttname"><a href="websockets_8h.html#ae052416633a92a9b15ddb35343f91665">sendImageToServer</a></div><div class="ttdeci">bool sendImageToServer()</div><div class="ttdoc">Envía una imagen capturada desde la cámara al servidor.</div><div class="ttdef"><b>Definition</b> <a href="websockets_8cpp_source.html#l00105">websockets.cpp:105</a></div></div>
+<div class="ttc" id="awebsockets_8h_html_ae786f8044734bf7283b0df88675335c5"><div class="ttname"><a href="websockets_8h.html#ae786f8044734bf7283b0df88675335c5">connectToWiFi</a></div><div class="ttdeci">void connectToWiFi()</div><div class="ttdoc">Conecta a la red WiFi utilizando el SSID y la contraseña proporcionados.</div><div class="ttdef"><b>Definition</b> <a href="websockets_8cpp_source.html#l00054">websockets.cpp:54</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a class="el" href="dir_1d909335146a71368e5ad46a70c27a79.html">websocket</a></li><li class="navelem"><a class="el" href="websockets_8h.html">websockets.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
+  </ul>
+</div>
+</body>
+</html>

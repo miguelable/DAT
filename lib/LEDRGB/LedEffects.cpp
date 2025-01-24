@@ -38,7 +38,14 @@ NeoPixelAnimator                             animations(AnimationChannels); /*!<
 TaskHandle_t  ledTask;     /*!< Manejador de la tarea de efectos LED. */
 QueueHandle_t effectQueue; /*!< Cola para enviar efectos LED. */
 
-// Variables internas
+/**
+ * @brief Estrutura para representar los estados de animación.
+ *
+ * Esta estructura contiene dos miembros:
+ * - StartingColor: El color inicial del efecto LED.
+ * - EndingColor: El color final del efecto LED.
+ *
+ */
 struct MyAnimationState
 {
   /**

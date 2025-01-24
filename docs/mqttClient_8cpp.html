@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>TecnoPark Project: Referencia del archivo lib/Mqtt/mqttClient.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">TecnoPark Project<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Gestion de parques temáticos</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.13.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('mqttClient_8cpp.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#define-members">defines</a> &#124;
+<a href="#func-members">Funciones</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">Referencia del archivo mqttClient.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Clase para gestionar la conexión MQTT.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="mqttClient_8h_source.html">mqttClient.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="LedEffects_8h_source.html">LedEffects.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="websockets_8h_source.html">websockets.h</a>&quot;</code><br />
+</div>
+<p><a href="mqttClient_8cpp_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+defines</h2></td></tr>
+<tr class="memitem:a0b85963cace75e76ae726bcffb04eb70" id="r_a0b85963cace75e76ae726bcffb04eb70"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b85963cace75e76ae726bcffb04eb70">DEVICE_ID</a>&#160;&#160;&#160;&quot;3&quot;</td></tr>
+<tr class="separator:a0b85963cace75e76ae726bcffb04eb70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a52b5d6a1c8d437c872a5d3a390d281ff" id="r_a52b5d6a1c8d437c872a5d3a390d281ff"><td class="memItemLeft" align="right" valign="top">PubSubClient&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52b5d6a1c8d437c872a5d3a390d281ff">mqtt</a> (<a class="el" href="#a38bd917fd580fe7ac85ef0553c9db492">mqttClient</a>)</td></tr>
+<tr class="separator:a52b5d6a1c8d437c872a5d3a390d281ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f763f0b0a738726d65ce6f5367c0eb0" id="r_a1f763f0b0a738726d65ce6f5367c0eb0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f763f0b0a738726d65ce6f5367c0eb0">connectToMQTT</a> ()</td></tr>
+<tr class="memdesc:a1f763f0b0a738726d65ce6f5367c0eb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conecta al servidor MQTT y se suscribe a varios temas.  <br /></td></tr>
+<tr class="separator:a1f763f0b0a738726d65ce6f5367c0eb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f06b273defaebb581fdf1adc8969f40" id="r_a6f06b273defaebb581fdf1adc8969f40"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f06b273defaebb581fdf1adc8969f40">mqttCallback</a> (char *topic, byte *payload, unsigned int length)</td></tr>
+<tr class="memdesc:a6f06b273defaebb581fdf1adc8969f40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Función de callback para manejar mensajes MQTT entrantes.  <br /></td></tr>
+<tr class="separator:a6f06b273defaebb581fdf1adc8969f40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cff6686f09444558b7c9436e082e73c" id="r_a3cff6686f09444558b7c9436e082e73c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3cff6686f09444558b7c9436e082e73c">setupMQTT</a> ()</td></tr>
+<tr class="memdesc:a3cff6686f09444558b7c9436e082e73c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configura el cliente MQTT y se conecta al servidor MQTT.  <br /></td></tr>
+<tr class="separator:a3cff6686f09444558b7c9436e082e73c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a38bd917fd580fe7ac85ef0553c9db492" id="r_a38bd917fd580fe7ac85ef0553c9db492"><td class="memItemLeft" align="right" valign="top">WiFiClientSecure&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38bd917fd580fe7ac85ef0553c9db492">mqttClient</a></td></tr>
+<tr class="separator:a38bd917fd580fe7ac85ef0553c9db492"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae329aab3aab6b785d4b9e90fb2405763" id="r_ae329aab3aab6b785d4b9e90fb2405763"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae329aab3aab6b785d4b9e90fb2405763">portaventuraWorldTopic</a> = &quot;portaventura/status&quot;</td></tr>
+<tr class="separator:ae329aab3aab6b785d4b9e90fb2405763"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefc7d7ff8c762601a00b39c761e20844" id="r_aefc7d7ff8c762601a00b39c761e20844"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aefc7d7ff8c762601a00b39c761e20844">ferrarilandTopic</a> = &quot;ferrariland/status&quot;</td></tr>
+<tr class="separator:aefc7d7ff8c762601a00b39c761e20844"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04461e98b3d1e174e41980b04d8965f2" id="r_a04461e98b3d1e174e41980b04d8965f2"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a04461e98b3d1e174e41980b04d8965f2">caribeAcuaticTopic</a> = &quot;caribeAcuatic/status&quot;</td></tr>
+<tr class="separator:a04461e98b3d1e174e41980b04d8965f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33d14e254a95971e9b0f5d5b2a27c33d" id="r_a33d14e254a95971e9b0f5d5b2a27c33d"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a33d14e254a95971e9b0f5d5b2a27c33d">deviceStatusTopic</a> = &quot;status/device/&quot; DEVICE_ID</td></tr>
+<tr class="separator:a33d14e254a95971e9b0f5d5b2a27c33d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a490c0a72c3c1afa6033fb82090f75b" id="r_a8a490c0a72c3c1afa6033fb82090f75b"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a490c0a72c3c1afa6033fb82090f75b">deviceActivationTopic</a> = &quot;activation&quot;</td></tr>
+<tr class="separator:a8a490c0a72c3c1afa6033fb82090f75b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Clase para gestionar la conexión MQTT. </p>
+<dl class="section author"><dt>Autor</dt><dd>Miguel Ferrer </dd></dl>
+<dl class="section version"><dt>Versión</dt><dd>0.1 </dd></dl>
+<dl class="section date"><dt>Fecha</dt><dd>2025-01-23</dd></dl>
+<p>Este archivo contiene la implementación de la clase MqttClient, que proporciona funciones para conectarse a un broker MQTT. La clase utiliza las bibliotecas PubSubClient y WiFiClientSecure para establecer una conexión segura con el broker MQTT. La clase también define las constantes de configuración del broker MQTT.</p>
+<dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2025 </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+</div><h2 class="groupheader">Documentación de «define»</h2>
+<a id="a0b85963cace75e76ae726bcffb04eb70" name="a0b85963cace75e76ae726bcffb04eb70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b85963cace75e76ae726bcffb04eb70">&#9670;&#160;</a></span>DEVICE_ID</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DEVICE_ID&#160;&#160;&#160;&quot;3&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>ID del dispositivo. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8cpp_source.html#l00019">19</a> del archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Documentación de funciones</h2>
+<a id="a1f763f0b0a738726d65ce6f5367c0eb0" name="a1f763f0b0a738726d65ce6f5367c0eb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f763f0b0a738726d65ce6f5367c0eb0">&#9670;&#160;</a></span>connectToMQTT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void connectToMQTT </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Conecta al servidor MQTT y se suscribe a varios temas. </p>
+<p>Esta función intenta conectarse al servidor MQTT utilizando el ID de cliente "ESP32Client". Si la conexión es exitosa, se suscribe a los siguientes temas:</p><ul>
+<li>portaventuraWorldTopic</li>
+<li>ferrarilandTopic</li>
+<li>caribeAcuaticTopic</li>
+<li>deviceStatusTopic</li>
+</ul>
+<p>Para cada suscripción, registra si la suscripción fue exitosa o si hubo un error. Si la conexión al servidor MQTT falla, registra el estado de error y reintenta después de un retraso de 5 segundos. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8cpp_source.html#l00044">44</a> del archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a52b5d6a1c8d437c872a5d3a390d281ff" name="a52b5d6a1c8d437c872a5d3a390d281ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52b5d6a1c8d437c872a5d3a390d281ff">&#9670;&#160;</a></span>mqtt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PubSubClient mqtt </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a38bd917fd580fe7ac85ef0553c9db492">mqttClient</a></td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Cliente MQTT. </p>
+
+</div>
+</div>
+<a id="a6f06b273defaebb581fdf1adc8969f40" name="a6f06b273defaebb581fdf1adc8969f40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f06b273defaebb581fdf1adc8969f40">&#9670;&#160;</a></span>mqttCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mqttCallback </td>
+          <td>(</td>
+          <td class="paramtype">char *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">byte *</td>          <td class="paramname"><span class="paramname"><em>payload</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int</td>          <td class="paramname"><span class="paramname"><em>length</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Función de callback para manejar mensajes MQTT entrantes. </p>
+<p>Esta función se llama cada vez que se recibe un mensaje en un tema MQTT suscrito. Procesa la carga útil del mensaje, la deserializa en un documento JSON y realiza acciones basadas en el contenido del mensaje.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>El tema en el que se recibió el mensaje. </td></tr>
+    <tr><td class="paramname">payload</td><td>La carga útil del mensaje. </td></tr>
+    <tr><td class="paramname">length</td><td>La longitud de la carga útil.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>La función espera que la carga útil sea una cadena JSON con la siguiente estructura: { "device": "&lt;device_id&gt;", "current_status": "&lt;status&gt;" }</p>
+<p>El &lt;device_id&gt; debe coincidir con la constante DEVICE_ID. El &lt;status&gt; puede ser uno de los siguientes:</p><ul>
+<li>"Apagado": Apaga el dispositivo y establece el efecto LED en Cerrado.</li>
+<li>"Encendido": Enciende el dispositivo y establece el efecto LED en Abierto.</li>
+<li>"Error": Indica un error, establece el efecto LED en Error y reactiva el dispositivo después de 4 segundos.</li>
+<li>"Exito": Indica éxito, establece el efecto LED en Éxito y reactiva el dispositivo después de 4 segundos.</li>
+</ul>
+<p>Si el mensaje es inválido o el ID del dispositivo no coincide, se registra un error. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8cpp_source.html#l00107">107</a> del archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3cff6686f09444558b7c9436e082e73c" name="a3cff6686f09444558b7c9436e082e73c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cff6686f09444558b7c9436e082e73c">&#9670;&#160;</a></span>setupMQTT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setupMQTT </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Configura el cliente MQTT y se conecta al servidor MQTT. </p>
+<p>Esta función realiza los siguientes pasos:</p><ol type="1">
+<li>Recupera la dirección IP local y establece el último octeto en 1 para formar la IP del servidor.</li>
+<li>Configura el cliente MQTT con el certificado CA y lo establece en modo inseguro.</li>
+<li>Inicializa el cliente MQTT con la IP del servidor y el puerto.</li>
+<li>Establece la función de callback para manejar los mensajes MQTT entrantes.</li>
+<li>Se conecta al servidor MQTT.</li>
+<li>Publica un mensaje de inicio en el tema de activación del dispositivo si la conexión es exitosa.</li>
+</ol>
+<p>Si la conexión al servidor MQTT falla, se registra un mensaje de error. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8cpp_source.html#l00154">154</a> del archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Documentación de variables</h2>
+<a id="a04461e98b3d1e174e41980b04d8965f2" name="a04461e98b3d1e174e41980b04d8965f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04461e98b3d1e174e41980b04d8965f2">&#9670;&#160;</a></span>caribeAcuaticTopic</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* caribeAcuaticTopic = &quot;caribeAcuatic/status&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Tema de Caribe Acuatic. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8cpp_source.html#l00027">27</a> del archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a8a490c0a72c3c1afa6033fb82090f75b" name="a8a490c0a72c3c1afa6033fb82090f75b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a490c0a72c3c1afa6033fb82090f75b">&#9670;&#160;</a></span>deviceActivationTopic</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* deviceActivationTopic = &quot;activation&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Tema de activación del dispositivo. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8cpp_source.html#l00029">29</a> del archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a33d14e254a95971e9b0f5d5b2a27c33d" name="a33d14e254a95971e9b0f5d5b2a27c33d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33d14e254a95971e9b0f5d5b2a27c33d">&#9670;&#160;</a></span>deviceStatusTopic</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* deviceStatusTopic = &quot;status/device/&quot; DEVICE_ID</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Tema de estado del dispositivo. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8cpp_source.html#l00028">28</a> del archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aefc7d7ff8c762601a00b39c761e20844" name="aefc7d7ff8c762601a00b39c761e20844"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefc7d7ff8c762601a00b39c761e20844">&#9670;&#160;</a></span>ferrarilandTopic</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* ferrarilandTopic = &quot;ferrariland/status&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Tema de Ferrari Land. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8cpp_source.html#l00026">26</a> del archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a38bd917fd580fe7ac85ef0553c9db492" name="a38bd917fd580fe7ac85ef0553c9db492"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38bd917fd580fe7ac85ef0553c9db492">&#9670;&#160;</a></span>mqttClient</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">WiFiClientSecure mqttClient</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Cliente seguro para MQTT. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8cpp_source.html#l00021">21</a> del archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ae329aab3aab6b785d4b9e90fb2405763" name="ae329aab3aab6b785d4b9e90fb2405763"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae329aab3aab6b785d4b9e90fb2405763">&#9670;&#160;</a></span>portaventuraWorldTopic</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* portaventuraWorldTopic = &quot;portaventura/status&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Tema de PortAventura World. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqttClient_8cpp_source.html#l00025">25</a> del archivo <a class="el" href="mqttClient_8cpp_source.html">mqttClient.cpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a class="el" href="dir_2fee1dd044c58baa0235735367bc7093.html">Mqtt</a></li><li class="navelem"><a class="el" href="mqttClient_8cpp.html">mqttClient.cpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
+  </ul>
+</div>
+</body>
+</html>

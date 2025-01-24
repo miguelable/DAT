@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['_7eesp32cam_0',['~ESP32Cam',['../classESP32Cam.html#a12e58411ad80f91a57d6b821fffae0c5',1,'ESP32Cam']]],
-  ['_7ehcsr04_1',['~HCSR04',['../classHCSR04.html#adb7fcb2d12d343cca54cb9934ee35ef3',1,'HCSR04']]]
+  ['returnbuffer_0',['returnBuffer',['../classESP32Cam.html#ab7d8992a000dc7463a705492c423d476',1,'ESP32Cam']]]
 ];

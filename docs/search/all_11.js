@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['vsync_5fgpio_5fnum_0',['VSYNC_GPIO_NUM',['../camConfig_8h.html#a272682da27a4b5c6fb5965abcdcce26c',1,'camConfig.h']]]
+  ['updatetimetask_0',['updateTimeTask',['../websockets_8cpp.html#ad1d24d9367c65fa6e1ab150bbe8460cd',1,'websockets.cpp']]],
+  ['updatetimetaskhandle_1',['updateTimeTaskHandle',['../websockets_8cpp.html#aad650555a6af3eae188592025af45dfa',1,'websockets.cpp']]]
 ];

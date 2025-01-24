@@ -1,0 +1,452 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>TecnoPark Project: Referencia del archivo lib/websocket/websockets.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">TecnoPark Project<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Gestion de parques temáticos</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.13.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('websockets_8cpp.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Funciones</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">Referencia del archivo websockets.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Librería para WebSocket y cámara ESP32.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="websockets_8h_source.html">websockets.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="LedEffects_8h_source.html">LedEffects.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="secrets_8h_source.html">secrets.h</a>&quot;</code><br />
+<code>#include &lt;Arduino.h&gt;</code><br />
+<code>#include &lt;ArduinoJson.h&gt;</code><br />
+<code>#include &lt;base64.h&gt;</code><br />
+</div>
+<p><a href="websockets_8cpp_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a76dc5458ef1696bfc6b2d69ceea47a31" id="r_a76dc5458ef1696bfc6b2d69ceea47a31"><td class="memItemLeft" align="right" valign="top">NTPClient&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76dc5458ef1696bfc6b2d69ceea47a31">timeClient</a> (ntpUDP, <a class="el" href="secrets_8h.html#abf81c882adaabaf964466f8c44383e75">ntpServer</a>, <a class="el" href="secrets_8h.html#a6c7db28543c3b2ef692f8dcb63964f2b">gmtOffset_sec</a>)</td></tr>
+<tr class="separator:a76dc5458ef1696bfc6b2d69ceea47a31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1d24d9367c65fa6e1ab150bbe8460cd" id="r_ad1d24d9367c65fa6e1ab150bbe8460cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1d24d9367c65fa6e1ab150bbe8460cd">updateTimeTask</a> (void *parameter)</td></tr>
+<tr class="memdesc:ad1d24d9367c65fa6e1ab150bbe8460cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tarea para actualizar continuamente la hora utilizando el cliente de tiempo.  <br /></td></tr>
+<tr class="separator:ad1d24d9367c65fa6e1ab150bbe8460cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae786f8044734bf7283b0df88675335c5" id="r_ae786f8044734bf7283b0df88675335c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae786f8044734bf7283b0df88675335c5">connectToWiFi</a> ()</td></tr>
+<tr class="memdesc:ae786f8044734bf7283b0df88675335c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conecta a la red WiFi utilizando el SSID y la contraseña proporcionados.  <br /></td></tr>
+<tr class="separator:ae786f8044734bf7283b0df88675335c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a869e72ce54480f78ddc261f6e50012a8" id="r_a869e72ce54480f78ddc261f6e50012a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a869e72ce54480f78ddc261f6e50012a8">connectToServer</a> ()</td></tr>
+<tr class="memdesc:a869e72ce54480f78ddc261f6e50012a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establece una conexión segura con el servidor.  <br /></td></tr>
+<tr class="separator:a869e72ce54480f78ddc261f6e50012a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1df123d9f3cacd6707a51455cd0c1ff" id="r_ad1df123d9f3cacd6707a51455cd0c1ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1df123d9f3cacd6707a51455cd0c1ff">startCamera</a> ()</td></tr>
+<tr class="memdesc:ad1df123d9f3cacd6707a51455cd0c1ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inicializa la cámara y registra el resultado.  <br /></td></tr>
+<tr class="separator:ad1df123d9f3cacd6707a51455cd0c1ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae052416633a92a9b15ddb35343f91665" id="r_ae052416633a92a9b15ddb35343f91665"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae052416633a92a9b15ddb35343f91665">sendImageToServer</a> ()</td></tr>
+<tr class="memdesc:ae052416633a92a9b15ddb35343f91665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Envía una imagen capturada desde la cámara al servidor.  <br /></td></tr>
+<tr class="separator:ae052416633a92a9b15ddb35343f91665"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a62e83d015cf018fb9d359512a886b24d" id="r_a62e83d015cf018fb9d359512a886b24d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a62e83d015cf018fb9d359512a886b24d">deviceActivated</a> = false</td></tr>
+<tr class="separator:a62e83d015cf018fb9d359512a886b24d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa817525bb3e0902bb62afaef35d7ec78" id="r_aa817525bb3e0902bb62afaef35d7ec78"><td class="memItemLeft" align="right" valign="top">TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa817525bb3e0902bb62afaef35d7ec78">sendDataTask</a> = NULL</td></tr>
+<tr class="separator:aa817525bb3e0902bb62afaef35d7ec78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad650555a6af3eae188592025af45dfa" id="r_aad650555a6af3eae188592025af45dfa"><td class="memItemLeft" align="right" valign="top">TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad650555a6af3eae188592025af45dfa">updateTimeTaskHandle</a> = NULL</td></tr>
+<tr class="separator:aad650555a6af3eae188592025af45dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22f33e7e05df58bb6145bb6e543e232a" id="r_a22f33e7e05df58bb6145bb6e543e232a"><td class="memItemLeft" align="right" valign="top">WiFiUDP&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22f33e7e05df58bb6145bb6e543e232a">ntpUDP</a></td></tr>
+<tr class="separator:a22f33e7e05df58bb6145bb6e543e232a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0a41e200670fc39fb09f953c9aa0661" id="r_ab0a41e200670fc39fb09f953c9aa0661"><td class="memItemLeft" align="right" valign="top">WiFiClientSecure&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0a41e200670fc39fb09f953c9aa0661">client</a></td></tr>
+<tr class="separator:ab0a41e200670fc39fb09f953c9aa0661"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6bb91a74b09e7dfe85d42747acfaaca" id="r_ab6bb91a74b09e7dfe85d42747acfaaca"><td class="memItemLeft" align="right" valign="top">IPAddress&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab6bb91a74b09e7dfe85d42747acfaaca">serverIP</a></td></tr>
+<tr class="separator:ab6bb91a74b09e7dfe85d42747acfaaca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f5c7f3b33420f29ffb80a313d00ad46" id="r_a1f5c7f3b33420f29ffb80a313d00ad46"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classESP32Cam.html">ESP32Cam</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f5c7f3b33420f29ffb80a313d00ad46">camera</a></td></tr>
+<tr class="separator:a1f5c7f3b33420f29ffb80a313d00ad46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Librería para WebSocket y cámara ESP32. </p>
+<dl class="section author"><dt>Autor</dt><dd>Miguel Ferrer </dd></dl>
+<dl class="section version"><dt>Versión</dt><dd>0.1 </dd></dl>
+<dl class="section date"><dt>Fecha</dt><dd>2025-01-20</dd></dl>
+<p>Este archivo contiene la implementación de la librería para WebSocket y cámara ESP32. La librería proporciona funciones para conectarse a una red WiFi, establecer una conexión</p>
+<dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2025 </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+</div><h2 class="groupheader">Documentación de funciones</h2>
+<a id="a869e72ce54480f78ddc261f6e50012a8" name="a869e72ce54480f78ddc261f6e50012a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a869e72ce54480f78ddc261f6e50012a8">&#9670;&#160;</a></span>connectToServer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void connectToServer </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Establece una conexión segura con el servidor. </p>
+<p>Esta función configura el cliente seguro con el certificado del servidor, establece el cliente para operar en modo inseguro, e intenta conectarse al servidor utilizando la dirección IP y el puerto especificados. Registra un mensaje de error si la conexión falla, o un mensaje de éxito si la conexión se establece. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="websockets_8cpp_source.html#l00080">80</a> del archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ae786f8044734bf7283b0df88675335c5" name="ae786f8044734bf7283b0df88675335c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae786f8044734bf7283b0df88675335c5">&#9670;&#160;</a></span>connectToWiFi()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void connectToWiFi </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Conecta a la red WiFi utilizando el SSID y la contraseña proporcionados. </p>
+<p>Esta función intenta conectarse a la red WiFi y espera hasta que la conexión se establezca. Una vez conectado, registra la dirección IP del dispositivo y configura la dirección IP del servidor. Además, inicializa el NTPClient y crea una tarea para actualizar la hora cada segundo.</p>
+<dl class="section note"><dt>Nota</dt><dd>Esta función utiliza tareas y retardos de FreeRTOS. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="websockets_8cpp_source.html#l00054">54</a> del archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ae052416633a92a9b15ddb35343f91665" name="ae052416633a92a9b15ddb35343f91665"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae052416633a92a9b15ddb35343f91665">&#9670;&#160;</a></span>sendImageToServer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool sendImageToServer </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Envía una imagen capturada desde la cámara al servidor. </p>
+<p>Esta función realiza los siguientes pasos:</p><ol type="1">
+<li>Verifica si el dispositivo está activado. Si no lo está, registra un error y retorna true.</li>
+<li>Enciende la cámara y el flash, y comienza el efecto LED.</li>
+<li>Captura una imagen desde la cámara. Si la captura falla, registra un error, apaga el flash y retorna false.</li>
+<li>Convierte la imagen capturada a una cadena codificada en base64.</li>
+<li>Envía información del sensor y la marca temporal al servidor.</li>
+<li>Fragmenta la imagen codificada en base64 en partes más pequeñas y envía cada fragmento al servidor. Los fragmentos incluyen un ID único, el número de fragmento y el número total de fragmentos para luego ensamblar la imagen en el servidor.</li>
+<li>Devuelve el buffer de la imagen a la cámara.</li>
+<li>Cambia el efecto del LED a procesamiento.</li>
+<li>Apaga el flash.</li>
+<li>Desactiva el dispositivo para evitar enviar imágenes mientras se espera una respuesta.</li>
+</ol>
+<dl class="section return"><dt>Devuelve</dt><dd>true si la imagen fue enviada exitosamente al servidor, false en caso contrario. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="websockets_8cpp_source.html#l00105">105</a> del archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ad1df123d9f3cacd6707a51455cd0c1ff" name="ad1df123d9f3cacd6707a51455cd0c1ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1df123d9f3cacd6707a51455cd0c1ff">&#9670;&#160;</a></span>startCamera()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void startCamera </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inicializa la cámara y registra el resultado. </p>
+<p>Esta función intenta inicializar la cámara. Si la inicialización es exitosa, registra un mensaje informativo. Si la inicialización falla, registra un mensaje de error. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="websockets_8cpp_source.html#l00094">94</a> del archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a76dc5458ef1696bfc6b2d69ceea47a31" name="a76dc5458ef1696bfc6b2d69ceea47a31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76dc5458ef1696bfc6b2d69ceea47a31">&#9670;&#160;</a></span>timeClient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">NTPClient timeClient </td>
+          <td>(</td>
+          <td class="paramtype">ntpUDP</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="secrets_8h.html#abf81c882adaabaf964466f8c44383e75">ntpServer</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="secrets_8h.html#a6c7db28543c3b2ef692f8dcb63964f2b">gmtOffset_sec</a></td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Cliente NTP para obtener la hora actual. </p>
+
+</div>
+</div>
+<a id="ad1d24d9367c65fa6e1ab150bbe8460cd" name="ad1d24d9367c65fa6e1ab150bbe8460cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1d24d9367c65fa6e1ab150bbe8460cd">&#9670;&#160;</a></span>updateTimeTask()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void updateTimeTask </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>parameter</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tarea para actualizar continuamente la hora utilizando el cliente de tiempo. </p>
+<p>Esta función ejecuta un bucle infinito donde actualiza el cliente de tiempo y luego espera 1000 milisegundos (1 segundo) antes de repetir.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parameter</td><td>Un puntero a los parámetros pasados a la tarea (no utilizado en esta función). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="websockets_8cpp_source.html#l00045">45</a> del archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Documentación de variables</h2>
+<a id="a1f5c7f3b33420f29ffb80a313d00ad46" name="a1f5c7f3b33420f29ffb80a313d00ad46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f5c7f3b33420f29ffb80a313d00ad46">&#9670;&#160;</a></span>camera</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classESP32Cam.html">ESP32Cam</a> camera</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Objeto de la cámara ESP32. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="websockets_8cpp_source.html#l00035">35</a> del archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ab0a41e200670fc39fb09f953c9aa0661" name="ab0a41e200670fc39fb09f953c9aa0661"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0a41e200670fc39fb09f953c9aa0661">&#9670;&#160;</a></span>client</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">WiFiClientSecure client</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Cliente seguro para WebSockets. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="websockets_8cpp_source.html#l00031">31</a> del archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a62e83d015cf018fb9d359512a886b24d" name="a62e83d015cf018fb9d359512a886b24d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62e83d015cf018fb9d359512a886b24d">&#9670;&#160;</a></span>deviceActivated</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool deviceActivated = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Estado de activación del dispositivo. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="websockets_8cpp_source.html#l00021">21</a> del archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a22f33e7e05df58bb6145bb6e543e232a" name="a22f33e7e05df58bb6145bb6e543e232a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22f33e7e05df58bb6145bb6e543e232a">&#9670;&#160;</a></span>ntpUDP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">WiFiUDP ntpUDP</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Objeto UDP para NTP. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="websockets_8cpp_source.html#l00027">27</a> del archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aa817525bb3e0902bb62afaef35d7ec78" name="aa817525bb3e0902bb62afaef35d7ec78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa817525bb3e0902bb62afaef35d7ec78">&#9670;&#160;</a></span>sendDataTask</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TaskHandle_t sendDataTask = NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Manejador de la tarea de envío de datos. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="websockets_8cpp_source.html#l00023">23</a> del archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ab6bb91a74b09e7dfe85d42747acfaaca" name="ab6bb91a74b09e7dfe85d42747acfaaca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6bb91a74b09e7dfe85d42747acfaaca">&#9670;&#160;</a></span>serverIP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">IPAddress serverIP</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Dirección IP del servidor. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="websockets_8cpp_source.html#l00033">33</a> del archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aad650555a6af3eae188592025af45dfa" name="aad650555a6af3eae188592025af45dfa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad650555a6af3eae188592025af45dfa">&#9670;&#160;</a></span>updateTimeTaskHandle</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TaskHandle_t updateTimeTaskHandle = NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Manejador de la tarea de actualización de la hora. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="websockets_8cpp_source.html#l00024">24</a> del archivo <a class="el" href="websockets_8cpp_source.html">websockets.cpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a class="el" href="dir_1d909335146a71368e5ad46a70c27a79.html">websocket</a></li><li class="navelem"><a class="el" href="websockets_8cpp.html">websockets.cpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['trig_5fpin_0',['TRIG_PIN',['../main_8cpp.html#a8eab89acd7dcb0e77e7b00d1749022a6',1,'main.cpp']]]
+  ['xclk_5fgpio_5fnum_0',['XCLK_GPIO_NUM',['../camConfig_8h.html#a95c10014a0137dd0325f865b4e5081ad',1,'camConfig.h']]]
 ];

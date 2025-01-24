@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['led_5fpin_0',['LED_PIN',['../main_8cpp.html#ab4553be4db9860d940f81d7447173b2f',1,'main.cpp']]]
+  ['pclk_5fgpio_5fnum_0',['PCLK_GPIO_NUM',['../camConfig_8h.html#ad65308c6f2f23570174a6833aacad785',1,'camConfig.h']]],
+  ['pwdn_5fgpio_5fnum_1',['PWDN_GPIO_NUM',['../camConfig_8h.html#acd94fd0cc9c4019e56a4ee5bbae46187',1,'camConfig.h']]]
 ];
