@@ -1,0 +1,17 @@
+<map id="LedEffects.cpp" name="LedEffects.cpp">
+<area shape="rect" id="Node000001" title="Implementación de la clase LedEffects." alt="" coords="350,5,459,32"/>
+<area shape="rect" id="Node000002" href="$LedEffects_8h.html" title="Biblioteca para gestionar efectos LED en una tira LED RGB." alt="" coords="248,80,342,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="387,35,328,74,325,69,384,30"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="366,80,443,107"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="407,33,407,64,402,64,402,33"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="467,80,572,107"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="426,30,488,69,485,74,423,35"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,155,143,181"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="258,110,128,152,127,147,256,105"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="166,155,275,181"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="284,109,246,146,242,142,280,105"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="299,155,441,181"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="310,105,348,142,345,146,306,109"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="466,155,581,181"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="336,105,470,147,468,152,334,110"/>
+</map>

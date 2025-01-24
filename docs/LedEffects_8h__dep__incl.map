@@ -1,0 +1,11 @@
+<map id="LedEffects.h" name="LedEffects.h">
+<area shape="rect" id="Node000001" title="Biblioteca para gestionar efectos LED en una tira LED RGB." alt="" coords="186,5,280,32"/>
+<area shape="rect" id="Node000002" href="$LedEffects_8cpp.html" title="Implementación de la clase LedEffects." alt="" coords="5,80,114,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,41,91,82,89,77,188,36"/>
+<area shape="rect" id="Node000003" href="$main_8cpp.html" title="Archivo principal para el proyecto TecnoPark." alt="" coords="138,80,213,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,46,187,81,183,78,211,43"/>
+<area shape="rect" id="Node000004" href="$mqttClient_8cpp.html" title="Clase para gestionar la conexión MQTT." alt="" coords="237,80,343,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="254,43,282,78,278,81,250,46"/>
+<area shape="rect" id="Node000005" href="$websockets_8cpp.html" title="Librería para WebSocket y cámara ESP32." alt="" coords="368,80,484,107"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="282,35,393,77,391,82,280,40"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="websockets.h" name="websockets.h">
+<area shape="rect" id="Node000001" title="Librería para WebSocket y cámara ESP32." alt="" coords="106,5,208,32"/>
+<area shape="rect" id="Node000002" href="$main_8cpp.html" title="Archivo principal para el proyecto TecnoPark." alt="" coords="5,80,80,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,43,64,82,61,77,123,38"/>
+<area shape="rect" id="Node000003" href="$mqttClient_8cpp.html" title="Clase para gestionar la conexión MQTT." alt="" coords="104,80,210,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="160,48,160,80,154,80,154,48"/>
+<area shape="rect" id="Node000004" href="$websockets_8cpp.html" title="Librería para WebSocket y cámara ESP32." alt="" coords="235,80,351,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="196,37,271,77,268,82,193,42"/>
+</map>

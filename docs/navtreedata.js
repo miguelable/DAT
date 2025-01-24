@@ -24,7 +24,7 @@
 */
 var NAVTREE =
 [
-  [ "TecnoPark", "index.html", [
+  [ "Tecnopark", "index.html", [
     [ "Estructuras de datos", "annotated.html", [
       [ "Descripción del Proyecto", "index.html#autotoc_md1", null ],
       [ "Estructura del Proyecto", "index.html#autotoc_md2", null ],

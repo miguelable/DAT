@@ -1,0 +1,15 @@
+<map id="camConfig.h" name="camConfig.h">
+<area shape="rect" id="Node000001" title="Archivo de configuración para el módulo de cámara ESP32&#45;CAM." alt="" coords="75,5,170,32"/>
+<area shape="rect" id="Node000002" href="$esp32cam_8h.html" title="Biblioteca para gestionar el módulo de cámara ESP32&#45;CAM." alt="" coords="76,80,169,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,48,125,80,120,80,120,48"/>
+<area shape="rect" id="Node000003" href="$esp32cam_8cpp.html" title="Implementación de la clase ESP32Cam." alt="" coords="5,155,112,181"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="103,120,72,156,68,152,99,117"/>
+<area shape="rect" id="Node000004" href="$websockets_8h.html" title="Librería para WebSocket y cámara ESP32." alt="" coords="135,155,238,181"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="146,117,177,152,173,156,142,120"/>
+<area shape="rect" id="Node000005" href="$main_8cpp.html" title="Archivo principal para el proyecto TecnoPark." alt="" coords="35,229,109,256"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="155,192,93,231,91,226,152,188"/>
+<area shape="rect" id="Node000006" href="$mqttClient_8cpp.html" title="Clase para gestionar la conexión MQTT." alt="" coords="133,229,240,256"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="189,197,189,229,184,229,184,197"/>
+<area shape="rect" id="Node000007" href="$websockets_8cpp.html" title="Librería para WebSocket y cámara ESP32." alt="" coords="264,229,381,256"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="225,187,300,226,297,231,222,191"/>
+</map>
