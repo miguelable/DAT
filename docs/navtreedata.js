@@ -24,9 +24,15 @@
 */
 var NAVTREE =
 [
-  [ "TecnoPark Project", "index.html", [
-    [ "TecnoPark", "index.html", null ],
+  [ "TecnoPark", "index.html", [
     [ "Estructuras de datos", "annotated.html", [
+      [ "Descripción del Proyecto", "index.html#autotoc_md1", null ],
+      [ "Estructura del Proyecto", "index.html#autotoc_md2", null ],
+      [ "Componentes del Firmware", "index.html#autotoc_md3", null ],
+      [ "Diagrama de Dependencias", "index.html#autotoc_md4", null ],
+      [ "Funcionamiento General", "index.html#autotoc_md5", null ],
+      [ "Licencia", "index.html#autotoc_md6", null ],
+      [ "Autores", "index.html#autotoc_md7", null ],
       [ "Estructuras de datos", "annotated.html", "annotated_dup" ],
       [ "Índice de estructuras de datos", "classes.html", null ],
       [ "Campos de datos", "functions.html", [
