@@ -1,0 +1,142 @@
+/* Estilos para el cuerpo */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-top: 80px;  /* Espacio suficiente para que el contenido no quede tapado por el título */
+    background-color: #f4f2f9;  /* Fondo suave de color gris claro/lavanda */
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos (header, main, footer) estén en una columna */
+}
+
+/* Header con el título */
+header {
+    background-color: #20206a;  
+    color: white;  /* Color del texto */
+    text-align: center;  /* Centrar el título */
+    position: fixed;  /* Fijar el título en la parte superior */
+    top: 0;  /* Coloca el título en la parte superior */
+    left: 0;  /* Alinea el título al lado izquierdo */
+    width: 100%;  /* Hace que el título ocupe todo el ancho */
+    z-index: 1000;  /* Asegurarse de que el título esté por encima de otros elementos */
+    font-size: 14px;  /* Tamaño de la fuente ajustado */
+    font-family: 'Orbitron', sans-serif;  /* Fuente futurista */
+    font-weight: 500;  /* Peso medio para la fuente */
+    letter-spacing: 5px; /* Espaciado entre letras */
+    box-shadow: none;  /* Eliminar sombra para hacerlo más fino */
+}
+
+.header-logo {
+    position: absolute;  /* Coloca la imagen de manera absoluta dentro del header */
+    top: 10px;            /* 10px desde la parte superior */
+    left: 30px;           /* 10px desde la izquierda */
+    width: 45px;          /* Ajusta el tamaño de la imagen */
+    height: auto;         /* Mantiene la proporción original de la imagen */
+}
+
+/* Footer centrado en la parte inferior */
+footer {
+    text-align: center; /* Centra el texto dentro del footer */
+    color: #626262; /* Texto blanco */
+    width: 100%; /* El footer ocupa el 100% del ancho */
+    font-size: 14px; /* Tamaño de la fuente */
+}
+
+h1{
+    text-align: center;
+}
+
+/* Estilos para el formulario */
+form {
+    background: #ffffff;  /* Fondo blanco para destacar */
+    border-radius: 10px;  /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra para darle profundidad */
+    padding: 20px;  /* Espaciado interno */
+    max-width: 600px;  /* Ancho máximo del formulario */
+    margin: 20px auto;  /* Centrar el formulario */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;  /* Espaciado entre elementos */
+}
+
+label {
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 5px;
+}
+
+input, select {
+    padding: 10px;
+    border: 1px solid #cccccc;  /* Bordes grises claros */
+    border-radius: 5px;  /* Bordes redondeados */
+    font-size: 16px;
+    width: 100%;  /* Ocupa todo el ancho */
+    box-sizing: border-box;  /* Asegura que padding no afecte al ancho total */
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #20206a;  /* Bordes en color del header */
+    box-shadow: 0 0 5px rgba(32, 32, 106, 0.5);  /* Sombra azulada */
+}
+
+button {
+    background-color: #20206a;  /* Color principal del botón */
+    color: white;  /* Texto blanco */
+    padding: 12px 20px;  /* Espaciado interno */
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;  /* Bordes redondeados */
+    cursor: pointer;  /* Indicador de clic */
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #5050a1;  /* Color más claro al pasar el mouse */
+}
+
+#visitor-info {
+    width: 50%; /* Ajusta el porcentaje según lo que desees */
+    max-width: 600px; /* Ajusta un ancho máximo si es necesario */
+    margin: 0 auto; /* Centra el contenedor */
+    padding: 20px; /* Espaciado interno */
+    background-color: #ffffff; /* Fondo blanco para consistencia */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+.visitor-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Distribución automática de formularios */
+    gap: 20px; /* Espacio entre formularios */
+}
+
+.visitor {
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease; /* Transición suave para la sombra */
+}
+
+.visitor:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efecto hover para resaltar */
+}
+
+/* Estilos generales */
+#finalizar-compra {
+    background-color: #20206a;  /* Color principal del botón */
+    color: white;  /* Texto blanco */
+    padding: 12px 20px;  /* Espaciado interno */
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;  /* Bordes redondeados */
+    cursor: pointer;  /* Indicador de clic */
+    transition: background-color 0.3s ease;
+    margin: 20px auto 0;  /* Centrado automático, margen superior de 20px */
+    display: block;  /* Asegura que el botón sea un bloque */
+    width: 200px;  /* Ajusta el tamaño del botón (puedes cambiarlo) */
+}
+
+#finalizar-compra:hover {
+    background-color: #5050a1;  /* Color más claro al pasar el mouse */
+}
