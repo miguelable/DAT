@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Compra de entradas</title>
+        <link rel="stylesheet" href="css/styles1.css">
+        <link rel="icon" href="images/favicon.png" type="image/x-icon">
+    </head>
+<body class="register-body">
+    <header>
+        <img src="images/pato.png" alt="Logo" class="header-logo">
+        <h1>TECNOPARK</h1>
+    </header>
+    <div class="container" id="ticket-info">
+        <h1>Compra de Entradas</h1>
+        <form id="ticket-form">
+            <label for="ticket-type">Selecciona el parque:</label>
+            <select id="ticket-type" name="ticket-type" required>
+                <option value="PortAventura">PortAventura Park</option>
+                <option value="FerrariLand">Ferrari Land</option>
+                <option value="CaribeAquaticPark">Caribe Aquatic Park</option>
+            </select>
+
+            <label for="fastpass-1">¿Deseas FastPass?</label>
+            <select id="fastpass-1" name="fastpass-1">
+                <option value="no">No</option>
+                <option value="yes">Sí</option>
+            </select>
+
+            <label for="ticket-quantity">Número de Entradas:</label>
+            <input type="number" id="ticket-quantity" name="ticket-quantity" min="1" required>
+
+            <label for="access-date-1">Fecha de acceso:</label>
+            <input type="date" id="access-date-1" name="access-date-1" required>
+
+            <label for="exit-date-1">Fecha de salida:</label>
+            <input type="date" id="exit-date-1" name="exit-date-1" required>
+
+            <button type="button" id="submit-btn">Siguiente</button>
+        </form>
+    </div>
+
+    <div class="container" id="visitor-info" style="display: none;">
+        <h3>Información de los Visitantes</h3>
+        <div id="visitors-container"></div> <!-- Aquí se insertarán dinámicamente los campos -->
+        <button id="finalizar-compra" type="button">Finalizar compra</button>
+    </div>
+    
+    <script src="js/sidebar.js"></script>
+    <script src="js/fetchData.js"></script>
+    <script src="js/formValidation.js"></script>
+    <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
