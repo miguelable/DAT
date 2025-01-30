@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TECNOPARK</title>
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="icon" href="images/favicon.png" type="image/x-icon">
+    </head>
+<body class="login-body">
+    <header>
+        <img src="images/pato.png" alt="Logo" class="header-logo">
+        <h1>TECNOPARK</h1>
+    </header>
+    <div class="login-container">
+        <h1>Bienvenido a TecnoPark</h1>       
+        <form action="php/login.php" method="POST">
+            <p>Usuario:</p>
+            <input type="text" id="input-login" name="username" placeholder="Usuario" required>
+            <p>Contraseña:</p>
+            <input type="password" id="input-login" name="password" placeholder="Contraseña" required>
+            <button id="button-submit" type="submit">Ingresar</button>
+            <p>¿No tienes una cuenta?</p> 
+            <a href="register.html" id="button-register" class="button-link">Regístrate aquí</a>
+            <p><a href="php/change-password.php" id="button-register" class="button-link">¿Olvidaste tu contraseña?</a></p> <!-- Enlace para cambiar contraseña -->
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+<footer>
+    <p>&copy; 2024 TECNOPARK. Todos los derechos reservados.</p>
+</footer>
+</html>

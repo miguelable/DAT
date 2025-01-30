@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registro - TECNOPARK</title>
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="icon" href="images/favicon.png" type="image/x-icon">
+    </head>
+<body class="register-body">
+    <header>
+        <img src="images/pato.png" alt="Logo" class="header-logo">
+        <h1>TECNOPARK</h1>
+    </header>
+    <div class="register-container">
+        <h1>Registro</h1>
+        <form action="php/register.php" method="POST">
+            <p>Username:</p>
+            <input type="text" id="input-register" name="username" placeholder="Usuario" required>
+            
+            <p>Password:</p>
+            <input type="password" id="input-register" name="password" placeholder="Contraseña" required>
+            
+            <p>Email:</p>
+            <input type="email" id="input-register" name="email" placeholder="correo@ejemplo.com" required>
+            
+            <p>Altura (en metros):</p>
+            <input type="number" id="input-register" step="0.01" name="altura" placeholder="1.75" required>
+            
+            <p>Edad:</p>
+            <input type="number" id="input-register" name="edad" placeholder="Edad" required>
+            
+            <p>¿Desea FastPass?</p>
+            <label>
+                <input type="radio" name="fastpass" value="yes" required> Sí
+            </label>
+            <label>
+                <input type="radio" name="fastpass" value="no" required> No
+            </label>
+            
+            <button id="button-register-submit" type="submit">Registrar</button>
+        </form>
+        <p>¿Ya tienes cuenta?</p> 
+        <a href="login.html" id="button-register" class="button-link">Inicia sesión aquí</a>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+<footer>
+    <p>&copy; 2024 TECNOPARK. Todos los derechos reservados.</p>
+</footer>
+</html>
