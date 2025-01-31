@@ -133,5 +133,5 @@ Este README proporciona una visión general del proyecto TecnoPark y explica cad
 
 ### Autores
 
-- Miguel Ferre Ferrández
+- Miguel Ferrer Ferrández
 - Paula Fernández Torres
