@@ -62,6 +62,31 @@ TecnoPark
 ├── .gitignore
 ├── platformio.ini
 └── README.md
+├── web/
+│   ├── css/
+│   ├── images/
+│   ├── js/
+│   ├── php/
+│   ├── videos/
+│   ├── admin.html
+│   ├── apache2.conf
+│   ├── caribeaquatic.html
+│   ├── china.html
+│   ├── codigo.html
+│   ├── compraentradas.html
+│   ├── farwest.html
+│   ├── ferrariland.html
+│   ├── hoteles.html
+│   ├── index.html
+│   ├── login.html
+│   ├── mapa.html
+│   ├── mediterrania.html
+│   ├── mexico.html
+│   ├── parques.html
+│   ├── polynesia.html
+│   ├── portaventura.html
+│   ├── register.html
+│   ├── sesamoaventura.html
 ```
 
 ### Componentes del Firmware
