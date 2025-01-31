@@ -86,7 +86,7 @@ TecnoPark
 │   ├── polynesia.html
 │   ├── portaventura.html
 │   ├── register.html
-│   ├── sesamoaventura.html
+│   └── sesamoaventura.html
 ```
 
 ### Componentes del Firmware
