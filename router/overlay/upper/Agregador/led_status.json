@@ -1,0 +1,45 @@
+{
+    "error": {
+        "desired_status": "J"
+    },
+    "0": {
+        "id_sonda": 4636,
+        "desired_status": null,
+        "actual_status": "0"
+    },
+    "1": {
+        "id_sonda": 34,
+        "desired_status": "1",
+        "actual_status": "1"
+    },
+    "2": {
+        "desired_status": "1"
+    },
+    "3": {
+        "desired_status": null
+    },
+    "4": {
+        "desired_status": null
+    },
+    "5": {
+        "desired_status": null
+    },
+    "6": {
+        "desired_status": null
+    },
+    "7": {
+        "desired_status": null
+    },
+    "8": {
+        "desired_status": null
+    },
+    "9": {
+        "desired_status": null
+    },
+    "10": {
+        "desired_status": null
+    },
+    "11": {
+        "desired_status": null
+    }
+}

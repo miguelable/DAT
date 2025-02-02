@@ -1,0 +1,14 @@
+Package: php7-cgi
+Version: 7.2.34-3
+Depends: libc, php7, libstdcpp6
+Source: feeds/packages/lang/php7
+SourceName: php7-cgi
+License: PHP-3.01
+LicenseFiles: LICENSE
+Section: lang
+Maintainer: Michael Heimpold <mhei@heimpold.de>
+Architecture: mipsel_24kc
+Installed-Size: 1158232
+Description:  PHP is a widely-used general-purpose scripting language that is especially
+ suited for Web development and can be embedded into HTML.
+ This package contains the CGI version of the PHP7 interpreter.

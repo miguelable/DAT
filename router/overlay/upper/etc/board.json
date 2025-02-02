@@ -1,0 +1,69 @@
+{
+	"model": {
+		"id": "gl-mt300n-v2",
+		"name": "GL-MT300N-V2"
+	},
+	"led": {
+		"wifi_led": {
+			"name": "wifi",
+			"sysfs": "gl-mt300n-v2:red:wlan",
+			"type": "netdev",
+			"device": "wlan0",
+			"mode": "link tx rx"
+		},
+		"wan": {
+			"name": "wan",
+			"sysfs": "gl-mt300n-v2:green:wan",
+			"trigger": "switch0",
+			"type": "switch",
+			"mode": "",
+			"port_mask": "0x1",
+			"speed_mask": ""
+		}
+	},
+	"switch": {
+		"switch0": {
+			"enable": true,
+			"reset": true,
+			"ports": [
+				{
+					"num": 1,
+					"role": "lan"
+				},
+				{
+					"num": 0,
+					"role": "wan"
+				},
+				{
+					"num": 6,
+					"device": "eth0",
+					"need_tag": false,
+					"want_untag": false
+				}
+			],
+			"roles": [
+				{
+					"role": "lan",
+					"ports": "1 6t",
+					"device": "eth0.1"
+				},
+				{
+					"role": "wan",
+					"ports": "0 6t",
+					"device": "eth0.2"
+				}
+			]
+		}
+	},
+	"network": {
+		"lan": {
+			"ifname": "eth0.1",
+			"protocol": "static"
+		},
+		"wan": {
+			"ifname": "eth0.2",
+			"protocol": "dhcp",
+			"macaddr": "94:83:c4:11:60:bb"
+		}
+	}
+}

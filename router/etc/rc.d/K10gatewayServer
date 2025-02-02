@@ -1,0 +1,34 @@
+#!/bin/sh /etc/rc.common
+# Script para iniciar el servidor PHP con php-cgi
+START=99
+STOP=10
+
+# Ruta al script PHP
+PHP_SCRIPT="/Agregador/gateway.php"
+PHP_CGI="/usr/bin/php-cgi"  # Asegúrate de que esta ruta sea correcta para tu instalación de php-cgi
+
+start() {
+
+    echo "Iniciando servidor PHP en el puerto 54471..."
+    
+    # Ejecutar el script PHP con php-cgi, especificando el archivo y redirigiendo los logs
+    $PHP_CGI "$PHP_SCRIPT" > /tmp/gatewayServer.log 2>&1 &
+    
+    if [ $? -eq 0 ]; then
+        echo "Servidor PHP iniciado correctamente."
+    else
+        echo "Error al iniciar el servidor PHP."
+    fi
+
+    echo "Puedes ver los logs en /tmp/gatewayServer.log"
+}
+
+stop() {
+    echo "Deteniendo servidor PHP..."
+    pkill -f "$PHP_SCRIPT"
+    if [ $? -eq 0 ]; then
+        echo "Servidor PHP detenido correctamente."
+    else
+        echo "Error al detener el servidor PHP."
+    fi
+}

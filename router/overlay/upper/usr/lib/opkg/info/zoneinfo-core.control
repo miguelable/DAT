@@ -1,0 +1,11 @@
+Package: zoneinfo-core
+Version: 2020c-1
+Depends: libc
+Source: feeds/packages/utils/zoneinfo
+SourceName: zoneinfo-core
+License: Public Domain
+Section: utils
+Maintainer: Vladimir Ulrich <admin@evl.su>
+Architecture: mipsel_24kc
+Installed-Size: 20622
+Description:  Zone Information (core)

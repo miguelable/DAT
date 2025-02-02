@@ -1,0 +1,39 @@
+
+config service 'general'
+	option port '83'
+	option model 'mt300n-v2'
+	option factory_mac '94:83:c4:11:60:bb'
+	option factory_sn '15c53288d322a820'
+	option factory_ddns 'md160bb'
+	option language 'EN'
+	option password '282cf1208d396ee4dddfdf522b88e25432928b70d870f05d417f217be1ed8167'
+	option wan2lan '0'
+
+config service 'ddns'
+	option enabled '0'
+
+config service 'download'
+
+config service 'adblock'
+	option enable '0'
+
+config service 'autoupdate'
+	option time '04:00'
+	option enable '0'
+
+config service 'samba'
+	option read_only 'yes'
+
+config service 'openvpn'
+	option enable '0'
+	option force '0'
+
+config service 'repeater'
+	option autoconnect '0'
+
+config login 'user'
+
+config server 'modem'
+	list bus '1-1'
+	option enable_log '0'
+

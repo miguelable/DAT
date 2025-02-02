@@ -1,0 +1,38 @@
+
+config network
+	option ssid 'Miguelable'
+	option key '88AAFA1FA8123E53EB4A'
+	option disabled '0'
+	option encryption 'psk'
+	option device 'mt7628'
+	option trycount '0'
+	option ignore '0'
+	option channel '2'
+
+config network
+	option ssid 'UPNA'
+	option disabled '0'
+	option encryption 'none'
+	option channel '1'
+	option device 'mt7628'
+	option trycount '0'
+
+config network
+	option ssid 'Pixel_3021'
+	option key 'miguelferrer'
+	option disabled '0'
+	option encryption 'psk2'
+	option device 'mt7628'
+	option trycount '0'
+	option ignore '0'
+	option channel '2'
+
+config network
+	option ssid 'MOVISTAR_1381'
+	option key '88AAFA1FA8123E53EB4A'
+	option disabled '0'
+	option encryption 'psk2'
+	option channel '1'
+	option device 'mt7628'
+	option trycount '0'
+
